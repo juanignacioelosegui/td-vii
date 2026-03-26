@@ -8,7 +8,8 @@
 \geometry{margin=2.5cm}
 
 \usepackage{hyperref}
-\usepackage{microtype} 
+\usepackage{microtype}
+\usepackage{color, soul}
 
 \usepackage{fancyhdr}
 
@@ -30,7 +31,6 @@
             \textbf{Entidad: Cliente}
                 \begin{itemize}
                     \item \underline{\texttt{id\_cliente}} (PK)
-                    \item ...
                 \end{itemize}
 
             \textbf{Relación: tiene}
@@ -38,83 +38,83 @@
                     \item Cliente (1) --- (1) Cuenta
                 \end{itemize}
 
-            \textbf{Entidad: Cuenta}
+            \textbf{Entidad: Cuenta bancaria}
                 \begin{itemize}
                     \item \underline{\texttt{id\_cuenta}} (PK)
-                    \item ...
                 \end{itemize}
 
        \subsection*{Inciso 2}
-            \textbf{Entidad: }
+            \textbf{Entidad: Cliente}
                 \begin{itemize}
-                    \item \underline{\texttt{}} (PK)
-                    \item ...
+                    \item \underline{\texttt{id\_cliente}} (PK)
                 \end{itemize}
 
-            \textbf{Relación: }
+            \textbf{Relación: tiene}
                 \begin{itemize}
-                    \item 
+                    \item Cliente (1) --- (N)
                 \end{itemize}
 
-            \textbf{Entidad: }
+            \textbf{Entidad: Cuenta bancaria}
                 \begin{itemize}
-                    \item \underline{\texttt{}} (PK)
-                    \item ...
+                    \item \underline{\texttt{id\_cuenta}} (PK)
                 \end{itemize}
             
         \subsection*{Inciso 3}
-            \textbf{Entidad: }
+            \textbf{Entidad: Cliente}
                 \begin{itemize}
-                    \item \underline{\texttt{}} (PK)
-                    \item ...
+                    \item \underline{\texttt{id\_cliente}} (PK)
                 \end{itemize}
 
-            \textbf{Relación: }
+            \textbf{Relación: tiene}
                 \begin{itemize}
-                    \item 
+                    \item Cliente (1) --- Cuentas (N)
                 \end{itemize}
 
-            \textbf{Entidad: }
+            \textbf{Entidad: Cuenta bancaria}
                 \begin{itemize}
-                    \item \underline{\texttt{}} (PK)
-                    \item ...
+                    \item \underline{\texttt{id\_cuenta}} (PK)
                 \end{itemize}
+                \noindent El valor de \texttt{id\_cuenta} puede ser \texttt{NULL}.
 
         \subsection*{Inciso 4}
-            \textbf{Entidad: }
+            \textbf{Entidad: Cuenta}
                 \begin{itemize}
-                    \item \underline{\texttt{}} (PK)
-                    \item ...
+                    \item \underline{\texttt{id\_cuenta}} (PK)
                 \end{itemize}
 
-            \textbf{Relación: }
+            \textbf{Relación: asociada a}
                 \begin{itemize}
-                    \item 
+                    \item Cuentas (N) --- Clientes (N)
                 \end{itemize}
 
-            \textbf{Entidad: }
+            \textbf{Entidad: Clientes}
                 \begin{itemize}
-                    \item \underline{\texttt{}} (PK)
-                    \item ...
+                    \item \texttt{id\_de\_dueños}
                 \end{itemize}
+                \noindent \hl{Importa decir ``cuentas bancarias a más de un cliente'' o ``clientes a más de una cuenta bancaria''? No sé si está bien la lógica.}
 
         \subsection*{Inciso 5}
-            \textbf{Entidad: }
+            \textbf{Entidad: Postulante}
                 \begin{itemize}
-                    \item \underline{\texttt{}} (PK)
-                    \item ...
+                    \item \underline{\texttt{CUIT}} (PK)
+                    \item \texttt{apellido}
+                    \item \texttt{nombre}
+                    \item \texttt{domicilio}
+                    \item \texttt{telefonos}
+                    \item \texttt{direcciones\_de\_mail}
                 \end{itemize}
 
-            \textbf{Relación: }
+            \textbf{Relación: tiene}
                 \begin{itemize}
-                    \item 
+                    \item Postulante (1) --- (N) Habilidades
                 \end{itemize}
 
-            \textbf{Entidad: }
+            \textbf{Entidad: Habilidades}
                 \begin{itemize}
-                    \item \underline{\texttt{}} (PK)
-                    \item ...
+                    \item \underline{\texttt{CUIT}} (PK)
+                    \item \texttt{habilidades}
                 \end{itemize}
+                \noindent \hl{¿La clave primaria de las dos entidades deben ser iguales? Si no, ¿cómo sabe que estamos hablando del mismo postulante?}
 
         \subsection*{Inciso 6}
             \textbf{Entidad: }
