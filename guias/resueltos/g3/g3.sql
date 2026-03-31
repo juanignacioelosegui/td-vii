@@ -67,3 +67,26 @@ ORDER BY numCounts DESC;
 SELECT DISTINCT ar.name FROM artist ar
 LEFT JOIN album al ON ar.artist_id = al.artist_id
 WHERE al.album_id IS NULL;
+
+--	Ejercicio 11
+SELECT ar.name
+	, COUNT(t.track_id) AS cantTracks
+FROM artist ar
+JOIN track t ON ar.name = t.composer
+WHERE ar.name LIKE 'M%'
+GROUP BY ar.artist_id, ar.name
+HAVING COUNT(t.track_id) > 25
+ORDER BY cantTracks DESC;
+
+--	Ejercicio 12
+SELECT ar.name
+	, al.title
+FROM artist ar
+INNER JOIN album al ON ar.artist_id = al.artist_id
+/* Muestro únicamente los artistas que tienen álbumes */
+
+--	Ejercicio 13
+SELECT al.title
+	, ar.name
+FROM album al
+INNER JOIN artist ar ON al.artist_id = ar.artist_id
