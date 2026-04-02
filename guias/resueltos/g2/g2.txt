@@ -1,0 +1,34 @@
+--	Juan Ignacio Elosegui
+
+--	Ejercicio 1
+π id, name, birth_year, playing_position(Players)
+
+--	Ejercicio 2
+π id (σ name = 'Lionel Messi' (Players))
+
+--	Ejercicio 3
+π name (σ birth_year = 1994 (Players))
+
+--	Ejercicio 4
+π id, name, playing_position (σ national_team = 'ARG' (Players))
+
+--	Ejercicio 5
+π id, name, playing_position (σ national_team = 'ARG'∧ birth_year > 2000 (Players))
+
+--	Ejercicio 6
+Players ∪ Players
+--	(!) No hay duplicados.
+
+--	Ejercicio 7
+(σ name = 'Lionel Messi' (Players)) ∪ (σ birth_year > 2000 ∧ national_team = 'ARG' (Players))
+
+--	Ejercicio 8
+Players ∩ Players
+(!) Devuelve la misma tabla.
+
+--	Ejercicio 9
+Players ⨯ Matches
+(!) Genera 680 x 64 = 43.520 combinaciones.
+
+--	Ejercicio 10
+π home, away, datetime, Stages.name (Matches ⋈ Matches.stage = Stages.id Stages)
