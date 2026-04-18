@@ -1,0 +1,831 @@
+\documentclass[12pt, a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{lmodern}
+
+% ── Colores
+\definecolor{teal}{RGB}{0, 100, 110}
+\definecolor{codegray}{RGB}{245, 245, 245}
+\definecolor{codegreen}{RGB}{0, 120, 0}
+\definecolor{codepurple}{RGB}{120, 0, 120}
+\definecolor{codeblue}{RGB}{0, 60, 180}
+
+% ── Estilo de código SQL
+\lstdefinestyle{sql}{
+  language=SQL,
+  backgroundcolor=\color{codegray},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{codeblue}\bfseries,
+  commentstyle=\color{codegreen},
+  stringstyle=\color{codepurple},
+  breaklines=true,
+  frame=single,
+  framerule=0.4pt,
+  rulecolor=\color{gray!50},
+  xleftmargin=8pt,
+  xrightmargin=8pt,
+  numbers=none,
+  tabsize=2,
+  showstringspaces=false,
+  morekeywords={FETCH, FIRST, ROWS, ONLY, OFFSET, OVER, PARTITION, NULLS, LAST,
+                TABLESPACE, USING, UNBOUNDED, PRECEDING, FOLLOWING, CURRENT,
+                DENSE_RANK, ROW_NUMBER, NTILE, LAG, LEAD, FIRST_VALUE, LAST_VALUE,
+                INTERSECT, EXCEPT, EXPLAIN, ANALYZE}
+}
+\lstset{style=sql}
+
+% ── Encabezados de sección
+\titleformat{\section}{\Large\bfseries\color{teal}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\large\bfseries\color{teal!80}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\bfseries}{}{0em}{}
+
+% ── Encabezado y pie de página
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\textcolor{gray}{\small TD7: Ingeniería de Datos — UTDT}}
+\lhead{\textcolor{gray}{\small Resumen de clases teóricas}}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% ── Hyperlinks
+\hypersetup{
+  colorlinks=true,
+  linkcolor=teal,
+  urlcolor=teal,
+  citecolor=teal
+}
+
+% ── Listas compactas
+\setlist[itemize]{itemsep=2pt, topsep=4pt}
+\setlist[enumerate]{itemsep=2pt, topsep=4pt}
+
+% ──────────────────────────────────────────────
+\begin{document}
+
+\begin{titlepage}
+  \centering
+  \vspace*{3cm}
+  {\Huge\bfseries\color{teal} TD7: Ingeniería de Datos\par}
+  \vspace{0.5cm}
+  {\Large Universidad Torcuato Di Tella\par}
+  \vspace{2cm}
+  {\huge\bfseries Resumen de Clases Teóricas\par}
+  \vspace{1cm}
+  {\large Teóricas 1.0 a 7.4\par}
+  \vfill
+  {\normalsize Abril 2026}
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% ══════════════════════════════════════════════
+\section{T1.0 — Presentación del curso}
+
+Presentación general de la materia. El curso cubre el ciclo completo de trabajo con datos: desde el modelado y diseño de bases de datos relacionales, pasando por SQL, hasta temas avanzados de gestión (concurrencia, recuperación, almacenamiento). Se usa \textbf{PostgreSQL} como motor y la base de datos \textbf{Chinook} como dataset de práctica.
+
+% ══════════════════════════════════════════════
+\section{T1.1 — Introducción a las bases de datos}
+
+\subsection{¿Qué es una base de datos?}
+Colección organizada de datos interrelacionados, gestionada por un \textbf{SGBD} (Sistema Gestor de Bases de Datos).
+
+\subsection{¿Por qué no usar archivos planos?}
+Los archivos tienen problemas de redundancia, inconsistencia, dificultad de acceso, falta de integridad, concurrencia imposible y ausencia de seguridad. Los SGBD resuelven todo esto.
+
+\subsection{Niveles de abstracción}
+\begin{itemize}
+  \item \textbf{Físico:} cómo se almacenan los datos en disco
+  \item \textbf{Lógico (conceptual):} qué datos hay y sus relaciones
+  \item \textbf{Vistas:} subconjuntos de datos para distintos usuarios
+\end{itemize}
+
+\textbf{Independencia de datos:} cambios en el nivel físico no afectan al lógico (independencia física), y cambios en el lógico no afectan a las aplicaciones (independencia lógica).
+
+\subsection{Lenguajes}
+\begin{itemize}
+  \item \textbf{DDL} (Data Definition Language): define esquemas
+  \item \textbf{DML} (Data Manipulation Language): consulta y modifica datos
+  \item \textbf{DCL} (Data Control Language): permisos
+  \item \textbf{TCL} (Transaction Control Language): transacciones
+\end{itemize}
+
+\subsection{Propiedades ACID}
+\begin{itemize}
+  \item \textbf{Atomicity:} la transacción se ejecuta completa o no se ejecuta
+  \item \textbf{Consistency:} lleva la base de un estado consistente a otro
+  \item \textbf{Isolation:} las transacciones concurrentes se comportan como si fueran seriales
+  \item \textbf{Durability:} los cambios confirmados son permanentes
+\end{itemize}
+
+% ══════════════════════════════════════════════
+\section{T1.2 — Primary Key y Foreign Key}
+
+\textbf{Clave Primaria (PK):} atributo o conjunto de atributos que identifican unívocamente cada fila de una tabla. No puede ser NULL ni repetirse. Se elige entre las \textit{claves candidatas}.
+
+\textbf{Clave Foránea (FK):} atributo(s) en una tabla que referencia(n) la PK de otra tabla. Garantiza la \textbf{integridad referencial}: no puede existir un valor en la FK que no exista en la tabla referenciada.
+
+\subsection{Comportamiento ante DELETE/UPDATE en la tabla padre}
+\begin{itemize}
+  \item \texttt{CASCADE}: se propaga el cambio
+  \item \texttt{SET NULL}: la FK se pone en NULL
+  \item \texttt{RESTRICT} / \texttt{NO ACTION}: se rechaza la operación
+\end{itemize}
+
+% ══════════════════════════════════════════════
+\section{T2 — Modelo Entidad-Interrelación (DER)}
+
+Herramienta de diseño conceptual para modelar la realidad \textit{antes} de implementar.
+
+\subsection{Componentes}
+\begin{itemize}
+  \item \textbf{Entidades:} objetos del mundo real (rectángulos). Tienen \textbf{atributos} (óvalos). El atributo identificador es la \textit{clave} (subrayado).
+  \item \textbf{Interrelaciones:} vínculos entre entidades (rombos). También pueden tener atributos propios.
+\end{itemize}
+
+\subsection{Tipos de atributos}
+\begin{itemize}
+  \item Simples vs.\ compuestos
+  \item Univaluados vs.\ multivaluados (doble óvalo)
+  \item Derivados (línea punteada)
+  \item Clave (subrayado)
+\end{itemize}
+
+\subsection{Cardinalidad}
+\begin{itemize}
+  \item \textbf{1:1} — uno a uno
+  \item \textbf{1:N} — uno a muchos
+  \item \textbf{N:M} — muchos a muchos
+\end{itemize}
+
+\subsection{Participación}
+\begin{itemize}
+  \item \textbf{Total} (línea doble): toda entidad participa obligatoriamente
+  \item \textbf{Parcial} (línea simple): la participación es opcional
+\end{itemize}
+
+\subsection{Entidades débiles}
+No tienen clave propia; dependen de una \textit{entidad identificadora}. Se representan con rectángulo doble. Su clave es una \textit{clave parcial} (discriminante).
+
+\subsection{Especialización/Generalización (herencia)}
+Una entidad puede especializarse en subentidades (\textbf{ISA}). Puede ser disjunta o solapada, total o parcial.
+
+\subsection{Paso al modelo relacional}
+\begin{itemize}
+  \item Cada entidad $\rightarrow$ tabla
+  \item Relaciones N:M $\rightarrow$ tabla intermedia
+  \item Relaciones 1:N $\rightarrow$ FK en el lado ``N''
+  \item Entidades débiles $\rightarrow$ incluyen la PK de la entidad identificadora
+\end{itemize}
+
+% ══════════════════════════════════════════════
+\section{T3.1 — Modelo Relacional}
+
+Propuesto por \textbf{Edgar Codd} en 1970. La base de datos es un conjunto de \textbf{relaciones} (tablas).
+
+\subsection{Conceptos clave}
+\begin{itemize}
+  \item \textbf{Relación:} subconjunto del producto cartesiano de dominios
+  \item \textbf{Esquema:} $R(A_1, A_2, \ldots, A_n)$
+  \item \textbf{Tupla:} fila de la tabla
+  \item \textbf{Dominio:} conjunto de valores válidos para un atributo
+\end{itemize}
+
+\subsection{Propiedades de una relación}
+\begin{itemize}
+  \item No hay tuplas duplicadas
+  \item Los atributos no tienen orden
+  \item Los valores de los atributos son atómicos (1FN)
+\end{itemize}
+
+\subsection{Restricciones de integridad}
+\begin{enumerate}
+  \item \textbf{De dominio:} el valor debe pertenecer al dominio del atributo
+  \item \textbf{De unicidad:} la PK identifica cada tupla unívocamente
+  \item \textbf{Integridad de entidad:} la PK no puede ser NULL
+  \item \textbf{Integridad referencial:} las FK deben apuntar a valores existentes
+\end{enumerate}
+
+\subsection{Jerarquía de claves}
+\begin{itemize}
+  \item \textbf{Superclave:} cualquier conjunto de atributos que identifica unívocamente
+  \item \textbf{Clave candidata:} superclave mínima (sin atributos redundantes)
+  \item \textbf{Clave primaria:} clave candidata elegida como identificador oficial
+\end{itemize}
+
+\subsection{SQL DDL}
+\begin{lstlisting}
+CREATE TABLE empleado (
+    legajo    INT          PRIMARY KEY,
+    nombre    VARCHAR(50)  NOT NULL,
+    salario   NUMERIC(10,2),
+    dept_id   INT          REFERENCES departamento(id)
+                           ON DELETE SET NULL
+);
+\end{lstlisting}
+
+Tipos de datos: \texttt{INT}, \texttt{FLOAT}, \texttt{NUMERIC(i,j)}, \texttt{VARCHAR(n)}, \texttt{DATE}, \texttt{TIME(i)}, \texttt{BOOLEAN}.
+
+Restricciones: \texttt{NOT NULL}, \texttt{UNIQUE}, \texttt{PRIMARY KEY}, \texttt{FOREIGN KEY}, \texttt{CHECK}.
+
+% ══════════════════════════════════════════════
+\section{T3.2 — Álgebra Relacional}
+
+Lenguaje \textbf{formal y procedural} que describe \textit{cómo} obtener el resultado. Base teórica de SQL.
+
+\subsection{Operadores unarios}
+
+\begin{tabularx}{\textwidth}{lllX}
+\toprule
+\textbf{Operador} & \textbf{Notación} & \textbf{Descripción} \\
+\midrule
+Selección    & $\sigma_{\text{cond}}(R)$ & Filtra filas que cumplen la condición \\
+Proyección   & $\pi_{\text{atrs}}(R)$    & Selecciona columnas (elimina duplicados) \\
+Renombramiento & $\rho_{\text{nuevo}}(R)$ & Renombra la relación o atributos \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Operadores de conjuntos}
+Requieren relaciones \textit{compatibles} (mismos atributos y tipos).
+
+\begin{tabularx}{\textwidth}{llX}
+\toprule
+\textbf{Operador} & \textbf{Símbolo} & \textbf{Descripción} \\
+\midrule
+Unión        & $R \cup S$ & Tuplas en R o en S (sin duplicados) \\
+Diferencia   & $R - S$    & Tuplas en R pero no en S \\
+Intersección & $R \cap S$ & Tuplas en R y en S \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Producto cartesiano y junta}
+\begin{itemize}
+  \item \textbf{Producto cartesiano:} $R \times S$ — combina todas las tuplas de R con todas las de S
+  \item \textbf{Junta (Join):} $R \bowtie_{\text{cond}} S = \sigma_{\text{cond}}(R \times S)$
+  \item \textbf{Junta natural:} $R \bowtie S$ — une por atributos con el mismo nombre
+\end{itemize}
+
+% ══════════════════════════════════════════════
+\section{T3.3 — Introducción a SQL}
+
+SQL es un lenguaje \textbf{declarativo} (especifica \textit{qué}, no \textit{cómo}).
+
+\subsection{Estructura básica}
+\begin{lstlisting}
+SELECT atributos
+FROM   tabla
+WHERE  condicion;
+\end{lstlisting}
+
+\textbf{Dataset de práctica — Chinook:} tienda de media digital. 11 tablas: Artist, Album, Track, Genre, MediaType, Invoice, InvoiceLine, Customer, Employee, Playlist, PlaylistTrack. Más de 15.000 filas.
+
+\subsection{Funciones de agregación}
+\begin{itemize}
+  \item \texttt{COUNT(*)} — cuenta filas (incluye NULLs)
+  \item \texttt{COUNT(A)} — cuenta valores no NULL del atributo A
+  \item \texttt{COUNT(DISTINCT A)} — cuenta valores distintos no NULL
+  \item \texttt{SUM(A)}, \texttt{AVG(A)}, \texttt{MIN(A)}, \texttt{MAX(A)}
+\end{itemize}
+
+\subsection{JOIN}
+\begin{lstlisting}
+SELECT a.Title, ar.Name
+FROM   Album a
+INNER JOIN Artist ar ON a.ArtistId = ar.ArtistId;
+\end{lstlisting}
+
+\textbf{Operaciones con NULL:} cualquier comparación con NULL da UNKNOWN. Usar \texttt{IS NULL} / \texttt{IS NOT NULL}.
+
+% ══════════════════════════════════════════════
+\section{T4.1 — SQL Parte II}
+
+\subsection{ORDER BY}
+\begin{lstlisting}
+SELECT * FROM Track ORDER BY UnitPrice DESC, Name ASC;
+\end{lstlisting}
+
+\subsection{Paginación}
+\begin{lstlisting}
+SELECT * FROM Track
+ORDER BY TrackId
+OFFSET 10 ROWS FETCH FIRST 5 ROWS ONLY;
+\end{lstlisting}
+
+\subsection{GROUP BY}
+\begin{lstlisting}
+SELECT GenreId, COUNT(*) AS cantidad
+FROM   Track
+GROUP BY GenreId;
+\end{lstlisting}
+Todo atributo en SELECT que no sea función de agregación \textbf{debe estar} en GROUP BY.
+
+\subsection{HAVING}
+Filtra grupos (se aplica \textit{después} de GROUP BY, a diferencia de WHERE que filtra filas):
+\begin{lstlisting}
+SELECT GenreId, COUNT(*) AS cantidad
+FROM   Track
+GROUP BY GenreId
+HAVING COUNT(*) > 50;
+\end{lstlisting}
+
+\subsection{Orden de ejecución lógico}
+\texttt{FROM} $\rightarrow$ \texttt{WHERE} $\rightarrow$ \texttt{GROUP BY} $\rightarrow$ \texttt{HAVING} $\rightarrow$ \texttt{SELECT} $\rightarrow$ \texttt{ORDER BY}
+
+\subsection{OUTER JOIN}
+\begin{lstlisting}
+-- LEFT JOIN: todas las filas de la izquierda, NULL si no hay match
+SELECT c.CustomerId, i.InvoiceId
+FROM   Customer c
+LEFT JOIN Invoice i ON c.CustomerId = i.CustomerId;
+
+-- RIGHT JOIN: todas las filas de la derecha
+-- FULL OUTER JOIN: todas las filas de ambas tablas
+\end{lstlisting}
+
+% ══════════════════════════════════════════════
+\section{T4.2 — SQL Parte III}
+
+\subsection{Cláusula WITH (CTE)}
+\begin{lstlisting}
+WITH ventas_por_cliente AS (
+    SELECT CustomerId, SUM(Total) AS total
+    FROM   Invoice
+    GROUP BY CustomerId
+)
+SELECT * FROM ventas_por_cliente WHERE total > 100;
+\end{lstlisting}
+Permite nombrar subconsultas y reutilizarlas. Mejora la legibilidad y permite encadenar resultados intermedios.
+
+\subsection{Subqueries (consultas anidadas)}
+\begin{lstlisting}
+-- Escalar
+SELECT * FROM Track
+WHERE Milliseconds > (SELECT AVG(Milliseconds) FROM Track);
+
+-- Con IN
+SELECT * FROM Customer
+WHERE CustomerId IN (SELECT CustomerId FROM Invoice);
+
+-- Con ALL / SOME
+SELECT * FROM Track
+WHERE UnitPrice > ALL (SELECT UnitPrice FROM Track WHERE GenreId = 1);
+
+-- Con EXISTS (correlacionada)
+SELECT * FROM Artist a
+WHERE EXISTS (
+    SELECT 1 FROM Album al WHERE al.ArtistId = a.ArtistId
+);
+\end{lstlisting}
+
+\subsection{Operaciones de conjuntos}
+\begin{lstlisting}
+-- UNION (elimina duplicados)
+SELECT City FROM Customer UNION SELECT City FROM Employee;
+
+-- UNION ALL (mantiene duplicados)
+SELECT City FROM Customer UNION ALL SELECT City FROM Employee;
+
+-- INTERSECT
+SELECT City FROM Customer INTERSECT SELECT City FROM Employee;
+
+-- EXCEPT (diferencia)
+SELECT City FROM Customer EXCEPT SELECT City FROM Employee;
+\end{lstlisting}
+
+\subsection{Diferencias entre COUNT}
+\begin{itemize}
+  \item \texttt{COUNT(*)} — cuenta todas las filas, incluyendo NULLs
+  \item \texttt{COUNT(A)} — cuenta solo valores no NULL de A
+  \item \texttt{COUNT(DISTINCT A)} — cuenta valores distintos no NULL de A
+\end{itemize}
+
+% ══════════════════════════════════════════════
+\section{T5.1 — Funciones de Ventana (Window Functions)}
+
+Las funciones de ventana calculan valores sobre un subconjunto de filas relacionadas con la fila actual, \textbf{sin colapsar el resultado} (a diferencia de GROUP BY).
+
+\subsection{Sintaxis general}
+\begin{lstlisting}
+funcion() OVER (
+    [PARTITION BY atributo]
+    [ORDER BY atributo]
+    [ROWS/RANGE frame_specification]
+)
+\end{lstlisting}
+
+\subsection{Funciones de ranking}
+\begin{itemize}
+  \item \texttt{ROW\_NUMBER()} — número de fila único (sin empates)
+  \item \texttt{RANK()} — ranking con saltos ante empates (1, 1, 3\ldots)
+  \item \texttt{DENSE\_RANK()} — ranking sin saltos (1, 1, 2\ldots)
+  \item \texttt{NTILE(n)} — divide en $n$ grupos iguales
+\end{itemize}
+
+\subsection{Funciones de desplazamiento}
+\begin{itemize}
+  \item \texttt{LAG(expr, n)} — valor de $n$ filas antes
+  \item \texttt{LEAD(expr, n)} — valor de $n$ filas adelante
+  \item \texttt{FIRST\_VALUE(expr)} — primer valor de la ventana
+  \item \texttt{LAST\_VALUE(expr)} — último valor de la ventana
+\end{itemize}
+
+\subsection{Ejemplo}
+\begin{lstlisting}
+SELECT nombre, salario,
+       AVG(salario) OVER (PARTITION BY departamento) AS avg_dept,
+       SUM(salario) OVER (ORDER BY fecha
+                          ROWS UNBOUNDED PRECEDING)  AS acumulado
+FROM empleados;
+\end{lstlisting}
+
+\textbf{PARTITION BY:} divide las filas en grupos (como GROUP BY pero sin colapsar). Cada partición define una ventana independiente.
+
+% ══════════════════════════════════════════════
+\section{T5.2 — Normalización}
+
+La normalización reduce \textbf{redundancia} y evita \textbf{anomalías}.
+
+\subsection{Anomalías de la redundancia}
+\begin{itemize}
+  \item \textbf{Inserción:} para insertar un dato hay que repetir otros
+  \item \textbf{Modificación:} hay que actualizar en múltiples lugares
+  \item \textbf{Eliminación:} al borrar se pierde información no deseada
+\end{itemize}
+
+\subsection{Dependencias funcionales}
+$X \rightarrow Y$ significa que conocer $X$ determina unívocamente el valor de $Y$.
+\begin{itemize}
+  \item \textbf{Dependencia completa:} $Y$ depende de todo $X$ (no de un subconjunto)
+  \item \textbf{Dependencia transitiva:} $X \rightarrow Y \rightarrow Z$ (donde $Y$ no es clave)
+\end{itemize}
+
+\subsection{Formas normales}
+
+\subsubsection{1FN — Primera Forma Normal}
+Todos los atributos son atómicos (sin grupos repetidos ni atributos multivaluados). Es la definición misma del modelo relacional.
+
+\subsubsection{2FN — Segunda Forma Normal}
+Está en 1FN y \textbf{no hay dependencias parciales}: todo atributo no primo depende de la clave completa. Solo es relevante cuando la PK es compuesta.
+
+\subsubsection{3FN — Tercera Forma Normal}
+Está en 2FN y \textbf{no hay dependencias transitivas}: ningún atributo no primo depende de otro atributo no primo.
+
+\subsubsection{FNBC — Forma Normal de Boyce-Codd}
+Versión más estricta de 3FN. Para toda dependencia funcional $X \rightarrow Y$ no trivial, $X$ debe ser superclave.
+
+\subsection{Descomposición}
+Para normalizar se divide una relación problemática. La descomposición debe ser:
+\begin{itemize}
+  \item \textbf{Sin pérdida (lossless):} el join de las partes reconstruye la relación original
+  \item \textbf{Que preserve dependencias:} las DF originales siguen siendo verificables
+\end{itemize}
+
+% ══════════════════════════════════════════════
+\section{T6.1 — Concurrencia: Serializabilidad}
+
+\subsection{Motivación}
+En producción, múltiples transacciones se ejecutan simultáneamente. Sin control, pueden surgir inconsistencias.
+
+\subsection{Schedule y serializabilidad}
+\begin{itemize}
+  \item \textbf{Schedule:} orden intercalado de instrucciones de múltiples transacciones
+  \item \textbf{Schedule serial:} las transacciones se ejecutan de a una, sin intercalarse. Siempre correcto.
+  \item \textbf{Schedule serializable:} produce el mismo resultado que algún schedule serial. Garantiza la propiedad \textit{Isolation} de ACID.
+\end{itemize}
+
+\subsection{Conflictos}
+Dos instrucciones de distintas transacciones sobre el mismo ítem conflictúan si al menos una es escritura:
+\begin{itemize}
+  \item $R_{T1}(X),\; W_{T2}(X)$ — T1 lee lo que T2 va a escribir
+  \item $W_{T1}(X),\; R_{T2}(X)$ — T1 escribe lo que T2 va a leer
+  \item $W_{T1}(X),\; W_{T2}(X)$ — ambas escriben el mismo ítem
+\end{itemize}
+
+Un schedule es \textbf{serializable por conflictos} si puede transformarse en un schedule serial mediante inversiones de instrucciones no conflictivas.
+
+\subsection{Grafo de precedencias}
+\begin{itemize}
+  \item Nodos = transacciones
+  \item Arco $T_1 \rightarrow T_2$ si hay un conflicto de una instrucción de $T_1$ que precede a una de $T_2$
+  \item \textbf{El schedule es serializable $\Longleftrightarrow$ el grafo no tiene ciclos}
+\end{itemize}
+
+\subsection{Control de concurrencia}
+
+\subsubsection{Estrategia optimista (timestamps)}
+Asume que los conflictos son raros. Deja operar libremente y resuelve conflictos con rollback.
+
+\subsubsection{Estrategia pesimista (locks)}
+Evita conflictos bloqueando recursos antes de operar.
+
+\begin{itemize}
+  \item \textbf{Lock exclusivo (X):} para escritura. Ningún otro lock puede concederse sobre ese recurso.
+  \item \textbf{Lock compartido (S):} para lectura. Pueden coexistir múltiples S-locks; no puede coexistir con X-lock.
+\end{itemize}
+
+\subsubsection{Protocolo 2PL (Two-Phase Locking)}
+Garantiza serializabilidad. Regla: una transacción \textbf{no puede adquirir ningún lock después de haber liberado alguno}.
+\begin{itemize}
+  \item \textbf{Fase de crecimiento:} adquiere locks
+  \item \textbf{Fase de reducción:} libera locks
+\end{itemize}
+
+\subsubsection{Peligros del 2PL}
+\begin{itemize}
+  \item \textbf{Deadlock:} dos transacciones se esperan mutuamente
+  \item \textbf{Starvation:} una transacción nunca consigue el lock porque otras siempre se le adelantan
+\end{itemize}
+
+% ══════════════════════════════════════════════
+\section{T6.2 — Concurrencia: Recuperabilidad}
+
+\subsection{Motivación}
+La serializabilidad garantiza \textit{Isolation}. También se necesita \textit{Atomicity} y \textit{Durability} cuando una transacción falla dentro de un schedule complejo.
+
+\subsection{Schedule recuperable}
+Un schedule es \textbf{recuperable} si y solo si ninguna transacción $T$ hace commit hasta que todas las transacciones que escribieron datos que $T$ leyó hayan hecho commit primero.
+
+Formalmente: si $W_{T1}(X)$ ocurre antes que $R_{T2}(X)$, entonces $c_{T1}$ debe ocurrir antes que $c_{T2}$.
+
+\subsection{Rollback en cascada}
+Si T1 aborta y T2 leyó datos de T1, hay que hacer rollback de T2 también, y de todo lo que dependa de T2.
+
+\subsection{Log de operaciones}
+Para poder deshacer efectos, el motor mantiene un log con registros:
+\begin{itemize}
+  \item \texttt{BEGIN $T_{id}$}
+  \item \texttt{WRITE $T_{id}$, X, $X_{old}$, $X_{new}$}
+  \item \texttt{READ $T_{id}$, X}
+  \item \texttt{COMMIT $T_{id}$}
+  \item \texttt{ABORT $T_{id}$}
+\end{itemize}
+
+\subsection{Resumen: independencia entre propiedades}
+Serializabilidad y recuperabilidad son propiedades \textbf{independientes}. Un schedule puede ser serializable sin ser recuperable, y viceversa.
+
+% ══════════════════════════════════════════════
+\section{T6.3 — Recuperación ante Fallas}
+
+\subsection{Tipos de fallas}
+\begin{enumerate}
+  \item \textbf{Fallas de sistema:} errores de software/hardware que detienen el gestor (segfault, división por cero). No hay pérdida de información en disco.
+  \item \textbf{Fallas de dispositivos:} daño físico en disco o memoria. Puede haber pérdida de datos.
+  \item \textbf{Fallas naturales externas:} cortes de luz, terremotos, incendios.
+\end{enumerate}
+
+\textbf{Fallas catastróficas} (pérdida de datos en disco) $\rightarrow$ requieren \textbf{backups}.\\
+\textbf{Fallas no catastróficas} (solo se interrumpe la ejecución) $\rightarrow$ requieren \textbf{mecanismos de recuperación} basados en log.
+
+\subsection{El WAL (Write-Ahead Log)}
+Archivo que registra \textit{todas} las operaciones del gestor.
+Registros: \texttt{(BEGIN, $T_{id}$)}, \texttt{(WRITE, $T_{id}$, X, $v_{old}$, $v_{new}$)}, \texttt{(READ, $T_{id}$, X)}, \texttt{(COMMIT, $T_{id}$)}, \texttt{(ABORT, $T_{id}$)}.
+
+\subsection{Reglas del Gestor de Recuperación}
+\begin{enumerate}
+  \item \textbf{Regla WAL:} antes de escribir un ítem modificado en disco, el registro de log correspondiente debe estar ya en disco.
+  \item \textbf{Regla FLC (Force Log at Commit):} cuando una transacción hace commit, el log debe volcarse a disco (\textit{flush}).
+\end{enumerate}
+
+\subsection{Estrategias de recuperación}
+
+\subsubsection{UNDO (actualización inmediata)}
+Los datos se escriben en disco lo antes posible, \textit{antes} del commit. El log guarda $v_{old}$.
+Ante una falla: recorrer el log de atrás hacia adelante y restaurar $v_{old}$ para transacciones sin COMMIT.
+El algoritmo es \textbf{idempotente}: puede ejecutarse parcialmente múltiples veces con el mismo resultado final.
+
+\subsubsection{REDO (actualización diferida)}
+Los datos \textbf{no} se escriben en disco hasta después del commit. El log guarda $v_{new}$.
+Ante una falla: buscar transacciones commiteadas y rehacer sus escrituras.
+Requiere \textbf{checkpoints} para no tener que retroceder hasta el inicio del log.
+
+\subsubsection{Checkpoints en REDO}
+\begin{enumerate}
+  \item Escribir \texttt{(BEGIN CKPT, transacciones\_activas)} en el log
+  \item Volcar a disco todos los ítems modificados por transacciones ya commiteadas
+  \item Escribir \texttt{(END CKPT)} en el log y volcar el log a disco
+\end{enumerate}
+
+% ══════════════════════════════════════════════
+\section{T7.1 — Recuperación: UNDO/REDO}
+
+\subsection{Estrategia UNDO/REDO (actualización libre)}
+El SGBD puede volcar ítems a disco cuando quiera (antes o después del commit). Mayor flexibilidad de gestión de memoria.
+
+El log guarda tanto $v_{old}$ como $v_{new}$: \texttt{(WRITE, $T_i$, X, $v_{old}$, $v_{new}$)}.
+
+\textbf{Regla maestra:} el log se vuelca a disco \textit{antes} de escribir el ítem (Write-Ahead Logging puro).
+
+\subsection{Procedimiento de recuperación bajo UNDO/REDO}
+\begin{enumerate}
+  \item Recorrer el log de atrás hacia adelante, clasificando transacciones en commiteadas y no commiteadas
+  \item Para las no commiteadas: deshacer escrituras (restaurar $v_{old}$)
+  \item En una pasada de adelante hacia atrás: rehacer escrituras de transacciones commiteadas
+  \item Registrar \texttt{ABORT} para las no commiteadas y volcar el log
+\end{enumerate}
+
+\subsection{Comparación de estrategias}
+
+\begin{tabularx}{\textwidth}{Xccc}
+\toprule
+\textbf{Estrategia} & \textbf{Escribe antes del commit} & \textbf{Rehace} & \textbf{Deshace} \\
+\midrule
+UNDO      & Sí (obligatorio) & No  & Sí \\
+REDO      & No               & Sí  & No \\
+UNDO/REDO & Libre            & Sí  & Sí \\
+\bottomrule
+\end{tabularx}
+
+% ══════════════════════════════════════════════
+\section{T7.2 — Backups}
+
+\subsection{Necesidad}
+Ante fallas catastróficas (daño físico), el log no alcanza. Se necesitan copias externas de la base.
+
+\subsection{Dumps periódicos}
+Copias realizadas periódicamente (ej.\ una vez al día) a un soporte externo, idealmente en otra ubicación física.
+\begin{itemize}
+  \item Al recuperar: restaurar el dump y reproducir el log para rehacer las transacciones ocurridas desde el dump.
+  \item Si el log también fue dañado: se pierden las transacciones más recientes.
+\end{itemize}
+
+\subsection{Tipos de dump}
+\begin{itemize}
+  \item \textbf{Full dump:} copia completa de toda la base de datos
+  \item \textbf{Incremental dump:} solo los datos modificados desde el último dump
+\end{itemize}
+
+\subsection{Analogía checkpoint/dump}
+\begin{itemize}
+  \item \textbf{Checkpoint:} mueve datos de memoria a disco $\rightarrow$ recuperación de fallas de sistema
+  \item \textbf{Dump:} mueve datos de disco a archivo externo $\rightarrow$ recuperación de fallas de dispositivos
+\end{itemize}
+
+\subsection{High Availability — Réplicas}
+\begin{itemize}
+  \item Para fallas de gran escala se usan \textbf{sistemas de réplicas} en distintas ubicaciones
+  \item El backup remoto se denomina \textbf{réplica secundaria}
+  \item Arquitectura \textbf{Activo/Pasivo}: el nodo secundario solo sirve tráfico cuando el primario está caído
+  \item La replicación continua se realiza a través del log (el primario envía entradas al secundario)
+\end{itemize}
+
+\subsection{RAID}
+Técnica de gestión de discos para mejorar rendimiento y/o tolerancia a fallos:
+\begin{itemize}
+  \item \textbf{RAID 0 (Striping):} distribuye datos entre discos para mayor velocidad; sin redundancia
+  \item \textbf{RAID 1 (Mirroring):} duplica los datos en dos discos
+  \item \textbf{RAID 5 (Paridad):} combina rendimiento y tolerancia a fallos con paridad distribuida
+\end{itemize}
+
+% ══════════════════════════════════════════════
+\section{T7.3 — Almacenamiento e Índices}
+
+\subsection{Jerarquía de almacenamiento}
+\begin{itemize}
+  \item \textbf{Primario:} registros del procesador, caché, RAM — muy rápido, volátil, costoso
+  \item \textbf{Secundario:} flash/SSD, discos magnéticos — lento, persistente, barato
+  \item \textbf{Terciario:} cintas magnéticas — muy lento, gran capacidad, largo plazo
+\end{itemize}
+
+\subsection{Discos magnéticos}
+La unidad de I/O es el \textbf{bloque} (4\,KB--16\,KB). Se leen/escriben de forma atómica. El acceso puede ser:
+\begin{itemize}
+  \item \textbf{Secuencial:} bloques físicamente adyacentes $\rightarrow$ más rápido
+  \item \textbf{Aleatorio (random access):} bloques dispersos $\rightarrow$ más lento (requiere seek)
+\end{itemize}
+
+\subsubsection{Técnicas de optimización}
+\begin{itemize}
+  \item \textbf{Buffering:} mantener bloques ya leídos en memoria para evitar releerlos
+  \item \textbf{Read-ahead:} cargar bloques consecutivos anticipadamente
+  \item \textbf{Scheduling:} reordenar pedidos de bloques según su ubicación física
+\end{itemize}
+
+\subsection{Organización de archivos — Registros}
+Los registros son el correlato en disco de las tuplas.
+
+\subsubsection{Registros de tamaño fijo}
+\begin{itemize}
+  \item Facilita el almacenamiento pero impide dominios de tamaño variable (como \texttt{VARCHAR})
+  \item Cada bloque aloja $\lfloor\text{tamaño\_bloque} / \text{tamaño\_registro}\rfloor$ registros
+  \item Al borrar registros quedan ``huecos'' reutilizables en futuras inserciones
+\end{itemize}
+
+\subsubsection{Registros de tamaño variable}
+\begin{itemize}
+  \item Permite dominios de distinto tamaño y múltiples relaciones en el mismo archivo
+  \item Cada bloque tiene un header con: cantidad de registros, lista de ubicaciones de cada registro, ubicación del espacio vacío
+\end{itemize}
+
+\subsection{Metadata (Data Dictionary)}
+El motor mantiene: nombres de relaciones y atributos con sus tipos, constraints (PK, FK), índices, usuarios y permisos, ubicación física de las relaciones.
+
+\subsection{Índices}
+
+\subsubsection{Motivación}
+Sin índice, una consulta con filtro requiere un \textbf{full scan} (leer todos los bloques). Los índices permiten acceder directamente a los registros relevantes.
+
+\subsubsection{Clustered vs.\ Unclustered}
+\begin{itemize}
+  \item \textbf{Clustered (agrupado):} los datos están físicamente ordenados según la clave del índice. Solo puede haber uno por tabla. Muy eficiente para rangos.
+  \item \textbf{Unclustered (secundario):} el índice apunta a los registros pero los datos no están físicamente ordenados. Pueden existir varios por tabla.
+\end{itemize}
+
+\subsubsection{Tipos de índices}
+\begin{itemize}
+  \item \textbf{B-tree (por defecto):} árbol balanceado. Soporta igualdad y rango (\texttt{<}, \texttt{<=}, \texttt{=}, \texttt{>=}, \texttt{>}). El más versátil.
+  \item \textbf{Hash:} tabla de hash. Solo soporta igualdad (\texttt{=}). Muy rápido para búsquedas exactas, inútil para rangos.
+  \item \textbf{GiST, GIN:} para tipos especiales (texto completo, geométricos).
+\end{itemize}
+
+\subsubsection{Sintaxis SQL}
+\begin{lstlisting}
+CREATE INDEX idx_nombre
+ON    tabla
+USING btree
+(atributo ASC NULLS LAST)
+TABLESPACE pg_default;
+\end{lstlisting}
+
+% ══════════════════════════════════════════════
+\section{T7.4 — Procesamiento de Consultas}
+
+\subsection{Pipeline completo}
+\begin{enumerate}
+  \item \textbf{Parser y traductor:} verifica sintaxis/semántica; traduce SQL a álgebra relacional
+  \item \textbf{Optimizer:} elige entre expresiones algebraicas equivalentes; usa estadísticas del catálogo para estimar costos
+  \item \textbf{Execution Engine:} ejecuta el plan elegido y devuelve el resultado
+\end{enumerate}
+
+SQL (declarativo: \textit{qué}) $\rightarrow$ Álgebra relacional (procedural: \textit{cómo}) $\rightarrow$ Plan de ejecución $\rightarrow$ Resultado.
+
+\subsection{Información de catálogo (estadísticas)}
+\begin{itemize}
+  \item $n_r$: número de tuplas de la relación $r$
+  \item $b_r$: número de bloques con tuplas de $r$
+  \item $l_r$: tamaño de una tupla en bytes
+  \item $f_r$: factor de bloque (tuplas por bloque)
+  \item $V(A, r)$: cantidad de valores distintos del atributo $A$ en $r$
+  \item $\text{Height}_{I(A,r)}$: altura del árbol B+ del índice $I$
+  \item $\text{Length}_{I(A,r)}$: tamaño en bloques de las hojas del índice
+\end{itemize}
+
+\subsection{Estimación de costo}
+Se mide en función de \textbf{seek de bloque} ($t_s$) y \textbf{transferencia de bloque} ($t_T$).
+
+\subsubsection{Costos de selección ($\sigma$)}
+
+\begin{tabularx}{\textwidth}{Xl}
+\toprule
+\textbf{Estrategia} & \textbf{Costo} \\
+\midrule
+Full scan & $t_s + b_r \cdot t_T$ \\
+Full scan (clave, igualdad) & $t_s + (b_r/2) \cdot t_T$ \\
+Clustering index, clave & $(h_i + 1)(t_T + t_s)$ \\
+Clustering index, no clave & $h_i(t_T + t_s) + t_s + b \cdot t_T$ \\
+Secondary index, clave & $(h_i + 1)(t_T + t_s)$ \\
+Secondary index, no clave & $(h_i + n)(t_T + t_s)$ \\
+Rango con clustering index & $h_i(t_T + t_s) + t_s + b \cdot t_T$ \\
+Rango con secondary index & $(h_i + n)(t_T + t_s)$ \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Selecciones complejas}
+\begin{itemize}
+  \item \textbf{Conjunción (AND):} usar el índice de menor costo y filtrar el resto en memoria; o índice compuesto; o intersección de identificadores de múltiples índices.
+  \item \textbf{Disyunción (OR):} usar índices para todas las condiciones y unir sus resultados; o hacer full scan.
+\end{itemize}
+
+\subsection{Plan de ejecución}
+A partir de estadísticas y estimaciones, el optimizer elige un \textbf{plan de ejecución} que especifica: qué índices usar, qué algoritmo aplicar en cada operación (selección, join, proyección, etc.). En PostgreSQL se puede inspeccionar con \texttt{EXPLAIN} / \texttt{EXPLAIN ANALYZE}.
+
+% ══════════════════════════════════════════════
+\section*{Mapa conceptual del curso}
+\addcontentsline{toc}{section}{Mapa conceptual del curso}
+
+\begin{tabularx}{\textwidth}{lX}
+\toprule
+\textbf{Bloque} & \textbf{Temas y teóricas} \\
+\midrule
+\textbf{Diseño} & DER (T2), Modelo Relacional (T3.1), Normalización (T5.2) \\
+\textbf{Consulta} & Álgebra Relacional (T3.2), SQL básico (T3.3), SQL avanzado (T4.1, T4.2), Window Functions (T5.1) \\
+\textbf{Gestión} & Serializabilidad (T6.1), Recuperabilidad (T6.2), Recuperación/UNDO-REDO (T6.3, T7.1), Backups (T7.2) \\
+\textbf{Implementación} & Almacenamiento e Índices (T7.3), Procesamiento de consultas (T7.4) \\
+\bottomrule
+\end{tabularx}
+
+\end{document}
