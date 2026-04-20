@@ -1,0 +1,183 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\definecolor{codegray}{RGB}{245,245,245}
+\definecolor{codeblue}{RGB}{0,60,180}
+\definecolor{codegreen}{RGB}{0,120,0}
+\definecolor{codepurple}{RGB}{120,0,120}
+
+\lstdefinestyle{sql}{
+  language=SQL,
+  backgroundcolor=\color{codegray},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{codeblue}\bfseries,
+  commentstyle=\color{codegreen},
+  stringstyle=\color{codepurple},
+  breaklines=true,
+  frame=single,
+  framerule=0.4pt,
+  xleftmargin=8pt,
+  xrightmargin=8pt,
+  numbers=none,
+  tabsize=2,
+  showstringspaces=false,
+  morekeywords={FETCH,FIRST,ROWS,ONLY,OFFSET,OVER,PARTITION,DENSE_RANK,ROW_NUMBER,NTILE,LAG,LEAD,FIRST_VALUE,LAST_VALUE,INTERSECT,EXCEPT}
+}
+\lstset{style=sql}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\textcolor{gray}{\small TD7: Ingeniería de Datos — UTDT}}
+\lhead{\textcolor{gray}{\small Primer Parcial Modelo 1}}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\setlist[enumerate,1]{label=\textbf{\alph*)}}
+\setlist[enumerate,2]{label=\roman*.}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries TD7 — Ingeniería de Datos}\\[6pt]
+  {\large Universidad Torcuato Di Tella}\\[4pt]
+  {\Large\bfseries Primer Parcial — Modelo 1}\\[4pt]
+  {\normalsize Duración: 2 horas \quad|\quad Puntaje total: 100 puntos}
+\end{center}
+\noindent\rule{\linewidth}{0.8pt}
+\vspace{2pt}
+
+\noindent\textbf{Instrucciones:} Responda todos los ejercicios. Justifique cada respuesta. No está permitido el uso de material de consulta ni dispositivos electrónicos. Indique claramente el número de ejercicio y subejercicio.
+
+\vspace{6pt}
+\noindent\rule{\linewidth}{0.4pt}
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 1 — Modelo Entidad-Interrelación y Modelo Relacional \hfill\normalfont(30 puntos)}
+
+Una plataforma de streaming de música necesita modelar su catálogo. Las reglas de negocio son:
+
+\begin{itemize}
+  \item Un \textbf{artista} tiene un identificador único, un nombre artístico y un año de debut.
+  \item Un \textbf{álbum} tiene un código, un título y un año de lanzamiento. Todo álbum pertenece a \emph{exactamente un} artista. Un artista puede tener varios álbumes o ninguno.
+  \item Cada \textbf{canción} tiene un identificador, un título y una duración en segundos. Una canción pertenece a \emph{exactamente un} álbum. Todo álbum tiene \emph{al menos una} canción.
+  \item Los \textbf{usuarios} tienen un identificador, nombre, email y fecha de registro. Un usuario puede crear una o más \textbf{listas de reproducción}; cada lista tiene un nombre y pertenece a \emph{un único} usuario. Una canción puede estar en varias listas, y una lista puede contener varias canciones.
+  \item Un usuario puede marcar canciones como \textbf{favoritas}. El sistema registra la fecha en que cada canción fue marcada favorita por cada usuario.
+\end{itemize}
+
+\begin{enumerate}
+  \item (20 pts) Dibuje el DER completo. Indique entidades, atributos (marcando el atributo identificador de cada entidad), interrelaciones, cardinalidades y tipos de participación (total o parcial).
+  \vspace{10cm}
+  \item (10 pts) Traduzca el DER al modelo relacional. Para cada tabla indique el nombre de la relación, todos sus atributos, y marque con \underline{subrayado} la clave primaria y con cursiva las claves foráneas (indicando a qué tabla referencian).
+\end{enumerate}
+
+\newpage
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 2 — Álgebra Relacional \hfill\normalfont(25 puntos)}
+
+Se tienen las siguientes relaciones del Mundial de Fútbol 2022:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Relación} & \textbf{Atributos} \\
+\midrule
+\texttt{Players} & \texttt{id, name, birth\_year, playing\_position, national\_team} \\
+\texttt{Matches}  & \texttt{id, home, away, datetime, stage} \\
+\texttt{Stages}   & \texttt{id, name} \\
+\midrule
+\end{tabular}
+\end{center}
+
+\noindent\small\textit{Notas: \texttt{home} y \texttt{away} son códigos de selección (ej. \texttt{'ARG'}). \texttt{stage} en \texttt{Matches} referencia a \texttt{Stages.id}.}
+
+\normalsize
+\vspace{4pt}
+Escriba expresiones en Álgebra Relacional para cada consulta. Use la notación vista en clase ($\sigma$, $\pi$, $\cup$, $-$, $\cap$, $\times$, $\bowtie$, $\rho$).
+
+\begin{enumerate}
+  \item (4 pts) Obtener el \texttt{name} y \texttt{playing\_position} de todos los jugadores de Brasil (\texttt{national\_team = 'BRA'}).
+
+  \vspace{2.2cm}
+
+  \item (4 pts) Obtener los \texttt{id} de los partidos disputados en la etapa con \texttt{id = 3}.
+
+  \vspace{2.2cm}
+
+  \item (5 pts) Obtener los \texttt{name} de los jugadores nacidos antes de 1995 que se desempeñan como arqueros (\texttt{playing\_position = 'GK'}).
+
+  \vspace{2.5cm}
+
+  \item (6 pts) Para los partidos en que Argentina (\texttt{home = 'ARG'}) jugó de local, obtener el \texttt{name} de cada jugador argentino y el \texttt{name} de la etapa correspondiente a ese partido. \emph{(Sugerencia: relacione \texttt{Players}, \texttt{Matches} y \texttt{Stages}.)}
+
+  \vspace{3cm}
+
+  \item (6 pts) Obtener los \texttt{name} de los jugadores que pertenecen a selecciones que \textbf{no} disputaron ningún partido (ni como local ni como visitante). \emph{(Sugerencia: use diferencia de conjuntos y renombramiento $\rho$.)}
+
+  \vspace{3.5cm}
+\end{enumerate}
+
+\newpage
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 3 — SQL \hfill\normalfont(45 puntos)}
+
+Use la base de datos \textbf{Chinook}. El esquema relevante es:
+
+\begin{center}\small
+\begin{tabular}{ll}
+\toprule
+\textbf{Tabla} & \textbf{Atributos principales} \\
+\midrule
+\texttt{Artist}       & \texttt{ArtistId (PK), Name} \\
+\texttt{Album}        & \texttt{AlbumId (PK), Title, ArtistId (FK)} \\
+\texttt{Track}        & \texttt{TrackId (PK), Name, AlbumId (FK), GenreId (FK), Composer, Milliseconds, UnitPrice} \\
+\texttt{Genre}        & \texttt{GenreId (PK), Name} \\
+\texttt{Invoice}      & \texttt{InvoiceId (PK), CustomerId (FK), InvoiceDate, BillingCountry, Total} \\
+\texttt{InvoiceLine}  & \texttt{InvoiceLineId (PK), InvoiceId (FK), TrackId (FK), UnitPrice, Quantity} \\
+\texttt{Customer}     & \texttt{CustomerId (PK), FirstName, LastName, SupportRepId (FK a Employee)} \\
+\texttt{Employee}     & \texttt{EmployeeId (PK), FirstName, LastName, ReportsTo (FK a Employee)} \\
+\texttt{Playlist}     & \texttt{PlaylistId (PK), Name} \\
+\texttt{PlaylistTrack}& \texttt{PlaylistId (FK), TrackId (FK)} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{enumerate}
+
+  \item (7 pts) Listar el \texttt{Name} de cada género musical junto con la cantidad de canciones que contiene. Incluir los géneros sin canciones (mostrando 0). Ordenar de mayor a menor cantidad.
+
+  \vspace{4cm}
+
+  \item (8 pts) Listar el nombre de los artistas que tienen \textbf{más de 10 álbumes}. Mostrar el nombre del artista y la cantidad de álbumes.
+
+  \vspace{4cm}
+
+  \item (8 pts) Listar el \texttt{FirstName} y \texttt{LastName} de los clientes que \textbf{nunca} realizaron ninguna compra (sin facturas). Utilizar un \texttt{LEFT JOIN}.
+
+  \vspace{4cm}
+
+  \item (8 pts) Para cada país (\texttt{BillingCountry}), calcular el monto total de ventas (suma de \texttt{Total}). Mostrar únicamente los países cuyo total supere \$100, ordenados de mayor a menor.
+
+  \vspace{4cm}
+
+  \item (14 pts) Usando una \textbf{CTE}, encontrar la playlist con mayor cantidad de canciones. Mostrar el nombre de la playlist y la cantidad de canciones. \emph{Si hay empate, mostrar todas las que comparten el máximo.}
+
+  \vspace{5cm}
+
+\end{enumerate}
+
+\end{document}

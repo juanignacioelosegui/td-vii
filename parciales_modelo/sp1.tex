@@ -1,0 +1,201 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta, positioning}
+
+\definecolor{codegray}{RGB}{245,245,245}
+\definecolor{codeblue}{RGB}{0,60,180}
+\definecolor{codegreen}{RGB}{0,120,0}
+
+\lstdefinestyle{log}{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{codegray},
+  frame=single,
+  framerule=0.4pt,
+  xleftmargin=8pt,
+  numbers=none,
+  breaklines=true
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\textcolor{gray}{\small TD7: Ingeniería de Datos — UTDT}}
+\lhead{\textcolor{gray}{\small Segundo Parcial Modelo 1}}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\setlist[enumerate,1]{label=\textbf{\alph*)}}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries TD7 — Ingeniería de Datos}\\[6pt]
+  {\large Universidad Torcuato Di Tella}\\[4pt]
+  {\Large\bfseries Segundo Parcial — Modelo 1}\\[4pt]
+  {\normalsize Duración: 2 horas \quad|\quad Puntaje total: 100 puntos}
+\end{center}
+\noindent\rule{\linewidth}{0.8pt}
+\vspace{2pt}
+
+\noindent\textbf{Instrucciones:} Responda todos los ejercicios. Justifique cada respuesta. No está permitido el uso de material de consulta ni dispositivos electrónicos.
+
+\vspace{6pt}
+\noindent\rule{\linewidth}{0.4pt}
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 1 — Normalización \hfill\normalfont(35 puntos)}
+
+Se tiene la siguiente relación sin normalizar:
+
+\begin{center}
+\textbf{INSCRIPCIÓN}(\texttt{legajo\_alumno, nombre\_alumno, email\_alumno, cod\_materia,}\\
+\texttt{nombre\_materia, departamento\_materia, legajo\_docente, nombre\_docente, nota})
+\end{center}
+
+Las dependencias funcionales (DF) válidas son:
+
+\begin{itemize}
+  \item $\texttt{legajo\_alumno} \rightarrow \texttt{nombre\_alumno},\; \texttt{email\_alumno}$
+  \item $\texttt{cod\_materia} \rightarrow \texttt{nombre\_materia},\; \texttt{departamento\_materia}$
+  \item $\texttt{legajo\_docente} \rightarrow \texttt{nombre\_docente}$
+  \item $\{\texttt{legajo\_alumno},\; \texttt{cod\_materia}\} \rightarrow \texttt{nota},\; \texttt{legajo\_docente}$
+\end{itemize}
+
+\begin{enumerate}
+  \item (5 pts) Identificar la clave primaria de \textbf{INSCRIPCIÓN}. Justifique por qué es clave (es decir, por qué determina funcionalmente a todos los demás atributos).
+
+  \vspace{3.5cm}
+
+  \item (6 pts) Describir una anomalía de \textbf{inserción}, una de \textbf{modificación} y una de \textbf{eliminación} concretas que presenta esta relación.
+
+  \vspace{4cm}
+
+  \item (12 pts) La relación no está en 2FN. Explique por qué y llévela a \textbf{3FN}. Indique las nuevas relaciones con todos sus atributos, PK y FK.
+
+  \vspace{7cm}
+
+  \item (5 pts) ¿La descomposición obtenida en el punto anterior está en BCNF? Justifique revisando cada relación.
+
+  \vspace{3.5cm}
+
+  \item (7 pts) Verifique que la descomposición sea \textbf{sin pérdida} (\textit{lossless}). Aplique el algoritmo de la tabla de marcas o argumente a partir de los atributos compartidos entre las relaciones.
+
+  \vspace{4cm}
+\end{enumerate}
+
+\newpage
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 2 — Concurrencia \hfill\normalfont(35 puntos)}
+
+Se tienen tres transacciones con las siguientes operaciones:
+
+\begin{center}
+$T_1: R(X),\; R(Y),\; W(X)$ \qquad
+$T_2: R(X),\; W(Y)$ \qquad
+$T_3: R(Y),\; W(X)$
+\end{center}
+
+El siguiente schedule $S$ intercala sus operaciones:
+
+\[
+S:\; R_1(X),\; R_2(X),\; R_3(Y),\; W_2(Y),\; R_1(Y),\; W_1(X),\; W_3(X),\; C_1,\; C_2,\; C_3
+\]
+
+\begin{enumerate}
+  \item (5 pts) Definir qué significa que dos operaciones estén en \textbf{conflicto}. ¿Por qué la serializabilidad por conflictos es una propiedad deseable?
+
+  \vspace{3.5cm}
+
+  \item (10 pts) Identificar \textbf{todos} los pares de operaciones en conflicto en $S$. Para cada par indique las operaciones, las transacciones y el ítem de datos involucrado.
+
+  \vspace{5cm}
+
+  \item (12 pts) Construir el \textbf{grafo de precedencias} de $S$ (nodos = transacciones, arcos según los conflictos). ¿$S$ es serializable por conflictos? Justifique. Si no lo es, identifique el ciclo.
+
+  \vspace{5.5cm}
+
+  \item (8 pts) ¿El schedule $S$ es \textbf{recuperable}? Para determinarlo, analice si hay alguna transacción que haya leído un ítem escrito por otra transacción sin que esta última haya hecho commit primero. Justifique con los pasos del schedule.
+
+  \vspace{4.5cm}
+\end{enumerate}
+
+\newpage
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 3 — Recuperación y Almacenamiento \hfill\normalfont(30 puntos)}
+
+\subsection*{Parte A — Recuperación con estrategia UNDO (12 puntos)}
+
+El sistema utiliza la estrategia \textbf{UNDO} (actualización inmediata). Se tiene el siguiente log en disco al momento de la falla:
+
+\begin{lstlisting}[style=log]
+(BEGIN,  T1)
+(WRITE,  T1, X, 10, 20)
+(BEGIN,  T2)
+(WRITE,  T2, Y, 5,  15)
+(COMMIT, T1)
+(BEGIN,  T3)
+(WRITE,  T3, X, 20, 30)
+         <-- FALLA DEL SISTEMA AQUI
+\end{lstlisting}
+
+\noindent\small\textit{Formato de WRITE: (WRITE, $T_i$, ítem, $v_{old}$, $v_{new}$).}
+
+\normalsize
+\begin{enumerate}
+  \item (4 pts) ¿Qué transacciones deben deshacerse y por qué? ¿Cuál no debe tocarse?
+
+  \vspace{2.5cm}
+
+  \item (5 pts) Describir paso a paso el procedimiento de recuperación. ¿Cuáles son los valores finales de $X$ e $Y$ en disco luego de la recuperación?
+
+  \vspace{3cm}
+
+  \item (3 pts) ¿Por qué el algoritmo UNDO debe ser idempotente? ¿Qué pasaría si la recuperación se interrumpiera a mitad del proceso?
+
+  \vspace{2.5cm}
+\end{enumerate}
+
+\subsection*{Parte B — Índices (8 puntos)}
+
+\begin{enumerate}
+  \setcounter{enumi}{3}
+  \item (8 pts) Explicar la diferencia entre un índice \textbf{clustered} y uno \textbf{unclustered}. ¿Cuántos índices clustered puede tener una tabla? Dar un ejemplo concreto de cuándo es preferible cada tipo.
+
+  \vspace{4.5cm}
+\end{enumerate}
+
+\subsection*{Parte C — Estimación de costos (10 puntos)}
+
+Se tiene una relación $R$ con las siguientes estadísticas: $b_R = 200$ bloques, $f_R = 50$ tuplas/bloque (es decir, $n_R = 10\,000$ tuplas). Se realiza la consulta $\sigma_{\texttt{ciudad} = \texttt{'Rosario'}}(R)$. Se estima que 100 tuplas cumplen la condición. Asuma $t_T = 1\;\text{ms}$ y $t_s = 5\;\text{ms}$.
+
+\begin{enumerate}
+  \setcounter{enumi}{4}
+  \item (3 pts) Calcular el costo de un \textbf{full scan}.
+
+  \vspace{2.5cm}
+
+  \item (4 pts) Calcular el costo usando un \textbf{índice B-tree clustered} sobre \texttt{ciudad}, con altura $h_i = 3$. Las 100 tuplas coincidentes ocupan 2 bloques contiguos.
+
+  \vspace{2.5cm}
+
+  \item (3 pts) Calcular el costo usando un \textbf{índice secundario} (unclustered) sobre \texttt{ciudad}, con altura $h_i = 3$, asumiendo que cada tupla coincidente puede estar en un bloque distinto.
+
+  \vspace{2.5cm}
+\end{enumerate}
+
+\end{document}

@@ -1,0 +1,157 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\definecolor{codegray}{RGB}{245,245,245}
+\definecolor{codeblue}{RGB}{0,60,180}
+\definecolor{codegreen}{RGB}{0,120,0}
+\definecolor{codepurple}{RGB}{120,0,120}
+
+\lstdefinestyle{sql}{
+  language=SQL,
+  backgroundcolor=\color{codegray},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{codeblue}\bfseries,
+  commentstyle=\color{codegreen},
+  stringstyle=\color{codepurple},
+  breaklines=true,
+  frame=single,
+  framerule=0.4pt,
+  xleftmargin=8pt,
+  xrightmargin=8pt,
+  numbers=none,
+  tabsize=2,
+  showstringspaces=false,
+  morekeywords={FETCH,FIRST,ROWS,ONLY,OFFSET,OVER,PARTITION,DENSE_RANK,ROW_NUMBER,NTILE,LAG,LEAD,FIRST_VALUE,LAST_VALUE,INTERSECT,EXCEPT}
+}
+\lstset{style=sql}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\textcolor{gray}{\small TD7: Ingeniería de Datos — UTDT}}
+\lhead{\textcolor{gray}{\small Primer Parcial Modelo 2}}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\setlist[enumerate,1]{label=\textbf{\alph*)}}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries TD7 — Ingeniería de Datos}\\[6pt]
+  {\large Universidad Torcuato Di Tella}\\[4pt]
+  {\Large\bfseries Primer Parcial — Modelo 2}\\[4pt]
+  {\normalsize Duración: 2 horas \quad|\quad Puntaje total: 100 puntos}
+\end{center}
+\noindent\rule{\linewidth}{0.8pt}
+\vspace{2pt}
+
+\noindent\textbf{Instrucciones:} Responda todos los ejercicios. Justifique cada respuesta. No está permitido el uso de material de consulta ni dispositivos electrónicos. Indique claramente el número de ejercicio y subejercicio.
+
+\vspace{6pt}
+\noindent\rule{\linewidth}{0.4pt}
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 1 — Modelo Entidad-Interrelación y Modelo Relacional \hfill\normalfont(30 puntos)}
+
+Una clínica médica quiere digitalizar su sistema de gestión de turnos y consultas. Las reglas son:
+
+\begin{itemize}
+  \item Cada \textbf{médico} tiene matrícula (identificador), nombre, apellido y especialidad.
+  \item Los \textbf{pacientes} se identifican por DNI y tienen nombre, apellido y fecha de nacimiento.
+  \item Un \textbf{turno} tiene un número correlativo, fecha, hora y estado (\texttt{pendiente}, \texttt{realizado} o \texttt{cancelado}). Cada turno involucra exactamente a un médico y exactamente a un paciente. Un paciente puede tener varios turnos; un médico puede atender varios turnos.
+  \item Los médicos trabajan en \textbf{consultorios}. Cada consultorio tiene un número y un piso. Un médico puede usar distintos consultorios, y un consultorio puede ser utilizado por distintos médicos. Se registra en qué consultorio atiende cada médico cada día de la semana.
+  \item Cuando un turno es realizado, se genera una \textbf{consulta} que registra el diagnóstico y las observaciones del médico. Una consulta corresponde a exactamente un turno; no todo turno genera una consulta (puede cancelarse).
+\end{itemize}
+
+\begin{enumerate}
+  \item (20 pts) Dibuje el DER completo. Indique entidades, atributos, interrelaciones, cardinalidades y tipos de participación.
+  \vspace{10cm}
+  \item (10 pts) Traduzca el DER al modelo relacional. Para cada tabla indique nombre, atributos, \underline{PK} y \textit{FK} (con tabla referenciada).
+\end{enumerate}
+
+\newpage
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 2 — Álgebra Relacional \hfill\normalfont(25 puntos)}
+
+Use el mismo esquema del Mundial 2022:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Relación} & \textbf{Atributos} \\
+\midrule
+\texttt{Players} & \texttt{id, name, birth\_year, playing\_position, national\_team} \\
+\texttt{Matches}  & \texttt{id, home, away, datetime, stage} \\
+\texttt{Stages}   & \texttt{id, name} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{enumerate}
+  \item (4 pts) Obtener \texttt{name} y \texttt{national\_team} de todos los jugadores.
+
+  \vspace{2cm}
+
+  \item (4 pts) Obtener \texttt{id} y \texttt{datetime} de los partidos donde Argentina (\texttt{home = 'ARG'}) fue local.
+
+  \vspace{2cm}
+
+  \item (5 pts) Obtener los \texttt{name} de los jugadores nacidos después de 2000.
+
+  \vspace{2.5cm}
+
+  \item (6 pts) Para los partidos donde Francia (\texttt{away = 'FRA'}) fue visitante, obtener el \texttt{datetime} del partido y el \texttt{name} de la etapa correspondiente.
+
+  \vspace{3cm}
+
+  \item (6 pts) Obtener los \texttt{id} de los partidos disputados en la etapa de nombre \texttt{'Final'}. \emph{(Relacione \texttt{Matches} con \texttt{Stages}.)}
+
+  \vspace{3cm}
+\end{enumerate}
+
+\newpage
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 3 — SQL \hfill\normalfont(45 puntos)}
+
+Use la base de datos \textbf{Chinook} (mismo esquema que en PP1).
+
+\begin{enumerate}
+
+  \item (7 pts) Listar el \texttt{FirstName} y \texttt{LastName} de cada empleado junto con el \texttt{FirstName} y \texttt{LastName} de su jefe directo (\texttt{ReportsTo}). Los empleados sin jefe también deben aparecer (con valores nulos en las columnas del jefe).
+
+  \vspace{4.5cm}
+
+  \item (8 pts) Encontrar los \textbf{5 clientes} que más dinero han gastado en total (suma de \texttt{Total} en \texttt{Invoice}). Mostrar \texttt{FirstName}, \texttt{LastName} y el monto total, ordenados de mayor a menor.
+
+  \vspace{4.5cm}
+
+  \item (8 pts) Listar los géneros musicales que \textbf{no tienen ninguna canción} en la base de datos. Usar un \texttt{LEFT JOIN}.
+
+  \vspace{4.5cm}
+
+  \item (8 pts) Para cada empleado, calcular el monto total de ventas generadas por los clientes que tiene asignados (\texttt{SupportRepId}). Mostrar nombre, apellido del empleado y el total. Incluir empleados sin clientes asignados (total = 0).
+
+  \vspace{4.5cm}
+
+  \item (14 pts) Para cada canción, mostrar su \texttt{Name}, el nombre del género al que pertenece, su \texttt{UnitPrice} y el \textbf{ranking de precio} dentro de su género (de mayor a menor), usando \texttt{DENSE\_RANK}. Ordenar el resultado por género y por ranking.
+
+  \vspace{5cm}
+
+\end{enumerate}
+
+\end{document}

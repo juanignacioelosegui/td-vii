@@ -1,0 +1,190 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\definecolor{codegray}{RGB}{245,245,245}
+\definecolor{codeblue}{RGB}{0,60,180}
+\definecolor{codegreen}{RGB}{0,120,0}
+
+\lstdefinestyle{log}{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{codegray},
+  frame=single,
+  framerule=0.4pt,
+  xleftmargin=8pt,
+  numbers=none,
+  breaklines=true
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\textcolor{gray}{\small TD7: Ingeniería de Datos — UTDT}}
+\lhead{\textcolor{gray}{\small Segundo Parcial Modelo 2}}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\setlist[enumerate,1]{label=\textbf{\alph*)}}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries TD7 — Ingeniería de Datos}\\[6pt]
+  {\large Universidad Torcuato Di Tella}\\[4pt]
+  {\Large\bfseries Segundo Parcial — Modelo 2}\\[4pt]
+  {\normalsize Duración: 2 horas \quad|\quad Puntaje total: 100 puntos}
+\end{center}
+\noindent\rule{\linewidth}{0.8pt}
+\vspace{2pt}
+
+\noindent\textbf{Instrucciones:} Responda todos los ejercicios. Justifique cada respuesta. No está permitido el uso de material de consulta ni dispositivos electrónicos.
+
+\vspace{6pt}
+\noindent\rule{\linewidth}{0.4pt}
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 1 — Normalización \hfill\normalfont(35 puntos)}
+
+Se tiene la siguiente relación sin normalizar que registra las líneas de ventas de una empresa:
+
+\begin{center}
+\textbf{VENTA}(\texttt{nro\_venta, fecha, cod\_cliente, nombre\_cliente, ciudad\_cliente,}\\
+\texttt{cod\_vendedor, nombre\_vendedor, cod\_producto, descripcion\_producto,}\\
+\texttt{cantidad, precio\_unitario})
+\end{center}
+
+Las dependencias funcionales válidas son:
+
+\begin{itemize}
+  \item $\texttt{nro\_venta} \rightarrow \texttt{fecha},\; \texttt{cod\_cliente},\; \texttt{cod\_vendedor}$
+  \item $\texttt{cod\_cliente} \rightarrow \texttt{nombre\_cliente},\; \texttt{ciudad\_cliente}$
+  \item $\texttt{cod\_vendedor} \rightarrow \texttt{nombre\_vendedor}$
+  \item $\{\texttt{nro\_venta},\; \texttt{cod\_producto}\} \rightarrow \texttt{cantidad}$
+  \item $\texttt{cod\_producto} \rightarrow \texttt{descripcion\_producto},\; \texttt{precio\_unitario}$
+\end{itemize}
+
+\begin{enumerate}
+  \item (4 pts) ¿Está la relación en 1FN? Identificar la clave primaria y justificar.
+
+  \vspace{3cm}
+
+  \item (10 pts) ¿Está la relación en 2FN? Si no lo está, identificar las dependencias parciales e indicar las relaciones obtenidas al normalizarla a 2FN (con sus atributos, PK y FK).
+
+  \vspace{6cm}
+
+  \item (10 pts) ¿Las relaciones de 2FN están en 3FN? Identificar las dependencias transitivas existentes y llevar a 3FN, mostrando las relaciones finales.
+
+  \vspace{6cm}
+
+  \item (4 pts) ¿Las relaciones obtenidas están en BCNF? Justifique brevemente para cada una.
+
+  \vspace{3cm}
+
+  \item (7 pts) Verificar que la descomposición final \textbf{preserva} todas las dependencias funcionales originales. Indique en qué relación queda verificable cada DF.
+
+  \vspace{3.5cm}
+\end{enumerate}
+
+\newpage
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 2 — Concurrencia \hfill\normalfont(35 puntos)}
+
+Se tienen tres transacciones:
+
+\begin{center}
+$T_1: R(X),\; W(Y)$ \qquad
+$T_2: R(Y),\; W(Z)$ \qquad
+$T_3: R(Z),\; W(X)$
+\end{center}
+
+El siguiente schedule $S$ intercala sus operaciones:
+
+\[
+S:\; R_1(X),\; R_2(Y),\; W_1(Y),\; W_2(Z),\; R_3(Z),\; W_3(X),\; C_1,\; C_2,\; C_3
+\]
+
+\begin{enumerate}
+  \item (10 pts) Identificar todos los pares de operaciones en conflicto en $S$. Construir el \textbf{grafo de precedencias}. ¿$S$ es serializable por conflictos? Si lo es, indique el orden serial equivalente.
+
+  \vspace{6cm}
+
+  \item (8 pts) ¿El schedule $S$ es \textbf{recuperable}? ¿Hay posibilidad de \textbf{rollback en cascada}? Justifique analizando quién lee datos escritos por quién y el orden de los commits.
+
+  \vspace{4.5cm}
+
+  \item (7 pts) Explicar el protocolo \textbf{2PL} (Two-Phase Locking). Para $T_1$, indicar en qué momento debe adquirir cada lock (tipo S o X) y cuándo puede liberarlos para cumplir con 2PL.
+
+  \vspace{4.5cm}
+
+  \item (10 pts) Describir con un ejemplo concreto (usando $T_1$, $T_2$ y $T_3$ o variaciones) cómo puede surgir un \textbf{deadlock} bajo 2PL. Dibujar el \textbf{grafo de espera} (\textit{wait-for graph}) del escenario propuesto e indicar cómo lo detectaría el SGBD.
+
+  \vspace{5.5cm}
+\end{enumerate}
+
+\newpage
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 3 — Recuperación, Backups y Almacenamiento \hfill\normalfont(30 puntos)}
+
+\subsection*{Parte A — Recuperación con estrategia REDO (12 puntos)}
+
+El sistema utiliza la estrategia \textbf{REDO} (actualización diferida). Se tiene el siguiente log al momento de la falla:
+
+\begin{lstlisting}[style=log]
+(BEGIN,  T1)
+(BEGIN,  T2)
+(WRITE,  T1, A, 100)
+(WRITE,  T2, B, 200)
+(COMMIT, T2)
+(WRITE,  T1, C, 300)
+         <-- FALLA DEL SISTEMA AQUI
+\end{lstlisting}
+
+\noindent\small\textit{Formato de WRITE en REDO: (WRITE, $T_i$, ítem, $v_{new}$). El valor anterior no se almacena.}
+
+\normalsize
+\begin{enumerate}
+  \item (4 pts) ¿Qué transacciones deben rehacerse y cuáles no? Justifique.
+
+  \vspace{2.5cm}
+
+  \item (5 pts) Describir el proceso de recuperación paso a paso. ¿Qué valores quedan en disco para $A$, $B$ y $C$?
+
+  \vspace{3.5cm}
+
+  \item (3 pts) ¿Qué ventaja aportan los \textbf{checkpoints} en la estrategia REDO? ¿Qué se escribe en el log al realizar un checkpoint?
+
+  \vspace{2.5cm}
+\end{enumerate}
+
+\subsection*{Parte B — Backups (8 puntos)}
+
+\begin{enumerate}
+  \setcounter{enumi}{3}
+  \item (8 pts) Explicar la diferencia entre \textbf{full dump} e \textbf{incremental dump}. Describir cómo se recuperaría una base de datos ante una falla catastrófica de disco si se cuenta con: (1) un full dump del domingo, (2) incremental dumps diarios de lunes a jueves, y la falla ocurre el viernes. ¿Qué información puede perderse y por qué?
+
+  \vspace{5cm}
+\end{enumerate}
+
+\subsection*{Parte C — RAID (10 puntos)}
+
+\begin{enumerate}
+  \setcounter{enumi}{4}
+  \item (10 pts) Explicar el funcionamiento de \textbf{RAID 0}, \textbf{RAID 1} y \textbf{RAID 5}, indicando para cada uno: mecanismo, ventajas y desventajas en términos de rendimiento, capacidad y tolerancia a fallos. ¿Cuál elegiría para un servidor de base de datos de producción donde la disponibilidad y la integridad de los datos son críticas? Justifique.
+
+  \vspace{7cm}
+\end{enumerate}
+
+\end{document}
