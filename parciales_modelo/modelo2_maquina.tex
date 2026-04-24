@@ -1,0 +1,136 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\definecolor{codegray}{RGB}{245,245,245}
+\definecolor{codeblue}{RGB}{0,60,180}
+\definecolor{codegreen}{RGB}{0,120,0}
+\definecolor{codepurple}{RGB}{120,0,120}
+
+\lstdefinestyle{sql}{
+  language=SQL,
+  backgroundcolor=\color{codegray},
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{codeblue}\bfseries,
+  commentstyle=\color{codegreen},
+  stringstyle=\color{codepurple},
+  breaklines=true,
+  frame=single,
+  framerule=0.4pt,
+  xleftmargin=8pt,
+  xrightmargin=8pt,
+  numbers=none,
+  tabsize=2,
+  showstringspaces=false,
+  morekeywords={FETCH,FIRST,ROWS,ONLY,OFFSET,OVER,PARTITION,DENSE_RANK,ROW_NUMBER,NTILE,LAG,LEAD,FIRST_VALUE,LAST_VALUE,INTERSECT,EXCEPT,AVG,SUM}
+}
+\lstset{style=sql}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\textcolor{gray}{\small TD7: Ingeniería de Datos — UTDT}}
+\lhead{\textcolor{gray}{\small Examen Modelo 2 — Bloque 3 (Máquina)}}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\setlist[enumerate,1]{label=\textbf{\arabic*.}}
+\setlist[enumerate,2]{label=\alph*.}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries TD7 — Ingeniería de Datos}\\[6pt]
+  {\large Universidad Torcuato Di Tella}\\[4pt]
+  {\Large\bfseries Examen — Modelo 2}\\[2pt]
+  {\large\bfseries Bloque 3: Lenguajes de Consulta \textnormal{---} \textit{Parte en máquina}}\\[4pt]
+  {\normalsize Duración: 1 hora \quad|\quad Puntaje: 3 puntos \quad|\quad Umbral de aprobación: 1{,}5\,/\,3}
+\end{center}
+\noindent\rule{\linewidth}{0.8pt}
+\vspace{2pt}
+
+\noindent\textbf{Instrucciones:} Escriba sus respuestas y envíelas por mail al finalizar la hora. Puede consultar la web para verificar \textbf{sintaxis SQL}. Está \textbf{prohibido} el uso de asistentes de IA (ChatGPT, Claude, Copilot, etc.), comunicarse con otras personas por cualquier medio, y compartir documentos en tiempo real (Google Docs, etc.).
+
+\vspace{6pt}
+\noindent\rule{\linewidth}{0.4pt}
+
+% ─────────────────────────────────────────────────────────────
+\subsection*{Esquema de la base de datos Chinook}
+
+\begin{center}\small
+\begin{tabular}{ll}
+\toprule
+\textbf{Tabla} & \textbf{Atributos principales} \\
+\midrule
+\texttt{Artist}       & \texttt{ArtistId (PK), Name} \\
+\texttt{Album}        & \texttt{AlbumId (PK), Title, ArtistId (FK)} \\
+\texttt{Track}        & \texttt{TrackId (PK), Name, AlbumId (FK), GenreId (FK), MediaTypeId (FK), Milliseconds, UnitPrice} \\
+\texttt{Genre}        & \texttt{GenreId (PK), Name} \\
+\texttt{Invoice}      & \texttt{InvoiceId (PK), CustomerId (FK), InvoiceDate, BillingCountry, Total} \\
+\texttt{InvoiceLine}  & \texttt{InvoiceLineId (PK), InvoiceId (FK), TrackId (FK), UnitPrice, Quantity} \\
+\texttt{Customer}     & \texttt{CustomerId (PK), FirstName, LastName, Country, SupportRepId (FK a Employee)} \\
+\texttt{Employee}     & \texttt{EmployeeId (PK), FirstName, LastName, ReportsTo (FK a Employee)} \\
+\texttt{Playlist}     & \texttt{PlaylistId (PK), Name} \\
+\texttt{PlaylistTrack}& \texttt{PlaylistId (FK), TrackId (FK)} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{4pt}
+\noindent\rule{\linewidth}{0.4pt}
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 1 — SQL \hfill\normalfont(0{,}5 puntos)}
+
+Listar el \texttt{FirstName} y \texttt{LastName} de cada empleado junto con el \texttt{FirstName} y \texttt{LastName} de su jefe directo (\texttt{ReportsTo}). Incluir también los empleados que no tienen jefe (con valores nulos en las columnas del jefe).
+
+\vspace{8pt}
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 2 — SQL \hfill\normalfont(0{,}75 puntos)}
+
+Para cada país de facturación (\texttt{BillingCountry}), calcular el monto total de ventas (suma de \texttt{Total} en \texttt{Invoice}). Mostrar únicamente los países con un total superior a \$100, ordenados de mayor a menor.
+
+\vspace{8pt}
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 3 — SQL \hfill\normalfont(1 punto)}
+
+Usando una \textbf{CTE}, obtener el \texttt{Name} de cada playlist junto con la cantidad de canciones que contiene. Luego, mostrar únicamente las playlists cuya cantidad de canciones sea \textbf{mayor o igual al promedio} de canciones por playlist (considerar solo playlists con al menos una canción). Ordenar de mayor a menor cantidad.
+
+\vspace{8pt}
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 4 — Álgebra Relacional \hfill\normalfont(0{,}75 puntos)}
+
+Se tienen las siguientes relaciones del Mundial de Fútbol 2022:
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+\textbf{Relación} & \textbf{Atributos} \\
+\midrule
+\texttt{Players} & \texttt{id, name, birth\_year, playing\_position, national\_team} \\
+\texttt{Matches}  & \texttt{id, home, away, datetime, stage} \\
+\texttt{Stages}   & \texttt{id, name} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\small\textit{Nota: \texttt{home} y \texttt{away} son códigos de selección (ej.\ \texttt{'ARG'}). \texttt{stage} en \texttt{Matches} referencia a \texttt{Stages.id}.}
+
+\normalsize\vspace{6pt}
+
+Obtener los \texttt{name} de los jugadores cuyos equipos (\texttt{national\_team}) participaron en la etapa con \texttt{name = 'Final'}, ya sea como local o como visitante. Use las operaciones $\sigma$, $\pi$, $\bowtie$, $\cup$ y eventualmente $\rho$.
+
+\end{document}

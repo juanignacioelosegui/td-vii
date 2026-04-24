@@ -1,0 +1,191 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\definecolor{codegray}{RGB}{245,245,245}
+
+\lstdefinestyle{log}{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{codegray},
+  frame=single,
+  framerule=0.4pt,
+  xleftmargin=8pt,
+  numbers=none,
+  breaklines=true
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\textcolor{gray}{\small TD7: Ingeniería de Datos — UTDT}}
+\lhead{\textcolor{gray}{\small Examen Modelo 2 — Bloques 1, 2 y 4 (Papel)}}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\setlist[enumerate,1]{label=\textbf{\alph*)}}
+\setlist[enumerate,2]{label=\roman*.}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries TD7 — Ingeniería de Datos}\\[6pt]
+  {\large Universidad Torcuato Di Tella}\\[4pt]
+  {\Large\bfseries Examen — Modelo 2}\\[2pt]
+  {\large\bfseries Bloques 1, 2 y 4 \textnormal{---} \textit{Parte en papel}}\\[4pt]
+  {\normalsize Duración: 2 horas \quad|\quad Dejar las máquinas de lado}
+\end{center}
+\noindent\rule{\linewidth}{0.8pt}
+\vspace{2pt}
+
+\noindent\textbf{Instrucciones:} Responda todos los ejercicios en papel. Justifique cada respuesta. No está permitido el uso de material de consulta ni de dispositivos electrónicos. Indique claramente el número de bloque y sub-ítem.
+
+\vspace{4pt}
+
+\begin{center}\small
+\begin{tabular}{lll}
+\toprule
+\textbf{Bloque} & \textbf{Puntaje} & \textbf{Aprueba con} \\
+\midrule
+Bloque 1 — DER                    & 10 puntos & $\geq 5 / 10$ \\
+Bloque 2 — Normalización + Concurrencia & 4 puntos  & $\geq 2 / 4$ \;(equiv.\ a 5/10) \\
+Bloque 4 — Preguntas Teóricas     & 3 puntos  & $\geq 1{,}5 / 3$ \;(equiv.\ a 5/10) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{4pt}
+\noindent\rule{\linewidth}{0.4pt}
+
+% ═══════════════════════════════════════════════════════════════
+\section*{Bloque 1 — Diseño de DER \hfill\normalfont(10 puntos)}
+
+Una plataforma de e-commerce desea modelar su sistema. Las reglas de negocio son:
+
+\begin{itemize}
+  \item Los \textbf{vendedores} tienen un identificador único, nombre, email y fecha de registro en la plataforma.
+  \item Los \textbf{productos} tienen un código, nombre, descripción y precio. Cada producto pertenece a exactamente una \textbf{categoría}. Una categoría tiene un código, nombre y descripción. Una categoría puede existir aunque no tenga productos asignados.
+  \item Cada producto es publicado por \emph{exactamente un} vendedor; un vendedor puede publicar varios productos o ninguno.
+  \item Los \textbf{compradores} se identifican por un ID y tienen nombre, email y dirección de envío.
+  \item Un comprador puede realizar uno o más \textbf{pedidos}. Cada pedido tiene un número único, fecha y estado (\texttt{pendiente}, \texttt{despachado}, \texttt{entregado}). Un pedido incluye uno o más productos con una cantidad determinada y el precio vigente al momento de la compra (puede diferir del precio actual del producto).
+  \item Un comprador puede escribir \textbf{reseñas} de productos que haya comprado. Cada reseña tiene un puntaje (entero de 1 a 5) y un texto opcional. Un comprador puede reseñar un mismo producto como máximo una vez.
+\end{itemize}
+
+\begin{enumerate}
+  \item (7 pts) Dibuje el DER completo. Indique entidades, atributos (marcando el identificador de cada entidad), interrelaciones, cardinalidades y tipos de participación (total o parcial).
+
+  \vspace{12cm}
+
+  \item (3 pts) Traduzca el DER al modelo relacional. Para cada tabla indique nombre, todos sus atributos, \underline{clave primaria} (subrayada) y \textit{claves foráneas} (en cursiva, indicando la tabla referenciada). Preste especial atención a la relación de pedido-producto (con atributos propios).
+\end{enumerate}
+
+\newpage
+
+% ═══════════════════════════════════════════════════════════════
+\section*{Bloque 2 — Normalización y Concurrencia \hfill\normalfont(4 puntos)}
+
+% ─────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 2A — Normalización \hfill\normalfont(1{,}5 puntos)}
+
+Se tiene la siguiente relación sin normalizar:
+
+\begin{center}
+\textbf{VENTA}(\texttt{nro\_venta, cod\_producto, fecha, cod\_cliente, nombre\_cliente,}\\
+\texttt{descripcion\_producto, precio\_unitario, cantidad})
+\end{center}
+
+Las dependencias funcionales (DF) válidas son:
+
+\begin{itemize}
+  \item $\texttt{nro\_venta} \rightarrow \texttt{fecha},\; \texttt{cod\_cliente}$
+  \item $\texttt{cod\_cliente} \rightarrow \texttt{nombre\_cliente}$
+  \item $\texttt{cod\_producto} \rightarrow \texttt{descripcion\_producto},\; \texttt{precio\_unitario}$
+  \item $\{\texttt{nro\_venta},\; \texttt{cod\_producto}\} \rightarrow \texttt{cantidad}$
+\end{itemize}
+
+\begin{enumerate}
+  \item (0{,}5 pts) Identificar la clave primaria de \textbf{VENTA}. ¿Está la relación en 2FN? Justifique identificando las dependencias parciales si las hubiera.
+
+  \vspace{3.5cm}
+
+  \item (1 pt) Lleve la relación a \textbf{3FN}. Muestre todas las relaciones resultantes con sus atributos, clave primaria y claves foráneas. Verifique también que no queden dependencias transitivas.
+
+  \vspace{5.5cm}
+\end{enumerate}
+
+% ─────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 2B — Concurrencia y Recuperabilidad \hfill\normalfont(2{,}5 puntos)}
+
+Se tienen tres transacciones con las siguientes operaciones:
+
+\begin{center}
+$T_1:\; R(A),\; R(B),\; W(A)$ \qquad
+$T_2:\; R(B),\; W(B)$ \qquad
+$T_3:\; R(A),\; W(C)$
+\end{center}
+
+El siguiente schedule $S$ intercala sus operaciones:
+
+\[
+S:\; R_1(A),\; R_2(B),\; R_3(A),\; W_2(B),\; R_1(B),\; W_1(A),\; C_2,\; W_3(C),\; C_1,\; C_3
+\]
+
+\begin{enumerate}
+  \item (0{,}75 pts) Identificar \textbf{todos} los pares de operaciones en conflicto en $S$. Construir el \textbf{grafo de precedencias}. ¿Es $S$ serializable por conflictos? Si lo es, indique el orden serial equivalente.
+
+  \vspace{5cm}
+
+  \item (0{,}75 pts) ¿El schedule $S$ es \textbf{recuperable}? ¿Existe riesgo de \textbf{rollback en cascada}? Analice quién leyó datos escritos por quién y en qué orden se produjeron los commits.
+
+  \vspace{4cm}
+
+  \item (1 pt) El sistema usa la estrategia \textbf{REDO} (actualización diferida). Al momento de la falla, el log en disco contiene:
+
+\begin{lstlisting}[style=log]
+(BEGIN,  T1)
+(BEGIN,  T2)
+(WRITE,  T2, B, 200)
+(COMMIT, T2)
+(WRITE,  T1, A, 500)
+         <-- FALLA DEL SISTEMA AQUI
+\end{lstlisting}
+
+  \noindent\small\textit{Formato de WRITE en REDO: (WRITE, $T_i$, ítem, $v_{new}$). El valor anterior no se almacena en el log.}
+
+  \normalsize\vspace{4pt}
+  ¿Qué transacciones deben rehacerse y cuáles no? Describa paso a paso el proceso de recuperación e indique los valores finales de $A$ y $B$ en disco.
+
+  \vspace{4.5cm}
+\end{enumerate}
+
+\newpage
+
+% ═══════════════════════════════════════════════════════════════
+\section*{Bloque 4 — Preguntas Teóricas \hfill\normalfont(3 puntos — 1 punto cada una)}
+
+\begin{enumerate}
+
+  \item \textbf{Almacenamiento — RAID.} Describir el funcionamiento de \textbf{RAID 0}, \textbf{RAID 1} y \textbf{RAID 5}, indicando para cada nivel sus ventajas y desventajas en términos de rendimiento, capacidad útil y tolerancia a fallos. ¿Cuál elegiría para un servidor de base de datos en producción donde la disponibilidad y la integridad de los datos son críticas? Justifique su elección.
+
+  \vspace{6cm}
+
+  \item \textbf{Índices — Selectividad.} ¿En qué situaciones \textbf{no} conviene crear un índice sobre un atributo y puede resultar más lento que un full scan? Relacione su respuesta con el concepto de \textbf{selectividad}. ¿Qué tipos de consultas se benefician más del uso de índices?
+
+  \vspace{6cm}
+
+  \item \textbf{Optimización de consultas — Estadísticas.} ¿Qué son las \textbf{estadísticas} de una tabla (por ejemplo, \texttt{n\_distinct}, histogramas de distribución de valores)? ¿Cómo las usa el optimizador para estimar el costo de un plan de ejecución? ¿Qué puede ocurrir si las estadísticas están desactualizadas?
+
+  \vspace{6cm}
+
+\end{enumerate}
+
+\end{document}

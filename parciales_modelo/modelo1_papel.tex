@@ -1,0 +1,186 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\definecolor{codegray}{RGB}{245,245,245}
+
+\lstdefinestyle{log}{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{codegray},
+  frame=single,
+  framerule=0.4pt,
+  xleftmargin=8pt,
+  numbers=none,
+  breaklines=true
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\textcolor{gray}{\small TD7: Ingeniería de Datos — UTDT}}
+\lhead{\textcolor{gray}{\small Examen Modelo 1 — Bloques 1, 2 y 4 (Papel)}}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\setlist[enumerate,1]{label=\textbf{\alph*)}}
+\setlist[enumerate,2]{label=\roman*.}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries TD7 — Ingeniería de Datos}\\[6pt]
+  {\large Universidad Torcuato Di Tella}\\[4pt]
+  {\Large\bfseries Examen — Modelo 1}\\[2pt]
+  {\large\bfseries Bloques 1, 2 y 4 \textnormal{---} \textit{Parte en papel}}\\[4pt]
+  {\normalsize Duración: 2 horas \quad|\quad Dejar las máquinas de lado}
+\end{center}
+\noindent\rule{\linewidth}{0.8pt}
+\vspace{2pt}
+
+\noindent\textbf{Instrucciones:} Responda todos los ejercicios en papel. Justifique cada respuesta. No está permitido el uso de material de consulta ni de dispositivos electrónicos. Indique claramente el número de bloque y sub-ítem.
+
+\vspace{4pt}
+
+\begin{center}\small
+\begin{tabular}{lll}
+\toprule
+\textbf{Bloque} & \textbf{Puntaje} & \textbf{Aprueba con} \\
+\midrule
+Bloque 1 — DER                    & 10 puntos & $\geq 5 / 10$ \\
+Bloque 2 — Normalización + Concurrencia & 4 puntos  & $\geq 2 / 4$ \;(equiv.\ a 5/10) \\
+Bloque 4 — Preguntas Teóricas     & 3 puntos  & $\geq 1{,}5 / 3$ \;(equiv.\ a 5/10) \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{4pt}
+\noindent\rule{\linewidth}{0.4pt}
+
+% ═══════════════════════════════════════════════════════════════
+\section*{Bloque 1 — Diseño de DER \hfill\normalfont(10 puntos)}
+
+Una biblioteca universitaria desea informatizar su sistema de gestión. Las reglas de negocio son:
+
+\begin{itemize}
+  \item La biblioteca tiene varias \textbf{sucursales}. Cada sucursal tiene un código único, un nombre y una dirección.
+  \item Los \textbf{libros} se identifican por ISBN y tienen título y año de publicación. Cada libro puede tener uno o varios \textbf{autores}; un autor puede haber escrito varios libros. De cada autor se registra nombre, nacionalidad y año de nacimiento.
+  \item Cada sucursal dispone de \textbf{ejemplares} de los libros. Un ejemplar pertenece a exactamente una sucursal y a exactamente un libro. Cada ejemplar tiene un número correlativo (único dentro de la sucursal) y un estado: \texttt{disponible}, \texttt{prestado} o \texttt{dañado}.
+  \item Los \textbf{socios} se identifican por número de socio y tienen nombre, apellido, email y fecha de alta. Un socio puede ser de cualquier sucursal, pero se registra a cuál sucursal está asociado.
+  \item Un socio puede tomar \textbf{préstamos} de ejemplares. Cada préstamo registra fecha de préstamo, fecha de devolución pactada y fecha de devolución real (nula mientras no se devuelva). Un préstamo corresponde exactamente a un ejemplar y exactamente a un socio. Un mismo ejemplar puede prestarse en distintos momentos.
+\end{itemize}
+
+\begin{enumerate}
+  \item (7 pts) Dibuje el DER completo. Indique entidades, atributos (marcando el identificador de cada entidad), interrelaciones, cardinalidades y tipos de participación (total o parcial).
+
+  \vspace{12cm}
+
+  \item (3 pts) Traduzca el DER al modelo relacional. Para cada tabla indique nombre, todos sus atributos, \underline{clave primaria} (subrayada) y \textit{claves foráneas} (en cursiva, indicando la tabla referenciada).
+\end{enumerate}
+
+\newpage
+
+% ═══════════════════════════════════════════════════════════════
+\section*{Bloque 2 — Normalización y Concurrencia \hfill\normalfont(4 puntos)}
+
+% ─────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 2A — Normalización \hfill\normalfont(1{,}5 puntos)}
+
+Se tiene la siguiente relación sin normalizar:
+
+\begin{center}
+\textbf{INSCRIPCIÓN}(\texttt{legajo\_alumno, cod\_materia, nombre\_alumno, nombre\_materia, departamento, nota})
+\end{center}
+
+Las dependencias funcionales (DF) válidas son:
+
+\begin{itemize}
+  \item $\texttt{legajo\_alumno} \rightarrow \texttt{nombre\_alumno}$
+  \item $\texttt{cod\_materia} \rightarrow \texttt{nombre\_materia},\; \texttt{departamento}$
+  \item $\{\texttt{legajo\_alumno},\; \texttt{cod\_materia}\} \rightarrow \texttt{nota}$
+\end{itemize}
+
+\begin{enumerate}
+  \item (0{,}5 pts) Identificar la clave primaria de \textbf{INSCRIPCIÓN}. ¿Está la relación en 2FN? Justifique indicando si existen dependencias parciales.
+
+  \vspace{3.5cm}
+
+  \item (1 pt) Lleve la relación a \textbf{3FN}. Indique las nuevas relaciones con todos sus atributos, clave primaria y claves foráneas.
+
+  \vspace{5cm}
+\end{enumerate}
+
+% ─────────────────────────────────────────────────────────────
+\subsection*{Ejercicio 2B — Concurrencia y Recuperabilidad \hfill\normalfont(2{,}5 puntos)}
+
+Se tienen dos transacciones con las siguientes operaciones:
+
+\begin{center}
+$T_1:\; R(X),\; W(Y)$ \qquad\qquad $T_2:\; R(Y),\; W(X)$
+\end{center}
+
+El siguiente schedule $S$ intercala sus operaciones:
+
+\[
+S:\; R_1(X),\; R_2(Y),\; W_1(Y),\; W_2(X),\; C_2,\; C_1
+\]
+
+\begin{enumerate}
+  \item (0{,}75 pts) Identificar \textbf{todos} los pares de operaciones en conflicto en $S$. Construir el \textbf{grafo de precedencias}. ¿Es $S$ serializable por conflictos? Justifique; si hay ciclo, identifíquelo.
+
+  \vspace{5cm}
+
+  \item (0{,}75 pts) ¿El schedule $S$ es \textbf{recuperable}? Analice si alguna transacción leyó un ítem escrito por otra antes de que esa otra hiciera commit. Justifique con los pasos del schedule.
+
+  \vspace{4cm}
+
+  \item (1 pt) El sistema usa la estrategia \textbf{UNDO} (actualización inmediata). Al momento de una falla, el log en disco contiene:
+
+\begin{lstlisting}[style=log]
+(BEGIN,  T1)
+(WRITE,  T1, X, 100, 150)
+(BEGIN,  T2)
+(WRITE,  T2, Y, 50, 80)
+(COMMIT, T1)
+         <-- FALLA DEL SISTEMA AQUI
+\end{lstlisting}
+
+  \noindent\small\textit{Formato de WRITE: (WRITE, $T_i$, ítem, $v_{old}$, $v_{new}$).}
+
+  \normalsize\vspace{4pt}
+  ¿Qué transacciones deben deshacerse y cuáles no? Describa paso a paso el proceso de recuperación e indique los valores finales de $X$ e $Y$ en disco.
+
+  \vspace{4.5cm}
+\end{enumerate}
+
+\newpage
+
+% ═══════════════════════════════════════════════════════════════
+\section*{Bloque 4 — Preguntas Teóricas \hfill\normalfont(3 puntos — 1 punto cada una)}
+
+\begin{enumerate}
+
+  \item \textbf{Índices.} Explicar la diferencia entre un índice \textbf{clustered} y un índice \textbf{unclustered}. ¿Cuántos índices clustered puede tener una tabla y por qué? Dar un ejemplo concreto de una consulta en la que un índice unclustered podría resultar \emph{menos} eficiente que un recorrido secuencial completo (full scan) de la tabla.
+
+  \vspace{6cm}
+
+  \item \textbf{Backups y recuperación ante fallas.} Describir la diferencia entre \textbf{full dump} e \textbf{incremental dump}. Suponga que cuenta con un full dump del domingo a las 00:00\,hs y dumps incrementales del lunes, martes y miércoles (cada uno a las 00:00\,hs). Una falla catastrófica de disco ocurre el jueves a las 14:00\,hs. Describa el procedimiento completo de recuperación e indique qué información podría haberse perdido y por qué.
+
+  \vspace{6cm}
+
+  \item \textbf{Procesamiento de consultas.} ¿Qué es un \textbf{plan de ejecución} de una consulta? ¿Qué rol cumple el \textbf{optimizador de consultas}? Describir al menos \textbf{dos algoritmos} para evaluar una operación de \emph{join} e indicar en qué condiciones es preferible cada uno.
+
+  \vspace{6cm}
+
+\end{enumerate}
+
+\end{document}
