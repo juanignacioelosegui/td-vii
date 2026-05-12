@@ -1,0 +1,150 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-05-07T20:28:09.089Z",
+  "source": "auto-postool",
+  "partial": false,
+  "phase": null,
+  "phase_name": null,
+  "phase_dir": null,
+  "plan": null,
+  "task": null,
+  "total_tasks": null,
+  "status": "auto-checkpoint",
+  "completed_tasks": [],
+  "remaining_tasks": [],
+  "blockers": [],
+  "human_actions_pending": [],
+  "decisions": [],
+  "uncommitted_files": [
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Concesionaria - soluci\\303\\263n.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "clases/teoricas/DiseasesAndSymptoms.txt"
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Ejercicio modelizaci\\303\\263n 7 (recursos cr\\303\\255ticos).pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Soluci\\303\\263n ejercicios integradores.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 1.0 - Presentaci\\303\\263n del curso.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 1.1 - Introducci\\303\\263n a las bases de datos.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 1.2 - PK - FK.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 2 - Modelo Entidad-Interrelaci\\303\\263n.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 3.1 - Modelo relacional.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 3.2 - \\303\\201lgebra Relacional.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 3.3 - Introducci\\303\\263n a SQL.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 4.1 - SQL parte II.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 4.2 - SQL parte III.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 5.1 - SQL Funciones de ventana.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 5.2- Normalizaci\\303\\263n.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 6.1 - Concurrencia - Serializabilidad.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 6.2 - Concurrencia - Recuperabilidad.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 6.3 - Recuperaci\\303\\263n ante fallas.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 7.1 - Recuperaci\\303\\263n - UNDO-REDO.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 7.2 - Backups.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 7.3 - Almacenamiento e \\303\\215ndices.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 7.4 - Procesamiento de consultas.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 8.1 - Calidad y Gobernanza de Datos.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 8.2 - Privacidad y Compliance.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/Te\\303\\263rica 8.3 - Optimizaci\\303\\263n en SQL Server.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "clases/teoricas/chinook.sql"
+    },
+    {
+      "status": "D",
+      "path": "\"clases/teoricas/concesionaria de autom\\303\\263viles - enunciado.pdf\""
+    },
+    {
+      "status": "D",
+      "path": "clases/teoricas/ejemplo.sql"
+    },
+    {
+      "status": "D",
+      "path": "clases/teoricas/resumen_td7.pdf"
+    },
+    {
+      "status": "D",
+      "path": "clases/teoricas/resumen_td7.tex"
+    },
+    {
+      "status": "??",
+      "path": "clases/teoricas/primer-parcial/"
+    },
+    {
+      "status": "??",
+      "path": "clases/teoricas/segundo-parcial/"
+    }
+  ],
+  "next_action": null,
+  "context_notes": "Recent commits:\n4d0e2f2 Tomada T08\ne54e417 Modificación /parciales_viejos\nc61da63 Agregado apuntes, P06 y parciales modelo\nee6c68a Agregado apuntes\n07928ce Agregadas guías 5 y 6"
+}

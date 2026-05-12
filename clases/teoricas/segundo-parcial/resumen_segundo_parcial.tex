@@ -1,0 +1,218 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2cm]{geometry}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{lmodern}
+
+% Colors
+\definecolor{teal}{RGB}{0, 95, 107}
+\definecolor{lightgray}{RGB}{245, 245, 245}
+\definecolor{darkgray}{RGB}{60, 60, 60}
+
+% Title formatting
+\titleformat{\section}{\large\bfseries\color{teal}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{darkgray}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\itshape}{}{0em}{}
+
+\titlespacing{\section}{0pt}{12pt}{6pt}
+\titlespacing{\subsection}{0pt}{8pt}{4pt}
+
+% Header/footer
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\small\color{gray}TD7 — Ingeniería de Datos}
+\lhead{\small\color{gray}Segundo Parcial}
+\rfoot{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Hyperref config
+\hypersetup{
+    colorlinks=true,
+    linkcolor=teal,
+    urlcolor=teal
+}
+
+\begin{document}
+
+% Title page
+\begin{center}
+    {\LARGE\bfseries\color{teal} TD7: Ingeniería de Datos}\\[0.4em]
+    {\large Resumen — Segundo Parcial}\\[0.2em]
+    {\small Universidad Torcuato Di Tella}
+\end{center}
+
+\vspace{0.5em}
+\hrule
+\vspace{1em}
+
+% =========================================================
+\section{8.1 — Calidad y Gobernanza de Datos}
+
+\subsection{Calidad de datos}
+
+\textbf{Definición:} aptitud de un dato para ser usado por quien debe consumirlo.
+
+\textbf{Cómo se mide:}
+\begin{itemize}[noitemsep]
+    \item \textbf{Análisis univariado:} mín/máx, media, mediana, moda, cuartiles, histogramas, boxplots
+    \item \textbf{Análisis bivariado:} coeficiente de correlación, tablas de contingencia, diagramas de dispersión
+\end{itemize}
+
+\subsection{8 Dimensiones de calidad}
+
+\begin{tabularx}{\textwidth}{@{}lX@{}}
+\toprule
+\textbf{Dimensión} & \textbf{Qué mide} \\
+\midrule
+\textbf{Precisión} & Qué tan cercano a la realidad (ej: ``Perezz'' en vez de ``Perez'') \\
+\textbf{Completitud} & No hay NULLs donde no debería haberlos \\
+\textbf{Consistencia} & Reglas de negocio se mantienen entre tablas \\
+\textbf{Puntualidad} & Disponible cuando se necesita \\
+\textbf{Validez} & Tipo correcto, FK válidas, formato correcto \\
+\textbf{Unicidad} & No hay duplicados del mismo hecho \\
+\textbf{Conformidad} & Formato correcto \\
+\textbf{Accesibilidad} & Disponible para los interesados \\
+\bottomrule
+\end{tabularx}
+
+\subsection{Gobernanza de datos}
+
+Capacidad organizacional de \textbf{asegurar alta calidad} en todos los datos. Implica:
+\begin{itemize}[noitemsep]
+    \item Definir \textbf{responsables} (\textit{data stewards})
+    \item Políticas de almacenamiento, backup y protección
+    \item Normas de uso y procedimientos de auditoría
+\end{itemize}
+
+\textbf{Ciclo de vida del dato:} Create $\to$ Store $\to$ Use $\to$ Share $\to$ Archive $\to$ Destroy
+
+\subsection{Alcanzando la calidad}
+
+\textbf{Pipelines:} validar datos en cada pasaje entre subsistemas. En streaming, validar continuamente y definir acción ante cada violación.
+
+\textbf{Observabilidad:} comprensión de salud y desempeño de datos. Técnicas:
+\begin{itemize}[noitemsep]
+    \item Monitoreo automatizado
+    \item \textit{Root cause analysis} (RCA)
+    \item \textbf{Data lineage:} rastreo de cómo se llega a un dato
+\end{itemize}
+Objetivo: \textbf{prevenir, detectar y resolver anomalías} lo antes posible.
+
+% =========================================================
+\section{8.2 — Privacidad y Compliance}
+
+\subsection{Roles clave}
+\begin{itemize}[noitemsep]
+    \item \textbf{Data Governance Lead:} fija la estrategia de gobernanza de la organización
+    \item \textbf{Data Steward:} ejecuta las tareas diarias de gobernanza
+\end{itemize}
+
+\subsection{PII (Personally Identifiable Information)}
+
+Información que \textbf{identifica directamente} a un individuo: nombre, dirección, CUIT, teléfono, e-mail.
+
+Las organizaciones deben cumplir normativas de protección (GDPR, CCPA, etc.). La gobernanza de datos implica rastrear dónde vive y fluye PII en todos los pipelines, y controlar quién tiene acceso.
+
+\subsection{Data Catalogs}
+
+Metadatos curados sobre \textbf{qué} datos tiene la organización, \textbf{quién} los usa y \textbf{dónde} están.
+
+Sirven para:
+\begin{itemize}[noitemsep]
+    \item Gobernanza y compliance
+    \item Rastrear dónde vive y fluye PII
+    \item Saber quién tiene acceso a qué datos
+    \item Responder: ¿dónde busco mis datos? ¿qué representan? ¿son relevantes?
+\end{itemize}
+
+\textbf{Tipos:} in-house (ej: Uber Databook, Airbnb, Netflix), open-source, comerciales.
+
+\subsection{Data Discovery}
+
+Evolución del catálogo: entendimiento \textbf{dinámico y en tiempo real} del estado actual de los datos (no el estado ``ideal catalogado''). Permite democratización del dato — que todos puedan acceder a los datos que necesitan para su trabajo.
+
+\textbf{Niveles de madurez:}
+\begin{enumerate}[noitemsep]
+    \item \textit{Data reactive:} nadie accede ni usa datos
+    \item \textit{Data scaling:} pocos tienen skills para analizar
+    \item \textit{Data progressive:} al menos un empleado data-fluent por equipo
+    \item \textit{Data fluent:} todos saben cómo acceder a los datos que necesitan
+\end{enumerate}
+
+% =========================================================
+\section{8.3 — Optimización en SQL Server}
+
+\subsection{Planes de ejecución}
+
+SQL Server genera un plan físico visible en el query optimizer. El flujo de datos va de \textbf{derecha a izquierda} en el diagrama. El porcentaje en cada operador indica su costo relativo.
+
+\subsection{Operadores de acceso a datos}
+
+\begin{tabularx}{\textwidth}{@{}lXX@{}}
+\toprule
+\textbf{Estructura} & \textbf{Scan} & \textbf{Seek} \\
+\midrule
+Heap & Table Scan & — \\
+Clustered Index & Clustered Index Scan & Clustered Index Seek \\
+Nonclustered Index & Index Scan & Index Seek \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.5em}
+\textbf{Seek} = acceso directo por índice (eficiente). \textbf{Scan} = recorre todo (costoso en tablas grandes).
+
+\subsection{Operadores de agregación}
+
+SQL Server usa dos operadores para \texttt{SUM}, \texttt{AVG}, \texttt{MAX}, \texttt{GROUP BY}, \texttt{DISTINCT}:
+
+\subsubsection{Stream Aggregate}
+\begin{itemize}[noitemsep]
+    \item \textit{Scalar aggregates} (sin \texttt{GROUP BY}) $\to$ siempre Stream Aggregate
+    \item Con \texttt{GROUP BY} $\to$ datos deben venir \textbf{ordenados} (usa índice o inserta Sort operator)
+\end{itemize}
+
+\subsubsection{Hash Aggregate (Hash Match)}
+\begin{itemize}[noitemsep]
+    \item Para tablas grandes con datos \textbf{no ordenados}
+    \item No necesita orden; óptimo cuando cardinalidad estimada es pocos grupos
+\end{itemize}
+
+\subsubsection{Hash vs Stream}
+Si se crea un índice que provee datos ordenados, el optimizador puede elegir Stream en vez de Hash. Si la entrada no está ordenada pero se pide orden explícito, el optimizador puede: insertar Sort + Stream Aggregate, o usar Hash Aggregate + Sort al final.
+
+\subsubsection{Distinct Sort}
+\texttt{DISTINCT} puede implementarse con Stream Aggregate, Hash Aggregate o \textbf{Distinct Sort}.
+
+\subsection{Juntas (Joins)}
+
+El optimizador debe decidir: \textbf{orden de las juntas} y \textbf{algoritmo de junta}.
+
+\begin{tabularx}{\textwidth}{@{}lXXllX@{}}
+\toprule
+\textbf{Algoritmo} & \textbf{Inner table} & \textbf{Outer table} & \textbf{Tamaño} & \textbf{Ordenado} & \textbf{Cláusula} \\
+\midrule
+\textbf{Hash Join} & Sin índice & Opcional & Cualquiera & No & Equi-join \\
+\textbf{Merge Join} & Con índice & Con índice & Grande & \textbf{Sí} & Equi-join \\
+\textbf{Nested Loops} & Con índice (must) & Preferable & \textbf{Pequeño} & Opcional & Cualquiera \\
+\bottomrule
+\end{tabularx}
+
+\vspace{0.5em}
+\textbf{Notas clave:}
+\begin{itemize}[noitemsep]
+    \item \textbf{Nested Loops:} ideal outer pequeño + inner grande indexado. Acepta cualquier predicado de junta.
+    \item \textbf{Merge Join:} ambas tablas pre-ordenadas; óptimo con índice clustered o covering en ambas.
+    \item \textbf{Hash Join:} no requiere orden; óptimo outer pequeño + inner grande. Implementado con Hash Match.
+    \item Merge y Hash \textbf{requieren equi-join}; Nested Loops acepta cualquier predicado.
+\end{itemize}
+
+\end{document}
