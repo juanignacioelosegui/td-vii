@@ -1,0 +1,906 @@
+\documentclass[11pt, a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2cm]{geometry}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{titlesec}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+% Colors
+\definecolor{teal}{RGB}{0, 95, 107}
+\definecolor{lightgray}{RGB}{245, 245, 245}
+\definecolor{darkgray}{RGB}{60, 60, 60}
+
+% Title formatting
+\titleformat{\section}{\large\bfseries\color{teal}}{}{0em}{}[\titlerule]
+\titleformat{\subsection}{\normalsize\bfseries\color{darkgray}}{}{0em}{}
+\titleformat{\subsubsection}{\normalsize\itshape}{}{0em}{}
+
+\titlespacing{\section}{0pt}{12pt}{6pt}
+\titlespacing{\subsection}{0pt}{8pt}{4pt}
+
+% Header/footer
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\small\color{gray}TD7 --- Ingeniería de Datos}
+\lhead{\small\color{gray}Juan Ignacio Elosegui}
+\rfoot{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+% Hyperref config
+\hypersetup{
+    colorlinks=true,
+    linkcolor=teal,
+    urlcolor=teal
+}
+
+\begin{document}
+
+% Title page
+\begin{center}
+	{\LARGE\bfseries\color{teal} Resumen de Bibliografía}\\[0.4em]
+	{\large Database System Concepts --- Silberschatz, Korth, Sudarshan (2019)}\\[0.2em]
+	{\small Capítulos 12 (12.1--12.3, 12.6), 13 (13.1--13.4), 14 (14.1--14.5), 15, 16 (16.1--16.4)}
+\end{center}
+
+\vspace{0.5em}
+\hrule
+\vspace{1em}
+
+% =========================================================
+% CAPÍTULO 12
+% =========================================================
+\section{Capítulo 12 --- Sistemas de Almacenamiento Físico}
+
+% ---------------------------------------------------------
+\subsection{12.1 --- Panorama de los Medios de Almacenamiento Físico}
+
+Los medios de almacenamiento se clasifican por \textbf{velocidad de acceso}, \textbf{costo por unidad de dato} y \textbf{confiabilidad}. La jerarquía de almacenamiento (de más rápido y caro a más lento y barato) es:
+
+\begin{enumerate}[nosep]
+	\item \textbf{Caché:} más rápida y costosa. Administrada por hardware. Muy pequeña.
+	\item \textbf{Memoria principal:} volátil (se pierde ante cortes de energía). Decenas a miles de GB. Instrucciones de CPU operan sobre ella.
+	\item \textbf{Memoria flash:} no volátil. Menor costo/byte que memoria principal pero mayor que discos magnéticos. Base de las SSDs. Interfaz orientada a bloques (típicamente 512 bytes a 8 KB).
+	\item \textbf{Disco magnético (HDD):} no volátil. Almacenamiento principal a largo plazo. Capacidades de 500 GB a 14 TB. Más barato que SSD pero más lento.
+	\item \textbf{Almacenamiento óptico (DVD/Blu-ray):} 27--128 GB. No apto para datos activos de BD.
+	\item \textbf{Cinta magnética:} acceso secuencial. 1--12 TB. Muy barata. Usada para backup y archivo.
+\end{enumerate}
+
+Clasificación según volatilidad:
+\begin{itemize}[nosep]
+	\item \textbf{Almacenamiento primario:} caché y memoria principal (volátiles).
+	\item \textbf{Almacenamiento secundario (online):} flash y disco magnético (no volátiles).
+	\item \textbf{Almacenamiento terciario (offline):} cintas y jukeboxes ópticos.
+\end{itemize}
+
+% ---------------------------------------------------------
+\subsection{12.2 --- Interfaces de Almacenamiento}
+
+Los discos se conectan al sistema mediante interfaces de alta velocidad:
+\begin{itemize}[nosep]
+	\item \textbf{SATA (Serial ATA):} hasta 600 MB/s (SATA-3). Uso general.
+	\item \textbf{SAS (Serial Attached SCSI):} hasta 12 Gbps. Uso en servidores.
+	\item \textbf{NVMe (Non-Volatile Memory Express):} interfaz lógica optimizada para SSDs, sobre PCIe. Mayor rendimiento.
+\end{itemize}
+
+Arquitecturas de almacenamiento remoto:
+\begin{itemize}[nosep]
+	\item \textbf{SAN (Storage Area Network):} red de alta velocidad conectando discos a servidores. Usa RAID internamente. Presenta vista lógica de disco grande y confiable. Protocolos: iSCSI, Fiber Channel, InfiniBand.
+	\item \textbf{NAS (Network Attached Storage):} similar a SAN pero provee interfaz de sistema de archivos (NFS, CIFS).
+	\item \textbf{Cloud storage:} acceso vía API. Latencia alta (decenas a cientos de ms). No ideal como almacenamiento subyacente para BD activas.
+\end{itemize}
+
+% ---------------------------------------------------------
+\subsection{12.3 --- Discos Magnéticos}
+
+\subsubsection{12.3.1 Características Físicas}
+
+Un disco magnético consta de \textbf{platos} circulares rígidos cubiertos de material magnético, montados sobre un \textbf{eje (spindle)} que gira a velocidad constante (5400--15000 RPM). Cada superficie se divide en:
+\begin{itemize}[nosep]
+	\item \textbf{Pistas (tracks):} círculos concéntricos en la superficie del plato.
+	\item \textbf{Sectores:} subdivisiones de cada pista. Unidad mínima de lectura/escritura (típicamente 512 bytes).
+	\item \textbf{Cilindro:} conjunto de las $i$-ésimas pistas de todos los platos.
+\end{itemize}
+
+Una \textbf{cabeza de lectura/escritura} (read-write head) se posiciona sobre la superficie del plato, montada en un \textbf{brazo de disco (disk arm)}. Todas las cabezas se mueven juntas (ensamblaje de brazo). La cabeza ``flota'' a micrones de la superficie.
+
+El \textbf{controlador de disco} acepta comandos de alto nivel, mueve el brazo, lee/escribe datos, agrega \textbf{checksums} a cada sector para detectar corrupción, y realiza \textbf{remapeo de sectores defectuosos}.
+
+\subsubsection{12.3.2 Métricas de Rendimiento}
+
+\begin{itemize}[nosep]
+	\item \textbf{Tiempo de acceso} = tiempo de búsqueda (seek time) + latencia rotacional.
+	      \begin{itemize}[nosep]
+		      \item \textbf{Seek time:} tiempo para mover el brazo a la pista correcta. Promedio: 4--10 ms.
+		      \item \textbf{Latencia rotacional:} espera a que el sector pase bajo la cabeza. Promedio: medio giro (2--5.5 ms según RPM).
+	      \end{itemize}
+	\item \textbf{Tasa de transferencia:} velocidad de lectura/escritura una vez posicionado. Máximo: 50--200 MB/s; menor en pistas internas.
+	\item \textbf{Bloque de disco:} unidad lógica de transferencia. Típicamente 4--16 KB.
+	\item \textbf{IOPS (I/O operations per second):} cantidad de accesos aleatorios por segundo. Discos actuales: 50--200 IOPS.
+	\item \textbf{MTTF (Mean Time To Failure):} tiempo medio hasta fallo. Valores reportados: 500,000--1,200,000 horas (vida útil real $\approx$ 5 años).
+\end{itemize}
+
+Patrones de acceso:
+\begin{itemize}[nosep]
+	\item \textbf{Secuencial:} bloques consecutivos, mínimo seek $\rightarrow$ máxima tasa de transferencia.
+	\item \textbf{Aleatorio:} cada acceso requiere seek $\rightarrow$ rendimiento mucho menor.
+\end{itemize}
+
+% ---------------------------------------------------------
+\subsection{12.6 --- Acceso a Bloques de Disco}
+
+Técnicas para mejorar la velocidad de acceso a bloques:
+
+\begin{enumerate}[nosep]
+	\item \textbf{Buffering:} bloques leídos se almacenan temporalmente en un buffer en memoria para satisfacer futuras solicitudes.
+	\item \textbf{Read-ahead (lectura anticipada):} se leen bloques consecutivos de la misma pista anticipadamente, aunque no hayan sido solicitados. Efectivo para acceso secuencial; poco útil para acceso aleatorio.
+	\item \textbf{Disk-arm scheduling:} reordenar solicitudes de acceso para minimizar movimiento del brazo. El \textbf{algoritmo del elevador} mueve el brazo en una dirección atendiendo solicitudes, luego invierte la dirección (como un ascensor).
+	\item \textbf{Organización de archivos:} organizar bloques en disco según el patrón de acceso esperado. Bloques consecutivos se numeran lógicamente como adyacentes. Archivos se asignan en \textbf{extents} (grupos de bloques consecutivos). La \textbf{fragmentación} se combate con desfragmentación o backup/restore.
+	\item \textbf{Buffers de escritura no volátiles (NVRAM):} cuando el sistema solicita escribir un bloque, el controlador lo escribe en un buffer NVRAM y reporta éxito inmediato. Luego escribe a disco optimizando movimiento del brazo. Ante crash, las escrituras pendientes se recuperan del NVRAM.
+\end{enumerate}
+
+% =========================================================
+% CAPÍTULO 13
+% =========================================================
+\section{Capítulo 13 --- Estructuras de Almacenamiento de Datos}
+
+% ---------------------------------------------------------
+\subsection{13.1 --- Arquitectura de Almacenamiento de BD}
+
+Los datos persistentes residen en almacenamiento no volátil (disco magnético o SSD). Los discos son dispositivos \textbf{orientados a bloques}: datos se leen/escriben en unidades de bloques. Las bases de datos trabajan con \textbf{registros}, que son mucho más pequeños que un bloque.
+
+La mayoría de BD usan \textbf{archivos del sistema operativo} como capa intermedia para almacenar registros, pero deben ser conscientes de los bloques para eficiencia y recuperación.
+
+Decisiones clave:
+\begin{itemize}[nosep]
+	\item Cómo representar registros individuales dentro de bloques (Sección 13.2).
+	\item Cómo organizar registros en archivos (Sección 13.3).
+	\item Cómo organizar metadatos en el diccionario de datos (Sección 13.4).
+\end{itemize}
+
+Bases de datos que caben en memoria principal se llaman \textbf{main-memory databases}; almacenamiento orientado a columnas (\textbf{column-oriented storage}) es eficiente para consultas analíticas.
+
+% ---------------------------------------------------------
+\subsection{13.2 --- Organización de Archivos}
+
+Una BD se mapea a varios archivos del SO. Un \textbf{archivo} es una secuencia lógica de registros mapeados a bloques de disco. Los \textbf{bloques} son la unidad de asignación y transferencia (típicamente 4--8 KB). Asumimos que \textbf{ningún registro es mayor que un bloque} y que cada registro cabe \textbf{enteramente en un solo bloque}.
+
+\subsubsection{13.2.1 Registros de Longitud Fija}
+
+Cada registro ocupa exactamente el mismo número de bytes. Los registros se almacenan consecutivamente en el bloque. Problemas:
+\begin{itemize}[nosep]
+	\item Si el tamaño del registro no divide exactamente al tamaño del bloque, algunos registros cruzarían límites de bloque $\rightarrow$ se desperdician bytes al final de cada bloque.
+	\item \textbf{Borrado:} el espacio liberado debe reutilizarse. Opciones: mover el último registro al hueco, o usar una \textbf{lista libre (free list)} con un puntero en el \textbf{encabezado del archivo (file header)} al primer registro borrado, y cada registro borrado apunta al siguiente.
+\end{itemize}
+
+\subsubsection{13.2.2 Registros de Longitud Variable}
+
+Surgen por campos de longitud variable (strings), campos repetidos, o múltiples tipos de registro en un archivo. Dos problemas:
+\begin{enumerate}[nosep]
+	\item Representar un registro individual para extraer atributos fácilmente.
+	\item Almacenar registros de longitud variable en un bloque.
+\end{enumerate}
+
+\textbf{Representación de un registro:} parte inicial fija con información de cada atributo. Atributos de longitud fija se almacenan directamente. Atributos de longitud variable se representan como un par (offset, longitud). Los valores variables van después de la parte fija. Se usa un \textbf{null bitmap} para indicar atributos nulos.
+
+\textbf{Estructura de página con ranuras (slotted-page structure):} método estándar para organizar registros variables en un bloque. El encabezado del bloque contiene:
+\begin{itemize}[nosep]
+	\item Número de entradas de registro.
+	\item Fin del espacio libre.
+	\item Un arreglo con ubicación y tamaño de cada registro.
+\end{itemize}
+Los registros se asignan contiguamente desde el \textbf{final del bloque}. El espacio libre está entre el arreglo del encabezado y los registros. Los punteros externos apuntan a la entrada del encabezado, no directamente al registro, permitiendo mover registros dentro del bloque sin invalidar punteros.
+
+\subsubsection{13.2.3 Almacenamiento de Objetos Grandes}
+
+Objetos como imágenes, audio o video pueden ser mucho más grandes que un bloque. SQL soporta tipos \textbf{blob} y \textbf{clob}. Se almacenan separados del registro, con un puntero lógico en el registro. Pueden usarse organizaciones de archivos B$^+$-tree para acceso eficiente a partes del objeto. Muchas aplicaciones almacenan objetos grandes fuera de la BD (en el sistema de archivos), guardando solo la ruta como atributo.
+
+% ---------------------------------------------------------
+\subsection{13.3 --- Organización de Registros en Archivos}
+
+Formas de organizar registros dentro de archivos:
+
+\subsubsection{13.3.1 Organización Heap (Montículo)}
+
+Los registros se colocan en cualquier lugar del archivo donde haya espacio. No hay ordenamiento. Se usa un \textbf{free-space map}: arreglo con una entrada por bloque indicando la fracción de espacio libre (típicamente 1 byte por bloque en PostgreSQL). Un free-space map de segundo nivel almacena el máximo de cada grupo de entradas del mapa principal para acelerar búsquedas. El mapa se escribe periódicamente a disco.
+
+\subsubsection{13.3.2 Organización Secuencial}
+
+Un \textbf{archivo secuencial} almacena registros en orden según una \textbf{clave de búsqueda (search key)}: cualquier atributo o conjunto de atributos. Los registros se encadenan con punteros en orden de clave. Permite lectura en orden y procesamiento secuencial eficiente.
+
+Inserciones: se busca el registro anterior en orden de clave; si hay espacio en el mismo bloque, se inserta allí; sino, se usa un \textbf{bloque de desbordamiento (overflow block)}. La correspondencia entre orden lógico y físico se degrada con el tiempo, requiriendo \textbf{reorganización} periódica.
+
+\subsubsection{13.3.3 Organización Multitable Clustering}
+
+Normalmente cada relación va en su propio archivo. En \textbf{multitable clustering}, registros de dos o más relaciones relacionadas se almacenan en el mismo bloque, agrupados por una \textbf{clave de cluster} (ej: \texttt{dept\_name}).
+
+Ventaja: joins sobre la clave de cluster son muy eficientes (registros relacionados en el mismo bloque). Desventaja: consultas sobre una sola relación requieren más accesos a bloques. Oracle lo soporta con \texttt{CREATE CLUSTER}.
+
+\subsubsection{13.3.4 Particionamiento de Tablas}
+
+Las relaciones pueden particionarse en subrelaciones más pequeñas basándose en un atributo (ej: particionar \textit{transaction} por año). Beneficios:
+\begin{itemize}[nosep]
+	\item Consultas filtradas por el atributo de partición solo acceden a la subrelación relevante.
+	\item Reduce overhead de operaciones como búsqueda de espacio libre.
+	\item Permite almacenar particiones frías en disco magnético y calientes en SSD.
+\end{itemize}
+
+% ---------------------------------------------------------
+\subsection{13.4 --- Almacenamiento del Diccionario de Datos}
+
+El \textbf{diccionario de datos} (o \textbf{catálogo del sistema}) almacena \textbf{metadatos}: datos sobre los datos. Información almacenada:
+\begin{itemize}[nosep]
+	\item Nombres de relaciones y sus atributos (dominios, longitudes).
+	\item Nombres y definiciones de vistas.
+	\item Restricciones de integridad (claves, etc.).
+	\item Información de usuarios, contraseñas, autorizaciones.
+	\item Organización de almacenamiento (heap, secuencial, hash, etc.) y ubicación de cada relación.
+	\item Información de índices: nombre, relación, atributos indexados, tipo.
+	\item Estadísticas: número de tuplas, valores distintos por atributo.
+\end{itemize}
+
+Los metadatos se almacenan como relaciones dentro de la propia BD. Un esquema ilustrativo incluye relaciones como \textit{Relation\_metadata}, \textit{Attribute\_metadata}, \textit{Index\_metadata}, \textit{View\_metadata} y \textit{User\_metadata}. Se almacena en forma desnormalizada para acceso rápido. Al ser accedido frecuentemente, se carga en estructuras in-memory al inicio de la BD.
+
+% =========================================================
+% CAPÍTULO 14
+% =========================================================
+\section{Capítulo 14 --- Indexación}
+
+% ---------------------------------------------------------
+\subsection{14.1 --- Conceptos Básicos}
+
+Un \textbf{índice} es una estructura adicional asociada a un archivo que permite acceso rápido a registros sin escanear toda la relación. Funciona como el índice de un libro: almacena claves en orden con punteros a los registros.
+
+Dos tipos básicos de índices:
+\begin{itemize}[nosep]
+	\item \textbf{Índices ordenados:} basados en ordenamiento de valores.
+	\item \textbf{Índices hash:} basados en distribución uniforme de valores mediante una función hash.
+\end{itemize}
+
+Factores de evaluación de un índice:
+\begin{itemize}[nosep]
+	\item \textbf{Tipos de acceso:} búsqueda por igualdad, búsqueda por rango.
+	\item \textbf{Tiempo de acceso.}
+	\item \textbf{Tiempo de inserción y eliminación} (incluye actualizar el índice).
+	\item \textbf{Overhead de espacio.}
+\end{itemize}
+
+Una \textbf{clave de búsqueda (search key)} es un atributo o conjunto de atributos usado para buscar registros en un archivo. No es lo mismo que clave primaria o candidata.
+
+% ---------------------------------------------------------
+\subsection{14.2 --- Índices Ordenados}
+
+Un \textbf{índice ordenado} almacena claves de búsqueda en orden y asocia con cada clave los registros que la contienen.
+
+\subsubsection{Índice de clustering vs.\ índice secundario}
+
+\begin{itemize}[nosep]
+	\item \textbf{Índice de clustering (primario):} la clave del índice define el orden secuencial del archivo. Se aplica a archivos \textbf{index-sequential}.
+	\item \textbf{Índice no clustering (secundario):} la clave especifica un orden diferente al orden físico del archivo.
+\end{itemize}
+
+\subsubsection{14.2.1 Índices Densos y Dispersos}
+
+Una \textbf{entrada de índice} (index record) contiene un valor de clave y puntero(s) a registros.
+
+\begin{itemize}[nosep]
+	\item \textbf{Índice denso:} una entrada por cada valor de clave en el archivo.
+	      \begin{itemize}[nosep]
+		      \item En clustering denso: cada entrada apunta al primer registro con ese valor de clave.
+		      \item En no clustering denso: cada entrada almacena lista de punteros a todos los registros con esa clave.
+	      \end{itemize}
+	\item \textbf{Índice disperso (sparse):} entradas solo para algunos valores de clave. Solo para índices de clustering (archivo ordenado por la clave). Localización: buscar la mayor clave $\leq$ al valor buscado y recorrer secuencialmente desde ahí.
+\end{itemize}
+
+Trade-off: denso es más rápido para búsqueda; disperso requiere menos espacio y menos mantenimiento. Compromiso práctico: una entrada dispersa por bloque.
+
+\subsubsection{14.2.2 Índices Multinivel}
+
+Cuando un índice es demasiado grande para caber en memoria, la búsqueda binaria sobre él requiere muchos accesos aleatorios a disco ($\lceil \log_2(b) \rceil$ bloques para $b$ bloques de índice).
+
+Solución: tratar al índice como un archivo secuencial y construir un \textbf{índice disperso externo (outer index)} sobre él. El índice original pasa a ser el \textbf{inner index}. Se puede repetir para más niveles.
+
+Ejemplo: con 10,000 bloques de inner index, el outer index ocupa solo 100 bloques. Si el outer index cabe en memoria, una búsqueda requiere solo 1 lectura de bloque (vs.\ 14 con búsqueda binaria).
+
+\subsubsection{14.2.3 Actualización de Índices}
+
+Todo índice debe actualizarse ante inserciones y eliminaciones.
+
+\textbf{Inserción en índice denso:} si la clave no existe, se inserta nueva entrada. Si existe, se agrega puntero o se coloca el registro después del primero con esa clave.
+
+\textbf{Inserción en índice disperso:} si se crea un nuevo bloque, se inserta entrada con la primera clave del nuevo bloque. Si el nuevo registro tiene la menor clave del bloque, se actualiza la entrada existente.
+
+\textbf{Eliminación:} en denso, se elimina la entrada si era el único registro con esa clave; sino se actualiza el puntero. En disperso, se reemplaza con la siguiente clave o se elimina la entrada.
+
+\subsubsection{14.2.4 Índices Secundarios}
+
+Los índices secundarios \textbf{deben ser densos}: como el archivo no está ordenado por la clave secundaria, no se puede usar recorrido secuencial para encontrar registros intermedios.
+
+Para claves no candidatas (nonunique), los punteros del índice secundario apuntan a \textbf{buckets} (bloques de punteros) que a su vez apuntan a los registros. Esto agrega un nivel de indirección.
+
+Ventaja: mejoran consultas sobre claves distintas a la de clustering. Desventaja: overhead significativo en actualizaciones (cada modificación del archivo debe actualizar \textbf{todos} los índices). El acceso secuencial por clave secundaria es muy costoso (cada registro puede estar en un bloque diferente).
+
+\subsubsection{14.2.5 Índices sobre Múltiples Claves}
+
+Una \textbf{clave de búsqueda compuesta} contiene más de un atributo. El ordenamiento es \textbf{lexicográfico}: $(a_1, a_2) < (b_1, b_2)$ si $a_1 < b_1$, o si $a_1 = b_1$ y $a_2 < b_2$. Útil para consultas que combinan condiciones sobre múltiples atributos.
+
+% ---------------------------------------------------------
+\subsection{14.3 --- Archivos de Índice B$^+$-Tree}
+
+El principal problema de la organización index-sequential es la \textbf{degradación del rendimiento} a medida que el archivo crece (desbordamientos, reorganizaciones costosas).
+
+El \textbf{B$^+$-tree} es la estructura de índice más usada en BD. Es un \textbf{árbol balanceado}: todos los caminos de la raíz a las hojas tienen la misma longitud.
+
+\subsubsection{14.3.1 Estructura del B$^+$-Tree}
+
+Cada nodo contiene hasta $n-1$ claves $K_1, K_2, \ldots, K_{n-1}$ y $n$ punteros $P_1, P_2, \ldots, P_n$. Las claves están ordenadas: $K_i < K_j$ si $i < j$.
+
+\textbf{Nodos hoja:}
+\begin{itemize}[nosep]
+	\item Para $i = 1, \ldots, n-1$: puntero $P_i$ apunta al registro con clave $K_i$.
+	\item $P_n$ apunta al siguiente nodo hoja (encadenamiento para recorrido secuencial).
+	\item Cada hoja tiene entre $\lceil (n-1)/2 \rceil$ y $n-1$ valores.
+	\item Si se usa como índice denso, todo valor de clave aparece en alguna hoja.
+\end{itemize}
+
+\textbf{Nodos internos (no hoja):}
+\begin{itemize}[nosep]
+	\item Forman un índice disperso multinivel sobre las hojas.
+	\item Puntero $P_i$ apunta al subárbol con claves $\geq K_{i-1}$ y $< K_i$.
+	\item Cada nodo interno tiene entre $\lceil n/2 \rceil$ y $n$ punteros (hijos).
+	\item El \textbf{fanout} es el número de punteros en un nodo.
+	\item La raíz puede tener mínimo 2 punteros.
+\end{itemize}
+
+Profundidad del árbol para $N$ registros: $\leq \lceil \log_{\lceil n/2 \rceil}(N) \rceil$.
+
+Ejemplo práctico: con $n = 100$ y 1,000,000 claves, la búsqueda requiere solo $\lceil \log_{50}(1{,}000{,}000) \rceil = 4$ accesos a nodos. La raíz suele estar en el buffer $\rightarrow$ 3 o menos lecturas de disco.
+
+\subsubsection{14.3.2 Consultas en B$^+$-Trees}
+
+\textbf{Búsqueda puntual} (\texttt{find(v)}): desde la raíz, en cada nodo encontrar el menor $K_i \geq v$ y seguir el puntero correspondiente. Repetir hasta llegar a una hoja. Costo: proporcional a la altura del árbol.
+
+\textbf{Consultas de rango} (\texttt{findRange(lb, ub)}): encontrar la hoja del límite inferior, luego recorrer hojas consecutivas recolectando punteros hasta superar el límite superior.
+
+Para claves no únicas, se crea una clave compuesta $(a_i, A_p)$ donde $A_p$ es la clave primaria, garantizando unicidad.
+
+\subsubsection{14.3.3 Actualizaciones en B$^+$-Trees}
+
+\textbf{Inserción:}
+\begin{enumerate}[nosep]
+	\item Buscar la hoja donde debe ir la nueva clave.
+	\item Si hay espacio, insertar en orden.
+	\item Si la hoja está llena, \textbf{split}: dividir en dos nodos, los primeros $\lceil n/2 \rceil$ quedan en el original, el resto en el nuevo. La menor clave del nuevo nodo se inserta en el padre.
+	\item Si el padre se llena, se repite el split recursivamente. Si la raíz se divide, se crea nueva raíz (el árbol crece en profundidad).
+	\item \textbf{Diferencia entre split de hoja y de nodo interno:} en hojas, la clave ``promovida'' se copia al padre (permanece en la hoja). En nodos internos, la clave se \textbf{mueve} al padre (no queda en ninguno de los nodos divididos).
+\end{enumerate}
+
+\textbf{Eliminación:}
+\begin{enumerate}[nosep]
+	\item Buscar y eliminar la entrada de la hoja.
+	\item Si la hoja queda con menos de $\lceil (n-1)/2 \rceil$ valores (\textbf{underfull}):
+	      \begin{itemize}[nosep]
+		      \item Intentar \textbf{redistribuir} con un hermano (tomar prestada una entrada).
+		      \item Si no es posible, \textbf{fusionar (coalesce)} con un hermano y eliminar la entrada separadora del padre.
+	      \end{itemize}
+	\item Las fusiones pueden propagarse recursivamente hasta la raíz. Si la raíz queda con un solo hijo, ese hijo se convierte en la nueva raíz.
+\end{enumerate}
+
+\subsubsection{14.3.4 Complejidad de Actualizaciones}
+
+Costo en I/O de inserción y eliminación: proporcional a $\log_{\lceil n/2 \rceil}(N)$ (altura del árbol). En la práctica, con fanout de 100, solo 1--2 lecturas de disco son necesarias. La probabilidad de split es muy baja (1 de cada 100 inserciones con fanout 100). Los nodos tienden a estar 2/3 llenos en promedio.
+
+\subsubsection{14.3.5 Claves de Búsqueda No Únicas}
+
+Para manejar duplicados, la mayoría de implementaciones usan el enfoque de \textbf{clave única compuesta}: se agrega un atributo \textbf{uniquifier} (típicamente la clave primaria o un record-id) a la clave de búsqueda. Esto simplifica inserción y eliminación, manteniendo la complejidad logarítmica.
+
+% ---------------------------------------------------------
+\subsection{14.4 --- Extensiones de B$^+$-Tree}
+
+\subsubsection{14.4.1 Organización de Archivo B$^+$-Tree}
+
+En una \textbf{B$^+$-tree file organization}, los nodos hoja almacenan \textbf{registros completos} en lugar de punteros. Resuelve la degradación de archivos index-sequential. Cada bloque tiene al menos la mitad de registros llenos.
+
+Para mejorar la utilización de espacio, durante splits se involucran nodos hermanos: redistribuir entre el nodo y sus adyacentes antes de crear un nuevo nodo. Esto garantiza $\lfloor 2n/3 \rfloor$ entradas mínimas por nodo.
+
+\subsubsection{14.4.2 Índices Secundarios y Reubicación de Registros}
+
+Problema: si la organización B$^+$-tree mueve registros (por splits), todos los índices secundarios deben actualizarse.
+
+Solución: los índices secundarios almacenan \textbf{valores de clave primaria} en lugar de punteros directos. Localizar un registro requiere dos pasos: buscar la clave primaria en el índice secundario, luego usar el índice primario. Reduce costo de actualización a cambio de mayor costo de acceso.
+
+\subsubsection{14.4.3 Indexación de Strings}
+
+Problemas: strings largos reducen el fanout. Soluciones:
+\begin{itemize}[nosep]
+	\item Nodos con fanout variable (según longitud de claves).
+	\item \textbf{Compresión de prefijos:} en nodos internos, almacenar solo el prefijo necesario para distinguir entre subárboles.
+\end{itemize}
+
+\subsubsection{14.4.4 Carga Masiva (Bulk Loading)}
+
+Insertar registros uno a uno en un B$^+$-tree grande no clustering es muy costoso (acceso aleatorio por cada inserción).
+
+\textbf{Bulk loading:} ordenar las entradas del índice por clave, luego insertarlas en orden. Beneficios:
+\begin{itemize}[nosep]
+	\item Cada nodo hoja se escribe solo una vez.
+	\item Las I/O son mayormente secuenciales.
+\end{itemize}
+
+\textbf{Construcción bottom-up:} partir las entradas ordenadas en bloques (hojas), luego construir niveles superiores con los valores mínimos de cada bloque. Mucho más eficiente que inserción individual.
+
+\subsubsection{14.4.5 Archivos de Índice B-Tree}
+
+El \textbf{B-tree} (sin ``$+$'') elimina la redundancia: cada valor de clave aparece \textbf{una sola vez} en todo el árbol. Los nodos internos incluyen punteros a registros ($B_i$) además de punteros a hijos ($P_i$). Ventaja teórica: menos nodos. Desventajas prácticas:
+\begin{itemize}[nosep]
+	\item Menor fanout en nodos internos $\rightarrow$ mayor profundidad.
+	\item Eliminación más compleja.
+	\item Implementación más complicada.
+	\item Ventaja de espacio marginal.
+\end{itemize}
+En la práctica, \textbf{casi todas las BD usan B$^+$-trees}, aunque muchas los llaman ``B-trees''.
+
+% ---------------------------------------------------------
+\subsection{14.5 --- Índices Hash}
+
+\textbf{Hashing} es una técnica para construir índices en memoria principal o en disco. Un \textbf{bucket} es una unidad de almacenamiento (lista enlazada en memoria, o bloque(s) de disco).
+
+Sea $K$ el conjunto de claves y $B$ el conjunto de direcciones de buckets. Una \textbf{función hash} $h: K \to B$ mapea cada clave a un bucket. La técnica más usada es \textbf{overflow chaining} (closed addressing): cada bucket tiene una lista enlazada de entradas, y los buckets que desbordan se encadenan con \textbf{overflow buckets}.
+
+\textbf{Operaciones:}
+\begin{itemize}[nosep]
+	\item \textbf{Búsqueda:} calcular $h(K_i)$, buscar en el bucket (y sus overflow buckets).
+	\item \textbf{Inserción:} calcular $h(K_i)$, insertar en el bucket; si está lleno, crear overflow bucket.
+	\item \textbf{Eliminación:} calcular $h(K_i)$, buscar y eliminar del bucket/lista.
+\end{itemize}
+
+\textbf{Limitación principal:} los índices hash \textbf{no soportan consultas de rango}. Solo sirven para búsquedas por igualdad.
+
+\textbf{Bucket overflow} puede ocurrir por:
+\begin{itemize}[nosep]
+	\item Número insuficiente de buckets.
+	\item \textbf{Skew} (distribución no uniforme): múltiples registros con la misma clave, o función hash con distribución no uniforme.
+\end{itemize}
+
+Para reducir overflow, se asignan $(n_r / f_r) \times (1 + d)$ buckets, donde $n_r$ = número de registros, $f_r$ = registros por bucket, y $d$ es un factor de holgura ($\approx 0.2$).
+
+\textbf{Hashing estático vs.\ dinámico:}
+\begin{itemize}[nosep]
+	\item \textbf{Estático:} número fijo de buckets, definido al crear el índice. Si los datos crecen mucho, se degradan las búsquedas. Reconstruir el índice es costoso.
+	\item \textbf{Dinámico:} permite incrementar el número de buckets gradualmente (\textit{linear hashing}, \textit{extendable hashing}).
+\end{itemize}
+
+% =========================================================
+% CAPÍTULO 15
+% =========================================================
+\newpage
+\section{Capítulo 15 --- Procesamiento de Consultas}
+
+% ---------------------------------------------------------
+\subsection{15.1 --- Panorama General}
+
+El procesamiento de consultas comprende las actividades para extraer datos de una BD. Pasos:
+\begin{enumerate}[nosep]
+	\item \textbf{Parsing y traducción:} verificar sintaxis y traducir SQL a álgebra relacional.
+	\item \textbf{Optimización:} elegir el plan de evaluación de menor costo entre los equivalentes.
+	\item \textbf{Evaluación:} ejecutar el plan elegido y devolver resultados.
+\end{enumerate}
+
+Un \textbf{plan de evaluación} define exactamente qué algoritmo usar para cada operación y cómo coordinar la ejecución. La diferencia de costo entre un plan bueno y uno malo puede ser de \textbf{varios órdenes de magnitud}.
+
+Tres pasos del optimizador: (1) generar expresiones lógicamente equivalentes, (2) anotar cada expresión con algoritmos alternativos, (3) estimar costos y elegir el menor.
+
+% ---------------------------------------------------------
+\subsection{15.2 --- Medidas de Costo de una Consulta}
+
+El costo se mide en términos de \textbf{transferencias de bloques} ($t_T$) y \textbf{búsquedas de disco} ($t_S$):
+\[
+	\text{Costo} = b \times t_T + S \times t_S
+\]
+donde $b$ = número de bloques transferidos y $S$ = número de seeks. Típicamente $t_S \gg t_T$ (ej: $t_S = 4$ ms, $t_T = 0.1$ ms).
+
+$M$ = número de bloques de memoria disponibles para el buffer. Más memoria $\rightarrow$ menos I/O. En peor caso, $M = 3$ (mínimo para muchos algoritmos).
+
+Se ignora el costo de escribir la salida final (es igual para todos los planes).
+
+% ---------------------------------------------------------
+\subsection{15.3 --- Operación de Selección}
+
+\subsubsection{Algoritmos de selección}
+
+\begin{tabularx}{\textwidth}{@{}llX@{}}
+	\toprule
+	\textbf{Algo.} & \textbf{Nombre}                                         & \textbf{Descripción y costo}                                                                                                         \\
+	\midrule
+	A1             & \textit{Linear search}                                  & Escaneo completo. Costo: $b_r \times t_T + t_S$. Para igualdad sobre clave: promedio $\frac{b_r}{2} \times t_T + t_S$.               \\
+	A2             & \textit{Clustering index, igualdad}                     & Índice primario/clustering. Costo: $(h_i + 1) \times (t_T + t_S)$.                                                                   \\
+	A3             & \textit{Clustering index, igualdad (múltiples)}         & Clave no candidata: $(h_i + \lceil b/V(A,r) \rceil) \times t_T + 2 \times t_S$.                                                      \\
+	A4             & \textit{Secondary index, igualdad}                      & Clave candidata: $(h_i + 1) \times (t_T + t_S)$. No candidata: $(h_i + n) \times (t_T + t_S)$ donde $n$ = registros que matchean.    \\
+	\midrule
+	A5             & \textit{Clustering index, comparación}                  & $\sigma_{A \geq v}$: un seek + escanear desde el punto. Costo $\approx h_i \times (t_T + t_S) + \frac{b_r}{2} \times t_T$.           \\
+	A6             & \textit{Secondary index, comparación}                   & Costoso: cada registro puede estar en un bloque diferente.                                                                           \\
+	\midrule
+	A7             & \textit{Conjunción con un índice}                       & Usar índice sobre el atributo más selectivo, luego verificar el resto en memoria.                                                    \\
+	A8             & \textit{Conjunción con índice compuesto}                & Si existe índice compuesto sobre los atributos de la conjunción.                                                                     \\
+	A9             & \textit{Conjunción por intersección de identificadores} & Obtener conjuntos de punteros de cada índice, intersectarlos.                                                                        \\
+	A10            & \textit{Disyunción por unión de identificadores}        & Si \textbf{todos} los términos tienen índice: unión de conjuntos de punteros. Si alguno no tiene índice $\rightarrow$ linear search. \\
+	\bottomrule
+\end{tabularx}
+
+\vspace{0.5em}
+\textbf{Nota:} $h_i$ = altura del índice (B$^+$-tree). Para B$^+$-tree típico, $h_i \leq 4$.
+
+% ---------------------------------------------------------
+\subsection{15.4 --- Ordenamiento (External Sort-Merge)}
+
+Relaciones que no caben en memoria se ordenan con \textbf{external sort-merge}:
+
+\begin{enumerate}[nosep]
+	\item \textbf{Generación de runs:} leer $M$ bloques a memoria, ordenar in-memory, escribir como un \textit{run} ordenado. Repetir hasta procesar toda la relación. Se generan $\lceil b_r / M \rceil$ runs iniciales.
+	\item \textbf{Merge de $N$ vías:} fusionar $N = M - 1$ runs a la vez (1 bloque de buffer por run + 1 bloque de salida). Si hay más de $N$ runs, se hacen múltiples pasadas de merge.
+\end{enumerate}
+
+\textbf{Número de pasadas de merge:} $\lceil \log_{M-1}(b_r / M) \rceil$.
+
+\textbf{Costo total:}
+\begin{itemize}[nosep]
+	\item Transferencias de bloques: $b_r \times (2 \lceil \log_{M-1}(b_r/M) \rceil + 1)$
+	\item Seeks: $2 \lceil b_r / M \rceil + \lceil b_r / b_b \rceil \times (2 \lceil \log_{M-1}(b_r/M) \rceil - 1)$, donde $b_b$ = bloques de buffer por run.
+\end{itemize}
+
+% ---------------------------------------------------------
+\subsection{15.5 --- Operación de Junta (Join)}
+
+\subsubsection{15.5.1 Nested-Loop Join}
+
+Para cada tupla de $r$ (outer), escanear \textbf{toda} $s$ (inner) buscando matches.
+
+\textbf{Costo (peor caso):} $n_r \times b_s + b_r$ transferencias, $n_r + b_r$ seeks.
+
+Conviene que la relación \textbf{más chica} sea la outer.
+
+\subsubsection{15.5.2 Block Nested-Loop Join}
+
+Para cada \textbf{bloque} de $r$, escanear todos los bloques de $s$.
+
+\textbf{Costo (peor caso):} $b_r \times b_s + b_r$ transferencias, $2 \times b_r$ seeks.
+
+\textbf{Optimización con $M$ bloques:} usar $M - 2$ bloques para $r$, 1 para $s$, 1 para salida:
+\[
+	\lceil b_r / (M-2) \rceil \times b_s + b_r \text{ transferencias}, \quad 2 \lceil b_r / (M-2) \rceil \text{ seeks}
+\]
+
+\subsubsection{15.5.3 Indexed Nested-Loop Join}
+
+Si existe índice sobre la clave de junta de la relación \textbf{inner}, para cada tupla de outer se busca en el índice.
+
+\textbf{Costo:} $b_r \times (t_T + t_S) + n_r \times c$, donde $c$ = costo de una búsqueda por índice + recuperación de registros. Con B$^+$-tree: $c = (h_i + 1) \times (t_T + t_S)$ para clave candidata.
+
+\subsubsection{15.5.4 Merge Join (Sort-Merge Join)}
+
+Ambas relaciones deben estar \textbf{ordenadas} por los atributos de junta. Se recorren en paralelo, matcheando grupos de tuplas con el mismo valor.
+
+\textbf{Costo (si ya ordenadas):} $b_r + b_s$ transferencias, $\lceil b_r / b_b \rceil + \lceil b_s / b_b \rceil$ seeks.
+
+Si no están ordenadas, sumar costo de ordenarlas con external sort-merge.
+
+\textbf{Hybrid merge join:} variante que combina una relación ordenada con un índice B$^+$-tree secundario de la otra, evitando ordenar ambas.
+
+\subsubsection{15.5.5 Hash Join}
+
+Usa una función hash $h$ sobre los atributos de junta para \textbf{particionar} ambas relaciones en $n_h$ particiones. Solo se comparan tuplas de particiones correspondientes ($r_i$ con $s_i$).
+
+\textbf{Fases:}
+\begin{enumerate}[nosep]
+	\item \textbf{Particionamiento:} aplicar $h$ a cada tupla de $r$ y $s$, escribir en particiones.
+	\item \textbf{Build \& Probe:} para cada par $(s_i, r_i)$: construir índice hash in-memory sobre $s_i$ (\textit{build input}), luego recorrer $r_i$ (\textit{probe input}) buscando matches.
+\end{enumerate}
+
+La relación \textbf{más chica} debe ser la build input. $s$ cabe sin particionamiento recursivo si $M > \sqrt{b_s}$ (aprox.).
+
+\textbf{Costo (sin particionamiento recursivo):}
+\begin{itemize}[nosep]
+	\item Transferencias: $3(b_r + b_s) + 4 n_h$
+	\item Seeks: $2(\lceil b_r / b_b \rceil + \lceil b_s / b_b \rceil) + 2 n_h$
+\end{itemize}
+
+\textbf{Particionamiento recursivo:} si $n_h > M$, se re-particiona con otra función hash. Costo adicional: factor $\lceil \log_{\lfloor M/b_b \rfloor - 1}(b_s/M) \rceil$.
+
+\textbf{Hash-table overflow:} ocurre por skew o demasiados duplicados. Manejo: \textit{overflow resolution} (re-particionar al detectar) u \textit{overflow avoidance} (particionar más finamente). El \textit{fudge factor} ($\approx 1.2$) incrementa $n_h$ para compensar skew.
+
+\textbf{Hybrid hash join:} si la memoria es grande, la primera partición de $s$ queda en memoria (no se escribe a disco). Ahorra un ciclo de I/O para esa partición. Útil si $M \gg \sqrt{b_s \times b_b}$.
+
+\subsubsection{15.5.6 Resumen comparativo de juntas}
+
+\begin{itemize}[nosep]
+	\item \textbf{Nested loops:} cualquier predicado de junta. Mejor si outer es muy chica.
+	\item \textbf{Merge join:} solo equi-joins. Óptimo si ambas relaciones ya ordenadas.
+	\item \textbf{Hash join:} solo equi-joins. Óptimo para relaciones grandes sin índice.
+	\item \textbf{Indexed nested loops:} ideal si existe índice en inner y outer es chica.
+\end{itemize}
+
+% ---------------------------------------------------------
+\subsection{15.6 --- Otras Operaciones}
+
+\subsubsection{15.6.1 Eliminación de duplicados}
+Dos métodos: \textbf{sorting} (ordenar, eliminar adyacentes iguales) o \textbf{hashing} (particionar, construir hash index in-memory descartando duplicados). Costo similar al de sort/hash join sobre la build relation.
+
+SQL requiere \texttt{DISTINCT} explícito; sino, duplicados se retienen.
+
+\subsubsection{15.6.2 Proyección}
+Proyectar cada tupla y luego eliminar duplicados (si es necesario). Si la proyección incluye una clave, no hay duplicados.
+
+\subsubsection{15.6.3 Operaciones de conjunto ($\cup$, $\cap$, $-$)}
+
+\textbf{Por sorting:} ordenar ambas relaciones, recorrer en paralelo.
+\begin{itemize}[nosep]
+	\item $r \cup s$: retener una copia de cada tupla.
+	\item $r \cap s$: retener solo tuplas presentes en ambas.
+	\item $r - s$: retener tuplas de $r$ ausentes en $s$.
+\end{itemize}
+Costo: $b_r + b_s$ transferencias + seeks (si ya ordenadas).
+
+\textbf{Por hashing:} particionar ambas con misma función hash, luego operar por partición con hash index in-memory.
+
+\subsubsection{15.6.4 Outer Join}
+Dos estrategias:
+\begin{enumerate}[nosep]
+	\item Computar el join normal, luego agregar tuplas sin match con NULLs.
+	\item Modificar algoritmos de join (nested loops, merge, hash) para emitir tuplas sin match con NULLs directamente.
+\end{enumerate}
+
+\subsubsection{15.6.5 Agregación}
+
+\texttt{GROUP BY} + funciones de agregación (\texttt{SUM}, \texttt{AVG}, \texttt{MIN}, \texttt{MAX}, \texttt{COUNT}): implementar igual que eliminación de duplicados, pero agrupando y aplicando funciones. Puede hacerse \textit{on-the-fly}: mantener acumuladores parciales mientras se construyen los grupos.
+
+Si resultado cabe en memoria: $b_r$ transferencias y 1 seek (sin escribir a disco).
+
+% ---------------------------------------------------------
+\subsection{15.7 --- Evaluación de Expresiones}
+
+\subsubsection{15.7.1 Materialización}
+
+Evaluar una operación a la vez, de abajo hacia arriba en el \textbf{árbol de operadores}. El resultado de cada operación intermedia se \textbf{materializa} (escribe en una relación temporal).
+
+Costo total = suma de costos individuales + costo de escribir/leer resultados intermedios. Los resultados intermedios pueden ser grandes $\rightarrow$ costoso.
+
+\textbf{Double buffering:} usar dos buffers de salida para solapar CPU con I/O.
+
+\subsubsection{15.7.2 Pipelining}
+
+Combinar varias operaciones en un \textbf{pipeline}: el resultado de una operación se pasa \textbf{directamente} a la siguiente sin materializar.
+
+\textbf{Beneficios:}
+\begin{enumerate}[nosep]
+	\item Elimina costo de leer/escribir relaciones temporales.
+	\item Resultados parciales disponibles más rápido.
+\end{enumerate}
+
+\textbf{Implementación:}
+\begin{itemize}[nosep]
+	\item \textbf{Demand-driven (lazy, pulling):} cada operador implementa un \textbf{iterador} con funciones \texttt{open()}, \texttt{next()}, \texttt{close()}. El operador raíz ``tira'' tuplas de sus hijos. Más común.
+	\item \textbf{Producer-driven (eager, pushing):} cada operador genera tuplas activamente y las ``empuja'' hacia su padre usando buffers intermedios. Útil en sistemas paralelos.
+\end{itemize}
+
+\subsubsection{Operaciones bloqueantes vs.\ pipelineables}
+
+\begin{itemize}[nosep]
+	\item \textbf{Operaciones bloqueantes:} necesitan ver toda la entrada antes de producir salida. Ej: sort (la fase de generación de runs acepta pipeline, pero la fase de merge necesita que los runs estén completos).
+	\item \textbf{Hash join:} bloqueante (necesita particionar ambas entradas antes del build-probe). Pero \textbf{hybrid hash join} puede hacer pipeline parcial si la primera partición de build cabe en memoria.
+	\item \textbf{Indexed nested-loop join:} pipeline en la entrada outer, bloqueante en inner (necesita el índice).
+\end{itemize}
+
+Un \textbf{pipeline stage} es un subárbol del plan donde todas las aristas son pipelined. Entre stages, las aristas son \textbf{materialized edges (blocking edges)}.
+
+% =========================================================
+% CAPÍTULO 16
+% =========================================================
+\newpage
+\section{Capítulo 16 --- Optimización de Consultas (16.1--16.4)}
+
+% ---------------------------------------------------------
+\subsection{16.1 --- Panorama General}
+
+La \textbf{optimización de consultas} es el proceso de seleccionar el plan de evaluación más eficiente. No se espera que el usuario escriba consultas eficientes; el sistema debe construir un plan que minimice el costo.
+
+Tres pasos:
+\begin{enumerate}[nosep]
+	\item Generar expresiones equivalentes mediante \textbf{reglas de equivalencia}.
+	\item Anotar cada expresión con algoritmos alternativos para generar \textbf{planes de evaluación}.
+	\item Estimar el costo de cada plan y elegir el de menor costo estimado.
+\end{enumerate}
+
+\textbf{Ver planes de ejecución:}
+\begin{itemize}[nosep]
+	\item PostgreSQL: \texttt{EXPLAIN <query>}
+	\item SQL Server: \texttt{SET SHOWPLAN\_TEXT ON}
+	\item Oracle: \texttt{EXPLAIN PLAN FOR}
+	\item MySQL: \texttt{EXPLAIN <query>} + \texttt{SHOW WARNINGS}
+\end{itemize}
+
+% ---------------------------------------------------------
+\subsection{16.2 --- Transformación de Expresiones Relacionales}
+
+Dos expresiones de álgebra relacional son \textbf{equivalentes} si producen el mismo conjunto de tuplas en toda instancia legal de la BD.
+
+\subsubsection{16.2.1 Reglas de Equivalencia}
+
+\begin{enumerate}[nosep]
+	\item \textbf{Cascada de $\sigma$:} $\sigma_{\theta_1 \wedge \theta_2}(E) \equiv \sigma_{\theta_1}(\sigma_{\theta_2}(E))$
+	\item \textbf{Conmutatividad de $\sigma$:} $\sigma_{\theta_1}(\sigma_{\theta_2}(E)) \equiv \sigma_{\theta_2}(\sigma_{\theta_1}(E))$
+	\item \textbf{Cascada de $\Pi$:} $\Pi_{L_1}(\Pi_{L_2}(\ldots(\Pi_{L_n}(E))\ldots)) \equiv \Pi_{L_1}(E)$ si $L_1 \subseteq L_2 \subseteq \ldots$
+	\item \textbf{$\sigma$ con $\times$ y $\bowtie$:}
+	      \begin{itemize}[nosep]
+		      \item $\sigma_\theta(E_1 \times E_2) \equiv E_1 \bowtie_\theta E_2$
+		      \item $\sigma_{\theta_1}(E_1 \bowtie_{\theta_2} E_2) \equiv E_1 \bowtie_{\theta_1 \wedge \theta_2} E_2$
+	      \end{itemize}
+	\item \textbf{Conmutatividad de $\bowtie$:} $E_1 \bowtie_\theta E_2 \equiv E_2 \bowtie_\theta E_1$
+	\item \textbf{Asociatividad de $\bowtie$:} $(E_1 \bowtie E_2) \bowtie E_3 \equiv E_1 \bowtie (E_2 \bowtie E_3)$
+	\item \textbf{Distribución de $\sigma$ sobre $\bowtie$:}
+	      \begin{itemize}[nosep]
+		      \item Si $\theta_1$ solo involucra atributos de $E_1$: $\sigma_{\theta_1}(E_1 \bowtie_\theta E_2) \equiv (\sigma_{\theta_1}(E_1)) \bowtie_\theta E_2$
+		      \item Si $\theta_1$ involucra $E_1$ y $\theta_2$ involucra $E_2$: $\sigma_{\theta_1 \wedge \theta_2}(E_1 \bowtie_\theta E_2) \equiv (\sigma_{\theta_1}(E_1)) \bowtie_\theta (\sigma_{\theta_2}(E_2))$
+	      \end{itemize}
+	\item \textbf{Distribución de $\Pi$ sobre $\bowtie$:} se puede proyectar antes del join si se retienen los atributos necesarios para la condición de junta.
+	\item \textbf{Conmutatividad de $\cup$ y $\cap$} (diferencia \textbf{no} es conmutativa).
+	\item \textbf{Asociatividad de $\cup$ y $\cap$}.
+	\item \textbf{Distribución de $\sigma$ sobre $\cup$, $\cap$, $-$}.
+	\item \textbf{Distribución de $\Pi$ sobre $\cup$}.
+\end{enumerate}
+
+\textbf{Reglas adicionales para outer joins:}
+\begin{itemize}[nosep]
+	\item Full outer join es conmutativo; left/right no (pero $E_1 \text{ LOJ } E_2 \equiv E_2 \text{ ROJ } E_1$).
+	\item Outer joins \textbf{no} son asociativos.
+	\item Outer join $\to$ inner join si la selección es \textbf{null rejecting} (rechaza NULLs de la tabla preservada).
+\end{itemize}
+
+\subsubsection{16.2.2 Ejemplos de Transformaciones}
+
+Aplicando regla 7.a (\textit{push selection}):
+\[
+	\sigma_{\text{dept}=\text{``Music''}}(\textit{instructor} \bowtie \textit{teaches}) \equiv (\sigma_{\text{dept}=\text{``Music''}}(\textit{instructor})) \bowtie \textit{teaches}
+\]
+Reduce el tamaño del resultado intermedio, bajando el costo.
+
+\textbf{Push projections:} eliminar atributos innecesarios antes de un join reduce el tamaño de los resultados intermedios.
+
+\subsubsection{16.2.3 Orden de Juntas (Join Ordering)}
+
+El natural join es \textbf{conmutativo} y \textbf{asociativo}: $(r_1 \bowtie r_2) \bowtie r_3 \equiv r_1 \bowtie (r_2 \bowtie r_3)$, pero los costos pueden ser muy diferentes. El optimizador debe elegir el orden que minimiza los resultados intermedios.
+
+Con $n$ relaciones, hay $\frac{(2(n-1))!}{(n-1)!}$ órdenes de junta posibles. Para $n = 3$: 12; $n = 7$: 665,280; $n = 10$: $> 17.6$ mil millones.
+
+\subsubsection{16.2.4 Enumeración de Expresiones Equivalentes}
+
+Se generan sistemáticamente aplicando reglas de equivalencia. Optimizaciones: (1) compartir subexpresiones entre expresiones equivalentes, (2) podar alternativas que ya superan el mejor costo conocido.
+
+% ---------------------------------------------------------
+\subsection{16.3 --- Estimación de Estadísticas de Resultados}
+
+\subsubsection{16.3.1 Información del Catálogo}
+
+Estadísticas almacenadas para cada relación $r$:
+\begin{itemize}[nosep]
+	\item $n_r$: número de tuplas.
+	\item $b_r$: número de bloques. $b_r = \lceil n_r / f_r \rceil$.
+	\item $l_r$: tamaño de una tupla en bytes.
+	\item $f_r$: \textbf{factor de bloqueo} (tuplas por bloque).
+	\item $V(A, r)$: número de valores distintos del atributo $A$ en $r$.
+\end{itemize}
+
+También: alturas de B$^+$-trees, número de hojas. Las estadísticas se actualizan periódicamente (no en cada modificación). Comando: \texttt{ANALYZE} (PostgreSQL/Oracle), \texttt{RUNSTATS} (DB2).
+
+\textbf{Histogramas:} distribución de valores de un atributo.
+\begin{itemize}[nosep]
+	\item \textbf{Equi-width:} rangos de igual tamaño.
+	\item \textbf{Equi-depth:} rangos con igual cantidad de tuplas ($\rightarrow$ mejores estimaciones).
+\end{itemize}
+Muchas BDs también almacenan los $n$ valores más frecuentes con sus conteos.
+
+\subsubsection{16.3.2 Estimación de Tamaño de Selecciones}
+
+\begin{itemize}[nosep]
+	\item $\sigma_{A=a}(r)$: estimado $= n_r / V(A, r)$ tuplas (asumiendo distribución uniforme). La probabilidad $s_i / n_r$ se llama \textbf{selectividad}.
+	\item $\sigma_{A \leq v}(r)$: estimado $= n_r \cdot \frac{v - \min(A,r)}{\max(A,r) - \min(A,r)}$. Si $v$ desconocido: $n_r / 2$.
+	\item \textbf{Conjunción} $\sigma_{\theta_1 \wedge \ldots \wedge \theta_n}(r)$: asumiendo independencia, $n_r \cdot \frac{s_1 \cdot s_2 \cdots s_n}{n_r^n}$.
+	\item \textbf{Disyunción} $\sigma_{\theta_1 \vee \ldots \vee \theta_n}(r)$: $n_r \cdot \left(1 - \prod_{i=1}^n \left(1 - \frac{s_i}{n_r}\right)\right)$.
+	\item \textbf{Negación} $\sigma_{\neg \theta}(r)$: $n_r - s_\theta$.
+\end{itemize}
+
+\subsubsection{16.3.3 Estimación de Tamaño de Juntas}
+
+\begin{itemize}[nosep]
+	\item Si $R \cap S = \emptyset$: $|r \bowtie s| = n_r \times n_s$ (producto cartesiano).
+	\item Si $R \cap S$ es clave de $R$: $|r \bowtie s| \leq n_s$. Si además es FK de $S$ referenciando $R$: $|r \bowtie s| = n_s$.
+	\item Caso general ($R \cap S = \{A\}$): estimado $= \frac{n_r \times n_s}{\max(V(A,r), V(A,s))}$ (se elige el menor de las dos estimaciones simétricas).
+\end{itemize}
+
+\subsubsection{16.3.4 Estimación de Tamaño de Otras Operaciones}
+
+\begin{itemize}[nosep]
+	\item \textbf{Proyección:} $|\Pi_A(r)| = V(A, r)$.
+	\item \textbf{Agregación:} $|{}_G\mathcal{Y}_A(r)| = V(G, r)$.
+	\item \textbf{Operaciones de conjunto:} $|r \cup s| \leq n_r + n_s$; $|r \cap s| \leq \min(n_r, n_s)$; $|r - s| \approx n_r$.
+	\item \textbf{Outer join:} $|r \text{ LOJ } s| = |r \bowtie s| + n_r$; $|r \text{ FOJ } s| = |r \bowtie s| + n_r + n_s$ (cotas superiores).
+\end{itemize}
+
+\subsubsection{16.3.5 Estimación de Valores Distintos}
+
+Para selecciones $V(A, \sigma_\theta(r))$:
+\begin{itemize}[nosep]
+	\item $\theta$ fuerza $A = a$: $V(A, \sigma_\theta(r)) = 1$.
+	\item $\theta$ es comparación: $V(A, \sigma_\theta(r)) \approx V(A, r) \times s$ ($s$ = selectividad).
+	\item Otros casos: $\min(V(A, r), n_{\sigma_\theta(r)})$.
+\end{itemize}
+
+Para juntas $V(A, r \bowtie s)$: si $A$ viene solo de $r$, $\min(V(A,r), n_{r \bowtie s})$. Si $A$ viene de ambos: $\min(V(A_1,r) \times V(A_2,s), n_{r \bowtie s})$.
+
+% ---------------------------------------------------------
+\subsection{16.4 --- Elección de Planes de Evaluación}
+
+\subsubsection{16.4.1 Selección de Orden de Juntas Basada en Costo}
+
+Un \textbf{optimizador basado en costo} explora el espacio de planes equivalentes y elige el de menor costo estimado.
+
+\textbf{Algoritmo de programación dinámica (FindBestPlan):}
+\begin{enumerate}[nosep]
+	\item Para un conjunto $S$ de relaciones, si el mejor plan ya fue computado, retornarlo (\textit{memoization}).
+	\item Si $|S| = 1$: elegir el mejor método de acceso (scan, index scan).
+	\item Si $|S| > 1$: probar toda partición de $S$ en dos subconjuntos $S_1$ y $S - S_1$. Para cada partición, recursivamente encontrar los mejores planes de $S_1$ y $S - S_1$, y probar todos los algoritmos de junta.
+	\item Guardar el plan de menor costo en \texttt{bestplan[S]}.
+\end{enumerate}
+
+Complejidad: $O(3^n)$ para $n$ relaciones. Mucho mejor que $O((2n)!/n!)$ de fuerza bruta.
+
+\textbf{Interesting sort orders:} un plan que genera resultados ordenados por un atributo útil para operaciones posteriores puede ser preferible aunque sea más caro localmente. \texttt{bestplan} se indexa por $[S, o]$ donde $o$ es un orden de interés.
+
+\subsubsection{16.4.2 Optimización Basada en Reglas de Equivalencia}
+
+Para manejar outer joins, agregaciones, subqueries y otras operaciones más allá de inner joins, se usan \textbf{reglas de equivalencia físicas} que transforman operaciones lógicas en físicas (ej: join $\to$ hash join, merge join, nested loops).
+
+Técnicas clave:
+\begin{enumerate}[nosep]
+	\item Representación eficiente que comparte subexpresiones.
+	\item Detección de derivaciones duplicadas.
+	\item \textbf{Memoization:} guardar el plan óptimo por subexpresión.
+	\item Poda: descartar planes cuyo costo parcial ya excede el mejor conocido.
+\end{enumerate}
+
+Este enfoque fue pionero del proyecto \textbf{Volcano}; el optimizador de SQL Server se basa en él.
+
+\subsubsection{16.4.3 Heurísticas en Optimización}
+
+\begin{itemize}[nosep]
+	\item \textbf{Realizar selecciones lo antes posible} (\textit{push selections early}): reduce el tamaño de resultados intermedios. Generalmente beneficioso, aunque no siempre óptimo.
+	\item \textbf{Realizar proyecciones lo antes posible} (\textit{push projections early}): eliminar atributos innecesarios.
+	\item \textbf{Left-deep join trees:} muchos optimizadores (ej: System R) solo consideran órdenes de junta donde el operando derecho es siempre una relación base. Facilita pipelining (solo un input por join necesita ser materializado). Complejidad: $O(n \cdot 2^n)$ vs.\ $O(3^n)$ general.
+	\item \textbf{Presupuesto de optimización:} si un plan barato se encuentra rápido, se reduce el presupuesto de búsqueda. Si el mejor plan es caro, se invierte más tiempo optimizando.
+	\item \textbf{Plan caching:} reusar planes de consultas parametrizadas ejecutadas previamente.
+\end{itemize}
+
+\subsubsection{16.4.4 Optimización de Subqueries Anidadas}
+
+SQL trata subqueries del \texttt{WHERE} como funciones que toman parámetros (\textbf{correlation variables}) del query externo.
+
+\textbf{Evaluación correlacionada:} ejecutar el subquery \textbf{por cada tupla} del query externo $\rightarrow$ muy costoso (muchos accesos aleatorios).
+
+\textbf{Decorrelación:} transformar subqueries en joins o semijoin/anti-semijoin:
+\begin{itemize}[nosep]
+	\item \texttt{EXISTS} $\to$ \textbf{semijoin} ($\ltimes$): retiene tuplas de $r$ que tienen al menos un match en $s$, preservando duplicados de $r$.
+	\item \texttt{NOT EXISTS} $\to$ \textbf{anti-semijoin} ($\bar{\ltimes}$): retiene tuplas de $r$ que \textbf{no} tienen match en $s$.
+	\item \texttt{IN} se traduce igual que \texttt{EXISTS}.
+\end{itemize}
+
+La decorrelación permite usar algoritmos de junta eficientes (hash, merge) en lugar de evaluación correlacionada.
+
+\end{document}
