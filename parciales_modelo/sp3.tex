@@ -1,0 +1,151 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\definecolor{codegray}{RGB}{245,245,245}
+\definecolor{codeblue}{RGB}{0,60,180}
+\definecolor{codegreen}{RGB}{0,120,0}
+
+\lstdefinestyle{log}{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{codegray},
+  frame=single,
+  framerule=0.4pt,
+  xleftmargin=8pt,
+  numbers=none,
+  breaklines=true
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\textcolor{gray}{\small TD7: Ingeniería de Datos — UTDT}}
+\lhead{\textcolor{gray}{\small Segundo Parcial Modelo 3}}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\setlist[enumerate,1]{label=\textbf{\alph*)}}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries TD7 — Ingeniería de Datos}\\[6pt]
+  {\large Universidad Torcuato Di Tella}\\[4pt]
+  {\Large\bfseries Segundo Parcial — Modelo 3}\\[4pt]
+  {\normalsize Duración: 2 horas \quad|\quad Puntaje total: 100 puntos}
+\end{center}
+\noindent\rule{\linewidth}{0.8pt}
+\vspace{2pt}
+
+\noindent\textbf{Instrucciones:} Responda todos los ejercicios. Justifique cada respuesta; las afirmaciones sin justificación no suman puntaje. No está permitido el uso de material de consulta ni dispositivos electrónicos.
+
+\vspace{6pt}
+\noindent\rule{\linewidth}{0.4pt}
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 1 — Calidad y Gobernanza de Datos \hfill\normalfont(30 puntos)}
+
+Una cadena de farmacias unifica los datos de ventas de todas sus sucursales en un repositorio central. Al revisar el repositorio se detectan, entre otros, los siguientes problemas: clientes cargados como ``Gonzáles'' y ``Gonzalez''; filas de venta sin sucursal asociada; un mismo ticket cargado dos veces; y precios en pesos mezclados con precios en dólares en la misma columna.
+
+\begin{enumerate}
+  \item (8 pts) Para \textbf{cada} uno de los cuatro problemas anteriores, indique qué \textbf{dimensión de calidad de datos} se está violando (precisión, completitud, consistencia, validez, unicidad, conformidad, puntualidad o accesibilidad). Justifique brevemente.
+
+  \vspace{4cm}
+
+  \item (6 pts) Defina \textbf{gobernanza de datos}. Explique el rol de un \textit{data steward} y en qué se diferencia del \textit{Data Governance Lead}.
+
+  \vspace{3.5cm}
+
+  \item (8 pts) Explique qué es la \textbf{observabilidad de datos}. Describa cómo el \textbf{data lineage} y el \textit{root cause analysis} ayudarían al equipo a encontrar el origen de uno de los problemas detectados. ¿En qué punto de un \textbf{pipeline} conviene validar los datos y por qué?
+
+  \vspace{4.5cm}
+
+  \item (8 pts) Enumere las etapas del \textbf{ciclo de vida del dato}. Para una columna que contiene \textbf{PII} (por ejemplo el DNI del cliente), indique en qué etapas del ciclo de vida deben aplicarse controles de privacidad y dé un ejemplo concreto de control en cada caso.
+
+  \vspace{4.5cm}
+\end{enumerate}
+
+\newpage
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 2 — Seguridad y Password Hashing \hfill\normalfont(25 puntos)}
+
+\subsection*{Parte A — Seguridad de la información (13 puntos)}
+
+\begin{enumerate}
+  \item (6 pts) Enuncie las tres propiedades de la \textbf{seguridad de la información} (la tríada CID: confidencialidad, integridad, disponibilidad). Para cada una, dé un ejemplo concreto de un ataque o falla que la vulnere en una base de datos.
+
+  \vspace{4cm}
+
+  \item (7 pts) Diferencie \textbf{control de acceso discrecional (DAC)}, \textbf{obligatorio (MAC)} y \textbf{basado en roles (RBAC)}. En el modelo RBAC, ¿por qué conviene asociar privilegios a roles y no a usuarios individuales? ¿Cómo se combinan DAC y MAC al evaluar si un usuario puede acceder a un dato?
+
+  \vspace{4.5cm}
+\end{enumerate}
+
+\subsection*{Parte B — Password Hashing (12 puntos)}
+
+\begin{enumerate}
+  \setcounter{enumi}{2}
+  \item (5 pts) ¿Por qué las contraseñas se almacenan \textbf{hasheadas} y no cifradas ni en texto plano? Enuncie las dos propiedades que debe cumplir la función de hashing (determinística y no reversible) y explique qué garantiza el hashing ante el acceso de un \textbf{superusuario} interno.
+
+  \vspace{3.5cm}
+
+  \item (4 pts) ¿Qué es un ataque por \textbf{rainbow tables}? Explique por qué el hashing simple (sin salt) es vulnerable a este ataque.
+
+  \vspace{3cm}
+
+  \item (3 pts) Describa la técnica de \textbf{salting}: cómo se genera, dónde se almacena el salt y cómo se calcula el hash al crear y al validar la contraseña. ¿Por qué derrota a las rainbow tables?
+
+  \vspace{3.5cm}
+\end{enumerate}
+
+\newpage
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 3 — Big Data e Integración de Datos \hfill\normalfont(25 puntos)}
+
+\begin{enumerate}
+  \item (8 pts) Enuncie las \textbf{cuatro ``V''} del Big Data. Una empresa de \textit{ride-sharing} recibe, en tiempo real, la posición GPS de cada vehículo, fotos de licencias de conducir, reseñas de texto de usuarios y registros de pago. Asocie cada uno de estos datos a la ``V'' que mejor lo ejemplifica y justifique.
+
+  \vspace{4.5cm}
+
+  \item (9 pts) Compare \textbf{Data Warehouse} y \textbf{Data Lake} en términos de: estructura impuesta (\textit{schema-on-write} vs.\ \textit{schema-on-read}), momento de la penalización de costo (carga vs.\ lectura), tipos de datos que aceptan y facilidad de gobernanza. Dé un caso de uso donde elegiría cada uno.
+
+  \vspace{5.5cm}
+
+  \item (8 pts) Explique la diferencia entre \textbf{ETL} y \textbf{ELT} detallando el orden de las tres etapas. Para un sistema de facturación por sucursal que alimenta un warehouse central con el ``monto vendido por mes'', muestre qué ocurre en cada etapa bajo ETL. ¿En qué arquitectura (DW o DL) encaja naturalmente cada enfoque?
+
+  \vspace{5cm}
+\end{enumerate}
+
+\newpage
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 4 — Arquitectura Lambda \hfill\normalfont(20 puntos)}
+
+\begin{enumerate}
+  \item (5 pts) Partiendo de la ecuación \texttt{query = function(all data)}, explique por qué precomputar esta función da origen a la noción de \textbf{batch view}. ¿Por qué una batch view por sí sola nunca alcanza para responder una consulta con datos frescos?
+
+  \vspace{3.5cm}
+
+  \item (9 pts) Describa las tres capas de la arquitectura Lambda (\textbf{batch layer}, \textbf{speed layer} y \textbf{serving layer}) indicando la tarea de cada una. Explique el recorrido completo de un dato nuevo desde que llega hasta que es consultado, y por qué al responder una query se combinan batch views y real-time views.
+
+  \vspace{6.5cm}
+
+  \item (6 pts) La arquitectura Lambda busca resolver las limitaciones de \textbf{Fully Incremental} y \textbf{Event Sourcing}. Describa brevemente cada una de esas dos estrategias y un problema central de cada una que Lambda mitiga.
+
+  \vspace{4.5cm}
+\end{enumerate}
+
+\end{document}

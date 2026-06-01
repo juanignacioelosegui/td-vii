@@ -1,0 +1,167 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{parskip}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{amssymb}
+
+\definecolor{codegray}{RGB}{245,245,245}
+\definecolor{codeblue}{RGB}{0,60,180}
+\definecolor{codegreen}{RGB}{0,120,0}
+
+\lstdefinestyle{log}{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{codegray},
+  frame=single,
+  framerule=0.4pt,
+  xleftmargin=8pt,
+  numbers=none,
+  breaklines=true
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\textcolor{gray}{\small TD7: Ingeniería de Datos — UTDT}}
+\lhead{\textcolor{gray}{\small Segundo Parcial Modelo 4}}
+\rfoot{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\setlist[enumerate,1]{label=\textbf{\alph*)}}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries TD7 — Ingeniería de Datos}\\[6pt]
+  {\large Universidad Torcuato Di Tella}\\[4pt]
+  {\Large\bfseries Segundo Parcial — Modelo 4}\\[4pt]
+  {\normalsize Duración: 2 horas \quad|\quad Puntaje total: 100 puntos}
+\end{center}
+\noindent\rule{\linewidth}{0.8pt}
+\vspace{2pt}
+
+\noindent\textbf{Instrucciones:} Responda todos los ejercicios. Justifique cada respuesta; las afirmaciones sin justificación no suman puntaje. No está permitido el uso de material de consulta ni dispositivos electrónicos.
+
+\vspace{6pt}
+\noindent\rule{\linewidth}{0.4pt}
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 1 — Optimización en SQL Server \hfill\normalfont(30 puntos)}
+
+Considere el siguiente esquema y consulta sobre una base en SQL Server:
+
+\begin{center}
+\textbf{Cliente}(\underline{\texttt{id\_cliente}}, \texttt{nombre}, \texttt{ciudad}) \qquad
+\textbf{Venta}(\underline{\texttt{id\_venta}}, \texttt{id\_cliente}, \texttt{fecha}, \texttt{monto})
+\end{center}
+
+\begin{lstlisting}[style=log]
+SELECT  c.ciudad, SUM(v.monto) AS total
+FROM    Cliente c JOIN Venta v ON c.id_cliente = v.id_cliente
+WHERE   c.ciudad = 'Rosario'
+GROUP BY c.ciudad;
+\end{lstlisting}
+
+La tabla \textbf{Venta} tiene 10 millones de filas; \textbf{Cliente} tiene 50.000 filas. Existe un índice \textit{nonclustered} sobre \texttt{Cliente.ciudad} y el índice \textit{clustered} de cada tabla está sobre su clave primaria.
+
+\begin{enumerate}
+  \item (6 pts) En un plan de ejecución de SQL Server, ¿en qué dirección se lee el flujo de datos y qué representa el \textbf{porcentaje} mostrado en cada operador? Explique la diferencia entre un operador \textbf{Scan} y uno \textbf{Seek}, y cuándo cada uno es preferible.
+
+  \vspace{4cm}
+
+  \item (8 pts) Para acceder a las filas de \texttt{Cliente} con \texttt{ciudad = 'Rosario'}, ¿el optimizador usará un \textit{Index Seek} o un \textit{Clustered Index Scan}? ¿Y para leer \texttt{Venta}? Justifique en función de la selectividad de cada predicado y de los índices disponibles.
+
+  \vspace{4.5cm}
+
+  \item (9 pts) El optimizador debe elegir el algoritmo de \textbf{junta}. Complete y justifique: para cada algoritmo (\textbf{Nested Loops}, \textbf{Merge Join}, \textbf{Hash Join}) indique si requiere que las entradas estén ordenadas, si requiere un equi-join y en qué situación de tamaños relativos es óptimo. ¿Cuál esperaría que elija el optimizador para esta consulta y por qué?
+
+  \vspace{6cm}
+
+  \item (7 pts) La consulta tiene \texttt{SUM} con \texttt{GROUP BY}. Explique la diferencia entre los operadores \textbf{Stream Aggregate} y \textbf{Hash Aggregate}. ¿Cuál exige que los datos lleguen ordenados? Si creara un índice que provea ese orden, ¿qué operador de agregación esperaría ver y por qué?
+
+  \vspace{4.5cm}
+\end{enumerate}
+
+\newpage
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 2 — Integración de Datos \hfill\normalfont(25 puntos)}
+
+\begin{enumerate}
+  \item (8 pts) Complete una tabla comparativa entre una base \textbf{transaccional (OLTP)} y un \textbf{Data Warehouse (OLAP)} en las dimensiones: optimización (escritura vs.\ lectura), normalización, qué información retiene (estado actual vs.\ historia) y perfil de latencia/throughput. Explique por qué \textbf{no} conviene correr reportes analíticos pesados directamente sobre la base transaccional de producción.
+
+  \vspace{5.5cm}
+
+  \item (9 pts) Describa la arquitectura \textbf{Medallion} (capas \textbf{Bronze}, \textbf{Silver} y \textbf{Gold}), indicando qué contiene cada capa. Mencione dos ventajas que aporta esta organización en capas (por ejemplo, frente a errores de datos).
+
+  \vspace{5.5cm}
+
+  \item (8 pts) Diseñe un \textbf{star schema} para la capa Gold de un \textit{e-commerce} que necesita reportar ventas por producto, cliente, fecha y canal. Indique la \textbf{fact table} (con sus claves y métricas) y las \textbf{dimension tables}. Explique la diferencia estructural entre fact y dimension tables (filas vs.\ columnas). Si la dirección de un cliente cambia, ¿qué significa \textbf{pisar} vs.\ \textbf{versionar} y qué se pierde con cada opción?
+
+  \vspace{6cm}
+\end{enumerate}
+
+\newpage
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 3 — Arquitectura de Datos y Sistemas Distribuidos \hfill\normalfont(25 puntos)}
+
+\begin{enumerate}
+  \item (8 pts) Contraste las estrategias \textbf{Fully Incremental} y \textbf{Event Sourcing}: qué almacena cada una, cómo responde una consulta y cuál es el problema central de cada una (tolerancia a errores humanos en una; costo/escala de almacenamiento y cómputo en la otra).
+
+  \vspace{5cm}
+
+  \item (9 pts) Defina los niveles de consistencia: \textbf{fuerte}, \textbf{read-your-own-writes (RYOW)}, \textbf{de sesión} y \textbf{eventual}. Para un sistema donde un usuario actualiza su propio perfil y espera verlo actualizado al instante, pero a otros usuarios les puede llegar con retraso, ¿qué nivel alcanza y por qué?
+
+  \vspace{6cm}
+
+  \item (8 pts) Enuncie el \textbf{teorema CAP} (consistencia, disponibilidad, tolerancia a particiones). Explique por qué, ante una \textbf{partición de red}, un sistema distribuido debe elegir entre CP y AP. Dé un ejemplo de aplicación donde priorizaría C sobre A y otro donde priorizaría A sobre C.
+
+  \vspace{5cm}
+\end{enumerate}
+
+\newpage
+
+% ─────────────────────────────────────────────────────────────
+\section*{Ejercicio 4 — Anonimización y Privacidad \hfill\normalfont(20 puntos)}
+
+Un hospital quiere publicar el siguiente dataset para investigación. Los atributos \texttt{Edad} y \texttt{CP} (código postal) son \textbf{cuasi-identificadores}; \texttt{Enfermedad} es el atributo \textbf{sensible}.
+
+\begin{center}
+\begin{tabular}{cccl}
+\toprule
+\textbf{\#} & \textbf{Edad} & \textbf{CP} & \textbf{Enfermedad} \\
+\midrule
+1 & 29 & 2000 & Gripe \\
+2 & 31 & 2001 & HIV \\
+3 & 27 & 2002 & HIV \\
+4 & 55 & 2010 & Diabetes \\
+5 & 58 & 2011 & Gripe \\
+6 & 52 & 2012 & Cáncer \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\begin{enumerate}
+  \item (5 pts) Defina \textbf{PII}. Explique por qué eliminar solo el nombre y el DNI \textbf{no} garantiza el anonimato si quedan cuasi-identificadores como edad y código postal.
+
+  \vspace{3.5cm}
+
+  \item (8 pts) Explique la técnica de \textbf{$k$-anonimato}. Generalizando \texttt{Edad} (en rangos) y \texttt{CP} (truncando dígitos), proponga una transformación de la tabla que logre \textbf{$k=3$}. Muestre los grupos resultantes.
+
+  \vspace{5cm}
+
+  \item (7 pts) Explique qué es la \textbf{$\ell$-diversidad} y qué problema del $k$-anonimato resuelve. En la tabla original, ¿qué podría inferir un atacante sobre el grupo de los registros 2 y 3 aunque estuvieran $k$-anonimizados? ¿Cómo lo evitaría la $\ell$-diversidad?
+
+  \vspace{4.5cm}
+\end{enumerate}
+
+\end{document}
