@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": "2026-06-03T20:44:10.595Z",
+  "timestamp": "2026-06-04T20:21:15.388Z",
   "source": "auto-postool",
   "partial": false,
   "phase": null,
@@ -18,6 +18,10 @@
   "uncommitted_files": [
     {
       "status": "M",
+      "path": ".planning/HANDOFF.json"
+    },
+    {
+      "status": "M",
       "path": "clases/teoricas/segundo-parcial/.planning/HANDOFF.json"
     },
     {
@@ -27,16 +31,8 @@
     {
       "status": "M",
       "path": "clases/teoricas/segundo-parcial/resumen_segundo_parcial.tex"
-    },
-    {
-      "status": "??",
-      "path": ".planning/"
-    },
-    {
-      "status": "??",
-      "path": "flashcards_segundo_parcial.txt"
     }
   ],
   "next_action": null,
-  "context_notes": "Recent commits:\nca06358 Avance\nb486d9d Agregadas notas T11.1\n8caac7e Agregado enunciado TP2\n181629b Agregadas notas T10.5\ndcbbfeb Agregadas clases T11"
+  "context_notes": "Recent commits:\n3ec1d6f Rename T12.2 y leída\n6454173 Agregadas notas T12.1. Sin código.\n1df2022 Agregadas teóricas de semana 12\n1f5877f Agregadas prácticas\ne472cc0 Agregadas flashcards"
 }

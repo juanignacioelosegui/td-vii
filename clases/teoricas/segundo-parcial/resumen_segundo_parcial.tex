@@ -13,6 +13,7 @@
 \usepackage{fancyhdr}
 \usepackage{lmodern}
 \usepackage{mdframed}
+\usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage[normalem]{ulem}
 
@@ -66,9 +67,9 @@
 \begin{document}
 
 \begin{center}
-    {\LARGE\bfseries\color{teal} TD7: Ingeniería de Datos}\\[0.4em]
-    {\large Resumen — Segundo Parcial}\\[0.2em]
-    {\small Universidad Torcuato Di Tella}
+	{\LARGE\bfseries\color{teal} TD7: Ingeniería de Datos}\\[0.4em]
+	{\large Resumen — Segundo Parcial}\\[0.2em]
+	{\small Universidad Torcuato Di Tella}
 \end{center}
 
 \vspace{0.5em}
@@ -86,8 +87,8 @@ La calidad se mide y se cuantifica. No es una opinión: hay métricas concretas.
 
 \subsubsection{¿Cómo se mide?}
 \begin{itemize}
-    \item \textbf{Análisis univariado:} valor mínimo/máximo, media, mediana, moda, tablas de frecuencia, gráficos (histogramas, boxplots). Permite detectar outliers y distribuciones inesperadas.
-    \item \textbf{Análisis bivariado:} coeficiente de correlación, tablas de contingencia, scatter plots (diagramas de dispersión). Permite detectar relaciones entre variables.
+	\item \textbf{Análisis univariado:} valor mínimo/máximo, media, mediana, moda, tablas de frecuencia, gráficos (histogramas, boxplots). Permite detectar outliers y distribuciones inesperadas.
+	\item \textbf{Análisis bivariado:} coeficiente de correlación, tablas de contingencia, scatter plots (diagramas de dispersión). Permite detectar relaciones entre variables.
 \end{itemize}
 
 \subsection{Las 8 dimensiones de calidad de datos}
@@ -95,21 +96,21 @@ La calidad se mide y se cuantifica. No es una opinión: hay métricas concretas.
 Estas son las 8 formas en las que un dato puede ser ``malo''. Cada una mide un aspecto diferente:
 
 \begin{enumerate}
-    \item \textbf{Precisión:} ¿qué tan cercano a la realidad es el dato? Ejemplo: un apellido ``Perezz'' tiene formato correcto (es un string), pero \textit{no se corresponde con la realidad observable} --- el apellido real es ``Perez''. El dato es impreciso.
+	\item \textbf{Precisión:} ¿qué tan cercano a la realidad es el dato? Ejemplo: un apellido ``Perezz'' tiene formato correcto (es un string), pero \textit{no se corresponde con la realidad observable} --- el apellido real es ``Perez''. El dato es impreciso.
 
-    \item \textbf{Completitud:} los datos no deben tener valores desconocidos (NULLs) donde no debería haberlos. Ejemplo: un cliente sin ``Total de gastos'' registrado es un dato incompleto.
+	\item \textbf{Completitud:} los datos no deben tener valores desconocidos (NULLs) donde no debería haberlos. Ejemplo: un cliente sin ``Total de gastos'' registrado es un dato incompleto.
 
-    \item \textbf{Consistencia:} las reglas de negocio se mantienen entre tablas --- los datos tienen coherencia. Ejemplo: si la tabla de empleados dice que Juan trabaja en la empresa con código 281 cuya dirección es ``Av. Figueroa Alcorta 7350'', pero la tabla de empresas dice que la empresa 281 tiene dirección ``Juan Pablo Saenz Valiente 1021'', hay \textit{inconsistencia}.
+	\item \textbf{Consistencia:} las reglas de negocio se mantienen entre tablas --- los datos tienen coherencia. Ejemplo: si la tabla de empleados dice que Juan trabaja en la empresa con código 281 cuya dirección es ``Av. Figueroa Alcorta 7350'', pero la tabla de empresas dice que la empresa 281 tiene dirección ``Juan Pablo Saenz Valiente 1021'', hay \textit{inconsistencia}.
 
-    \item \textbf{Puntualidad:} el dato debe estar disponible \textit{on-demand}, cuando se lo necesita. No sirve tener datos correctos que llegan tarde.
+	\item \textbf{Puntualidad:} el dato debe estar disponible \textit{on-demand}, cuando se lo necesita. No sirve tener datos correctos que llegan tarde.
 
-    \item \textbf{Validez:} revisión de \textbf{tipo de dato} y \textbf{claves foráneas}. Ejemplo: un campo ``Total de gastos'' con valor ``a'' no es válido (no es numérico). Una FK con código de país 99 que no existe en la tabla de países tampoco es válida. Un email ``hola@gmail'' sin dominio completo tampoco.
+	\item \textbf{Validez:} revisión de \textbf{tipo de dato} y \textbf{claves foráneas}. Ejemplo: un campo ``Total de gastos'' con valor ``a'' no es válido (no es numérico). Una FK con código de país 99 que no existe en la tabla de países tampoco es válida. Un email ``hola@gmail'' sin dominio completo tampoco.
 
-    \item \textbf{Unicidad:} no guardar varias veces el mismo dato. No debe haber duplicados del mismo hecho o entidad.
+	\item \textbf{Unicidad:} no guardar varias veces el mismo dato. No debe haber duplicados del mismo hecho o entidad.
 
-    \item \textbf{Conformidad:} el dato debe estar en el formato correcto esperado.
+	\item \textbf{Conformidad:} el dato debe estar en el formato correcto esperado.
 
-    \item \textbf{Accesibilidad:} el dato debe estar disponible para los interesados que lo necesitan.
+	\item \textbf{Accesibilidad:} el dato debe estar disponible para los interesados que lo necesitan.
 \end{enumerate}
 
 \subsection{Gobernanza de datos}
@@ -118,10 +119,10 @@ Estas son las 8 formas en las que un dato puede ser ``malo''. Cada una mide un a
 
 La gobernanza abarca:
 \begin{itemize}
-    \item Quiénes son los \textbf{responsables} de conseguirla (data stewards)
-    \item Cómo los datos van a ser \textbf{almacenados, respaldados y protegidos}
-    \item \textbf{Normas} sobre cómo serán utilizados
-    \item \textbf{Controles y procedimientos} de auditoría
+	\item Quiénes son los \textbf{responsables} de conseguirla (data stewards)
+	\item Cómo los datos van a ser \textbf{almacenados, respaldados y protegidos}
+	\item \textbf{Normas} sobre cómo serán utilizados
+	\item \textbf{Controles y procedimientos} de auditoría
 \end{itemize}
 
 \subsubsection{Ciclo de vida del dato}
@@ -129,7 +130,7 @@ La gobernanza abarca:
 Todo dato pasa por estas etapas:
 
 \begin{center}
-\textbf{Create} $\to$ \textbf{Store} $\to$ \textbf{Use} $\to$ \textbf{Share} $\to$ \textbf{Archive} $\to$ \textbf{Destroy}
+	\textbf{Create} $\to$ \textbf{Store} $\to$ \textbf{Use} $\to$ \textbf{Share} $\to$ \textbf{Archive} $\to$ \textbf{Destroy}
 \end{center}
 
 La gobernanza debe acompañar al dato en \textit{cada una} de estas etapas.
@@ -144,15 +145,15 @@ Cuando se pasan datos entre dos equipos o subsistemas, estos \textbf{se deben va
 
 Se logra mediante estas técnicas:
 \begin{itemize}
-    \item \textbf{Monitoreo automatizado:} alertas cuando algo se desvía
-    \item \textbf{Análisis de causa raíz (RCA):} ir al origen del problema, no solo al síntoma
-    \item \textbf{Data lineage:} rastreo de cómo se llega a un dato (de dónde viene, qué transformaciones sufrió)
+	\item \textbf{Monitoreo automatizado:} alertas cuando algo se desvía
+	\item \textbf{Análisis de causa raíz (RCA):} ir al origen del problema, no solo al síntoma
+	\item \textbf{Data lineage:} rastreo de cómo se llega a un dato (de dónde viene, qué transformaciones sufrió)
 \end{itemize}
 
 Estas técnicas se usan para \textbf{prevenir, detectar y resolver anomalías} lo antes posible.
 
 \begin{recallbox}
-\textbf{Recordá:} entre más se tarda en detectar una anomalía, peor es la consecuencia. Un error detectado en la carga es barato; un error detectado después de que un dashboard ejecutivo tomó decisiones basadas en datos erróneos es carísimo.
+	\textbf{Recordá:} entre más se tarda en detectar una anomalía, peor es la consecuencia. Un error detectado en la carga es barato; un error detectado después de que un dashboard ejecutivo tomó decisiones basadas en datos erróneos es carísimo.
 \end{recallbox}
 
 % =========================================================
@@ -160,12 +161,12 @@ Estas técnicas se usan para \textbf{prevenir, detectar y resolver anomalías} l
 
 \subsection{Roles clave}
 \begin{itemize}
-    \item \textbf{Data Governance Lead:} define la \textbf{estrategia} de organización en cuanto a la gobernanza de los datos. Es el rol estratégico.
-    \item \textbf{Data Steward:} quien se encarga de ejecutar las \textbf{tareas diarias} de gobernanza. Es el rol operativo.
+	\item \textbf{Data Governance Lead:} define la \textbf{estrategia} de organización en cuanto a la gobernanza de los datos. Es el rol estratégico.
+	\item \textbf{Data Steward:} quien se encarga de ejecutar las \textbf{tareas diarias} de gobernanza. Es el rol operativo.
 \end{itemize}
 
 \begin{recallbox}
-\textbf{Recordá la diferencia:} el Lead define \textit{qué} hacer y \textit{por qué}. El Steward ejecuta el \textit{cómo}, día a día.
+	\textbf{Recordá la diferencia:} el Lead define \textit{qué} hacer y \textit{por qué}. El Steward ejecuta el \textit{cómo}, día a día.
 \end{recallbox}
 
 \subsection{PII (Personally Identifiable Information)}
@@ -181,13 +182,13 @@ La ley argentina establece que \textbf{no puede haber} registros referidos a: or
 \subsection{Legislación}
 
 \begin{itemize}
-    \item \textbf{Argentina --- Ley 25.326/2000:} los ciudadanos pueden solicitar que sus datos no sean usados sin consentimiento, que les informen qué datos personales están registrados, que sean corregidos/actualizados/suprimidos, y que sean guardados confidencialmente. Pueden iniciar acción judicial. Organismo de aplicación: \textbf{AAIP} (Agencia de Acceso a la Información Pública).
-    \item \textbf{Unión Europea --- GDPR (2016):} Reglamento General de Protección de Datos.
-    \item \textbf{EEUU --- CCPA (2018):} California Consumer Privacy Act.
+	\item \textbf{Argentina --- Ley 25.326/2000:} los ciudadanos pueden solicitar que sus datos no sean usados sin consentimiento, que les informen qué datos personales están registrados, que sean corregidos/actualizados/suprimidos, y que sean guardados confidencialmente. Pueden iniciar acción judicial. Organismo de aplicación: \textbf{AAIP} (Agencia de Acceso a la Información Pública).
+	\item \textbf{Unión Europea --- GDPR (2016):} Reglamento General de Protección de Datos.
+	\item \textbf{EEUU --- CCPA (2018):} California Consumer Privacy Act.
 \end{itemize}
 
 \begin{recallbox}
-\textbf{Recordá:} las filtraciones de datos son costosas y dolorosas, al igual que las multas regulatorias. La protección de datos no es solo ética, es una obligación legal.
+	\textbf{Recordá:} las filtraciones de datos son costosas y dolorosas, al igual que las multas regulatorias. La protección de datos no es solo ética, es una obligación legal.
 \end{recallbox}
 
 \subsection{Data Catalogs}
@@ -200,9 +201,9 @@ Sirven para: gobernanza y compliance, rastrear dónde vive y fluye PII, saber qu
 
 \textbf{Tipos de catálogos:}
 \begin{itemize}
-    \item \textbf{In-house:} construidos internamente por la empresa. Ejemplos: Uber (Databook), Airbnb, Netflix.
-    \item \textbf{Third-party:} herramientas comerciales o de proveedores cloud (Google, AWS, Azure).
-    \item \textbf{Open Source:} Amundsen (Lyft, 2018), Apache Atlas, Magda, CKAN.
+	\item \textbf{In-house:} construidos internamente por la empresa. Ejemplos: Uber (Databook), Airbnb, Netflix.
+	\item \textbf{Third-party:} herramientas comerciales o de proveedores cloud (Google, AWS, Azure).
+	\item \textbf{Open Source:} Amundsen (Lyft, 2018), Apache Atlas, Magda, CKAN.
 \end{itemize}
 
 \subsection{Data Discovery}
@@ -213,10 +214,10 @@ Data Discovery reemplaza la necesidad de un catálogo estático al proveer un en
 
 \subsubsection{Niveles de madurez en una organización}
 \begin{enumerate}
-    \item \textbf{Data reactive:} nadie accede ni usa datos en su trabajo diario. La empresa rara vez reporta o presenta datos.
-    \item \textbf{Data scaling:} muy pocas personas tienen las habilidades y el acceso necesario para analizar, reportar y presentar datos con confianza.
-    \item \textbf{Data progressive:} cada equipo tiene al menos \textbf{un empleado fluido} en datos que puede analizar, reportar y presentar, sin importar su rol.
-    \item \textbf{Data fluent:} \textbf{todos} saben cómo acceder a los datos que necesitan para hacer su trabajo (esto no significa que todos necesiten saber programar).
+	\item \textbf{Data reactive:} nadie accede ni usa datos en su trabajo diario. La empresa rara vez reporta o presenta datos.
+	\item \textbf{Data scaling:} muy pocas personas tienen las habilidades y el acceso necesario para analizar, reportar y presentar datos con confianza.
+	\item \textbf{Data progressive:} cada equipo tiene al menos \textbf{un empleado fluido} en datos que puede analizar, reportar y presentar, sin importar su rol.
+	\item \textbf{Data fluent:} \textbf{todos} saben cómo acceder a los datos que necesitan para hacer su trabajo (esto no significa que todos necesiten saber programar).
 \end{enumerate}
 
 \subsection{Data Literacy y Swampification}
@@ -233,7 +234,7 @@ Data Discovery reemplaza la necesidad de un catálogo estático al proveer un en
 SQL Server genera un \textbf{plan físico} visible en el query optimizer. Es la estrategia concreta que el motor elige para ejecutar una consulta.
 
 \begin{recallbox}
-\textbf{Recordá:} el flujo de datos va de \textbf{derecha a izquierda} en el diagrama. El porcentaje en cada operador indica su \textbf{costo relativo} dentro del plan total. Un operador con 95\% es el cuello de botella.
+	\textbf{Recordá:} el flujo de datos va de \textbf{derecha a izquierda} en el diagrama. El porcentaje en cada operador indica su \textbf{costo relativo} dentro del plan total. Un operador con 95\% es el cuello de botella.
 \end{recallbox}
 
 \subsection{Operadores de acceso a datos}
@@ -241,13 +242,13 @@ SQL Server genera un \textbf{plan físico} visible en el query optimizer. Es la 
 Hay dos formas fundamentales de acceder a datos: \textbf{Scan} (recorrer todo) y \textbf{Seek} (ir directo por índice). Según la estructura de la tabla:
 
 \begin{tabularx}{\textwidth}{@{}lXX@{}}
-\toprule
-\textbf{Estructura} & \textbf{Scan} & \textbf{Seek} \\
-\midrule
-Heap (sin índice clustered) & Table Scan & — (no es posible) \\
-Clustered Index & Clustered Index Scan & Clustered Index Seek \\
-Nonclustered Index & Index Scan & Index Seek \\
-\bottomrule
+	\toprule
+	\textbf{Estructura}         & \textbf{Scan}        & \textbf{Seek}        \\
+	\midrule
+	Heap (sin índice clustered) & Table Scan           & — (no es posible)    \\
+	Clustered Index             & Clustered Index Scan & Clustered Index Seek \\
+	Nonclustered Index          & Index Scan           & Index Seek           \\
+	\bottomrule
 \end{tabularx}
 
 \vspace{0.5em}
@@ -256,7 +257,7 @@ Nonclustered Index & Index Scan & Index Seek \\
 \textbf{Scan} = recorre toda la estructura secuencialmente. Costoso en tablas grandes.
 
 \begin{recallbox}
-\textbf{Recordá:} una Heap \textbf{nunca puede hacer Seek} porque no tiene índice clustered --- sus datos no tienen orden. Solo puede hacer Table Scan (recorrer todo).
+	\textbf{Recordá:} una Heap \textbf{nunca puede hacer Seek} porque no tiene índice clustered --- sus datos no tienen orden. Solo puede hacer Table Scan (recorrer todo).
 \end{recallbox}
 
 \subsection{Operadores de agregación}
@@ -265,15 +266,15 @@ SQL Server usa dos operadores para funciones como \texttt{SUM}, \texttt{AVG}, \t
 
 \subsubsection{Stream Aggregate}
 \begin{itemize}
-    \item Para \textbf{scalar aggregates} (sin \texttt{GROUP BY}, ej: \texttt{SELECT COUNT(*) FROM tabla}) $\to$ \textbf{siempre} usa Stream Aggregate.
-    \item Con \texttt{GROUP BY} $\to$ los datos \textbf{deben venir ordenados} por la columna de agrupación. Si hay un índice que provea ese orden, lo usa directo. Si no, el optimizador inserta un operador \textbf{Sort} antes.
+	\item Para \textbf{scalar aggregates} (sin \texttt{GROUP BY}, ej: \texttt{SELECT COUNT(*) FROM tabla}) $\to$ \textbf{siempre} usa Stream Aggregate.
+	\item Con \texttt{GROUP BY} $\to$ los datos \textbf{deben venir ordenados} por la columna de agrupación. Si hay un índice que provea ese orden, lo usa directo. Si no, el optimizador inserta un operador \textbf{Sort} antes.
 \end{itemize}
 
 \subsubsection{Hash Aggregate (Hash Match)}
 \begin{itemize}
-    \item Para tablas grandes con datos \textbf{no ordenados}
-    \item \textbf{No necesita que los datos estén ordenados}: construye una hash table en memoria
-    \item Óptimo cuando la cardinalidad estimada (cantidad de grupos) es baja
+	\item Para tablas grandes con datos \textbf{no ordenados}
+	\item \textbf{No necesita que los datos estén ordenados}: construye una hash table en memoria
+	\item Óptimo cuando la cardinalidad estimada (cantidad de grupos) es baja
 \end{itemize}
 
 \subsubsection{¿Cuándo elige uno u otro?}
@@ -284,58 +285,58 @@ Si se crea un índice que provee datos ordenados, el optimizador puede elegir St
 
 \subsubsection{Otros operadores}
 \begin{itemize}
-    \item \textbf{Compute Scalar:} realiza cálculos o conversiones de tipo sobre los datos. Ejemplo: \texttt{COUNT(*)} retorna \texttt{int} pero \texttt{COUNT\_BIG(*)} retorna \texttt{bigint}; Compute Scalar convierte el tipo.
-    \item \textbf{Filter:} aplica una condición de filtrado \textbf{posterior} a la agregación, típicamente para cláusulas \texttt{HAVING}. Se ejecuta después del aggregate.
+	\item \textbf{Compute Scalar:} realiza cálculos o conversiones de tipo sobre los datos. Ejemplo: \texttt{COUNT(*)} retorna \texttt{int} pero \texttt{COUNT\_BIG(*)} retorna \texttt{bigint}; Compute Scalar convierte el tipo.
+	\item \textbf{Filter:} aplica una condición de filtrado \textbf{posterior} a la agregación, típicamente para cláusulas \texttt{HAVING}. Se ejecuta después del aggregate.
 \end{itemize}
 
 \subsection{Juntas (Joins)}
 
 El optimizador de consultas debe tomar \textbf{dos decisiones importantes} con respecto a las juntas:
 \begin{enumerate}
-    \item La selección de un \textbf{orden de las juntas} (qué tabla va como outer, cuál como inner)
-    \item La selección del \textbf{algoritmo de junta} (Nested Loops, Merge o Hash)
+	\item La selección de un \textbf{orden de las juntas} (qué tabla va como outer, cuál como inner)
+	\item La selección del \textbf{algoritmo de junta} (Nested Loops, Merge o Hash)
 \end{enumerate}
 
 \begin{recallbox}
-\textbf{Recordá:} Merge Join y Hash Join \textbf{requieren} que la junta tenga al menos un predicado basado sobre un \textbf{operador de igualdad} (equi-join, ej: \texttt{ON a.id = b.id}). Nested Loops es el único que acepta cualquier predicado.
+	\textbf{Recordá:} Merge Join y Hash Join \textbf{requieren} que la junta tenga al menos un predicado basado sobre un \textbf{operador de igualdad} (equi-join, ej: \texttt{ON a.id = b.id}). Nested Loops es el único que acepta cualquier predicado.
 \end{recallbox}
 
 \subsubsection{Nested Loops Join}
 \begin{itemize}
-    \item Es muy efectivo si el \textbf{outer input es suficientemente pequeño} y el \textbf{inner input es grande pero indexado}
-    \item Por cada fila del outer, busca en el inner (de ahí el nombre ``loops'')
-    \item Es el \textbf{único} que acepta cualquier predicado de junta (no solo equi-join)
-    \item Inner table: \textbf{debe tener índice}. Outer table: preferible que sea pequeña
+	\item Es muy efectivo si el \textbf{outer input es suficientemente pequeño} y el \textbf{inner input es grande pero indexado}
+	\item Por cada fila del outer, busca en el inner (de ahí el nombre ``loops'')
+	\item Es el \textbf{único} que acepta cualquier predicado de junta (no solo equi-join)
+	\item Inner table: \textbf{debe tener índice}. Outer table: preferible que sea pequeña
 \end{itemize}
 
 \subsubsection{Merge Join}
 \begin{itemize}
-    \item Requiere que \textbf{ambas tablas estén ordenadas} por la columna de join
-    \item Si ya hay un clustered index o covering index que provea ese orden, no necesita Sort previo. Si no, SQL Server introduce un operador Sort explícito
-    \item Óptimo para tablas \textbf{grandes} con clustered o covering index en ambas
-    \item Solo soporta \textbf{equi-join}
+	\item Requiere que \textbf{ambas tablas estén ordenadas} por la columna de join
+	\item Si ya hay un clustered index o covering index que provea ese orden, no necesita Sort previo. Si no, SQL Server introduce un operador Sort explícito
+	\item Óptimo para tablas \textbf{grandes} con clustered o covering index en ambas
+	\item Solo soporta \textbf{equi-join}
 \end{itemize}
 
 \subsubsection{Hash Join}
 \begin{itemize}
-    \item Inner table: \textbf{no necesita índice}. Outer table: índice opcional
-    \item Útil para tablas de \textbf{cualquier tamaño}
-    \item \textbf{No requiere} datos preordenados: construye una hash table con la tabla más chica y luego busca matches
-    \item Solo soporta \textbf{equi-join}
-    \item Condición óptima: outer table pequeña, inner table grande
-    \item Implementado con el operador Hash Match
+	\item Inner table: \textbf{no necesita índice}. Outer table: índice opcional
+	\item Útil para tablas de \textbf{cualquier tamaño}
+	\item \textbf{No requiere} datos preordenados: construye una hash table con la tabla más chica y luego busca matches
+	\item Solo soporta \textbf{equi-join}
+	\item Condición óptima: outer table pequeña, inner table grande
+	\item Implementado con el operador Hash Match
 \end{itemize}
 
 \subsubsection{Tabla resumen de Joins}
 
 \begin{tabularx}{\textwidth}{@{}lXXllX@{}}
-\toprule
-\textbf{Algoritmo} & \textbf{Inner table} & \textbf{Outer table} & \textbf{Tamaño} & \textbf{Presorted} & \textbf{Cláusula} \\
-\midrule
-Hash Join & Sin índice & Opcional & Cualquiera & No & Equi-join \\
-Merge Join & Con índice & Con índice & Grande & \textbf{Sí} & Equi-join \\
-Nested Loops & Con índice (must) & Preferable & \textbf{Pequeño} & Opcional & Cualquiera \\
-\bottomrule
+	\toprule
+	\textbf{Algoritmo} & \textbf{Inner table} & \textbf{Outer table} & \textbf{Tamaño}  & \textbf{Presorted} & \textbf{Cláusula} \\
+	\midrule
+	Hash Join          & Sin índice           & Opcional             & Cualquiera       & No                 & Equi-join         \\
+	Merge Join         & Con índice           & Con índice           & Grande           & \textbf{Sí}        & Equi-join         \\
+	Nested Loops       & Con índice (must)    & Preferable           & \textbf{Pequeño} & Opcional           & Cualquiera        \\
+	\bottomrule
 \end{tabularx}
 
 % =========================================================
@@ -345,9 +346,9 @@ Nested Loops & Con índice (must) & Preferable & \textbf{Pequeño} & Opcional & 
 
 La seguridad de la información es un área amplia que aborda tres grandes problemas:
 \begin{enumerate}
-    \item Cuestiones \textbf{legales y éticas} relacionadas con el derecho a acceder a cierta información. Cierta información puede considerarse privada y no pueden acceder legalmente organizaciones o personas no autorizadas.
-    \item Cuestiones de \textbf{política a nivel gubernamental, institucional o corporativo} con respecto a la información que no debería ponerse a disposición de todos. Ejemplo: calificaciones crediticias, registros médicos personales.
-    \item Necesidad de \textbf{identificar múltiples niveles de seguridad} y categorizar los datos y los usuarios basándose en estas clasificaciones. Niveles: alto secreto, secreto, confidencial y no clasificado.
+	\item Cuestiones \textbf{legales y éticas} relacionadas con el derecho a acceder a cierta información. Cierta información puede considerarse privada y no pueden acceder legalmente organizaciones o personas no autorizadas.
+	\item Cuestiones de \textbf{política a nivel gubernamental, institucional o corporativo} con respecto a la información que no debería ponerse a disposición de todos. Ejemplo: calificaciones crediticias, registros médicos personales.
+	\item Necesidad de \textbf{identificar múltiples niveles de seguridad} y categorizar los datos y los usuarios basándose en estas clasificaciones. Niveles: alto secreto, secreto, confidencial y no clasificado.
 \end{enumerate}
 
 \subsection{Tríada CIA}
@@ -355,17 +356,17 @@ La seguridad de la información es un área amplia que aborda tres grandes probl
 La gobernanza, privacidad y compliance se nutren a partir de la capacidad de una empresa de mantener segura la información. Esto implica garantizar tres propiedades:
 
 \begin{itemize}
-    \item \textbf{Confidencialidad:} la información solo la pueden ver quienes \textbf{estén autorizados} a verla.
-    \item \textbf{Integridad:} \textbf{no pueden haber modificaciones} de la información por parte de personas no autorizadas.
-    \item \textbf{Disponibilidad:} la información está \textbf{disponible} para los que estén autorizados \textbf{en el momento que la necesiten}.
+	\item \textbf{Confidencialidad:} la información solo la pueden ver quienes \textbf{estén autorizados} a verla.
+	\item \textbf{Integridad:} \textbf{no pueden haber modificaciones} de la información por parte de personas no autorizadas.
+	\item \textbf{Disponibilidad:} la información está \textbf{disponible} para los que estén autorizados \textbf{en el momento que la necesiten}.
 \end{itemize}
 
 \subsection{Estrategias y técnicas de seguridad}
 \begin{itemize}
-    \item \textbf{Autenticación:} verificación de identidad (¿sos quien decís ser?)
-    \item \textbf{Control de acceso:} verificación de que los actores accedan a la información correcta (¿tenés permiso para ver esto?)
-    \item \textbf{Encriptación:} oscurecimiento de la información si cae en manos equivocadas
-    \item \textbf{Firewalls o sistemas de detección:} detección y prevención del acceso a redes y sistemas
+	\item \textbf{Autenticación:} verificación de identidad (¿sos quien decís ser?)
+	\item \textbf{Control de acceso:} verificación de que los actores accedan a la información correcta (¿tenés permiso para ver esto?)
+	\item \textbf{Encriptación:} oscurecimiento de la información si cae en manos equivocadas
+	\item \textbf{Firewalls o sistemas de detección:} detección y prevención del acceso a redes y sistemas
 \end{itemize}
 
 \subsection{Medidas de control en bases de datos}
@@ -374,7 +375,7 @@ La gobernanza, privacidad y compliance se nutren a partir de la capacidad de una
 Evitar que usuarios deduzcan información confidencial a partir de datos a los que \textit{sí} tienen acceso.
 
 \begin{recallbox}
-\textbf{Ejemplo clásico:} si tuviéramos una base de datos para estadísticas de población y un usuario puede consultar el promedio de sueldos de un departamento que tiene \textbf{una sola persona}, infiere el sueldo exacto de esa persona. Un usuario no debería poder acceder a información confidencial sobre alguien en específico, ni debería poder inferir ciertas cosas a partir de las estadísticas.
+	\textbf{Ejemplo clásico:} si tuviéramos una base de datos para estadísticas de población y un usuario puede consultar el promedio de sueldos de un departamento que tiene \textbf{una sola persona}, infiere el sueldo exacto de esa persona. Un usuario no debería poder acceder a información confidencial sobre alguien en específico, ni debería poder inferir ciertas cosas a partir de las estadísticas.
 \end{recallbox}
 
 \subsubsection{2. Cifrado de datos (Data Encryption)}
@@ -400,19 +401,19 @@ Los privilegios y otros permisos están \textbf{asociados con roles organizacion
 
 \textbf{Conceptos:}
 \begin{itemize}
-    \item Un \textbf{usuario} es un miembro de la organización con algún acceso a los datos
-    \item Un \textbf{objeto} es un elemento sobre el cual se puede controlar el acceso
+	\item Un \textbf{usuario} es un miembro de la organización con algún acceso a los datos
+	\item Un \textbf{objeto} es un elemento sobre el cual se puede controlar el acceso
 \end{itemize}
 
 \textbf{Jerarquía de objetos:}
 \begin{enumerate}
-    \item \textbf{Base de datos:} conjunto de esquemas y un único sistema de permisos. Puede haber más de una base en el mismo motor.
-    \item \textbf{Esquema:} separación lógica de objetos dentro de una base de datos. Conjunto de objetos.
-    \item \textbf{Objetos atómicos:} tablas, vistas, funciones, índices...
+	\item \textbf{Base de datos:} conjunto de esquemas y un único sistema de permisos. Puede haber más de una base en el mismo motor.
+	\item \textbf{Esquema:} separación lógica de objetos dentro de una base de datos. Conjunto de objetos.
+	\item \textbf{Objetos atómicos:} tablas, vistas, funciones, índices...
 \end{enumerate}
 
 \begin{recallbox}
-\textbf{Recordá el ejemplo:} una empresa puede tener roles como ``cuenta de ventas'', ``gerente'', ``agente de compras''. En vez de dar permisos individuales a cada persona, se asignan a un rol y los usuarios se asignan al rol. Mucho más simple de administrar.
+	\textbf{Recordá el ejemplo:} una empresa puede tener roles como ``cuenta de ventas'', ``gerente'', ``agente de compras''. En vez de dar permisos individuales a cada persona, se asignan a un rol y los usuarios se asignan al rol. Mucho más simple de administrar.
 \end{recallbox}
 
 \subsection{SQL Injection}
@@ -422,7 +423,7 @@ Las bases de datos no están expuestas directamente a redes externas, pero se pu
 Este ataque está orientado a: obtener información no autorizada, alterar información, o destruirla.
 
 \begin{recallbox}
-\textbf{Recordá el ejemplo de Bobby Tables:} el nombre del hijo es \texttt{Robert'); DROP TABLE Students;--}. Al usar ese input directamente en un SQL, se ejecuta un DROP TABLE. Prevención: \textbf{sanitizar inputs} y usar prepared statements.
+	\textbf{Recordá el ejemplo de Bobby Tables:} el nombre del hijo es \texttt{Robert'); DROP TABLE Students;--}. Al usar ese input directamente en un SQL, se ejecuta un DROP TABLE. Prevención: \textbf{sanitizar inputs} y usar prepared statements.
 \end{recallbox}
 
 % =========================================================
@@ -436,16 +437,16 @@ Las contraseñas son información \textbf{ultra sensible} porque pueden permitir
 
 \subsection{Propiedades de una función hash criptográfica}
 \begin{itemize}
-    \item \textbf{Determinística:} un texto plano devuelve \textbf{siempre el mismo hash}
-    \item \textbf{No reversible:} a partir de un hash hay múltiples posibles textos planos (no se puede volver atrás)
-    \item Es \textbf{computacionalmente inviable} obtener el texto plano a partir de un hash
+	\item \textbf{Determinística:} un texto plano devuelve \textbf{siempre el mismo hash}
+	\item \textbf{No reversible:} a partir de un hash hay múltiples posibles textos planos (no se puede volver atrás)
+	\item Es \textbf{computacionalmente inviable} obtener el texto plano a partir de un hash
 \end{itemize}
 
 \textbf{¿Cómo funciona en la práctica?}
 \begin{enumerate}
-    \item Al \textbf{crear la contraseña}: se calcula el hash y se \textbf{almacena solo el hash} (nunca el texto plano)
-    \item En cada \textbf{autenticación}: se calcula el hash del input del usuario y se compara con el hash almacenado
-    \item Ante una \textbf{filtración}: incluso si alguien roba la base de datos, solo ve hashes --- no puede obtener las contraseñas originales (ni siquiera un superusuario)
+	\item Al \textbf{crear la contraseña}: se calcula el hash y se \textbf{almacena solo el hash} (nunca el texto plano)
+	\item En cada \textbf{autenticación}: se calcula el hash del input del usuario y se compara con el hash almacenado
+	\item Ante una \textbf{filtración}: incluso si alguien roba la base de datos, solo ve hashes --- no puede obtener las contraseñas originales (ni siquiera un superusuario)
 \end{enumerate}
 
 \subsection{Rainbow Tables}
@@ -457,13 +458,13 @@ Pero el hashing solo no es suficiente. Existen \textbf{rainbow tables}: listas d
 Es una técnica para \textbf{dificultar el ataque por rainbow tables}:
 
 \begin{enumerate}
-    \item Para cada contraseña a almacenar, se genera un \textbf{string al azar} (comúnmente llamado \textbf{salt})
-    \item Se \textbf{almacena el salt} junto con la información de la cuenta
-    \item Cada vez que se tenga que calcular el hash (al crear o validar la contraseña), se \textbf{concatena el salt con la contraseña original}: \texttt{hash(contraseña + salt)}
+	\item Para cada contraseña a almacenar, se genera un \textbf{string al azar} (comúnmente llamado \textbf{salt})
+	\item Se \textbf{almacena el salt} junto con la información de la cuenta
+	\item Cada vez que se tenga que calcular el hash (al crear o validar la contraseña), se \textbf{concatena el salt con la contraseña original}: \texttt{hash(contraseña + salt)}
 \end{enumerate}
 
 \begin{recallbox}
-\textbf{Recordá por qué funciona:} dos usuarios con la \textit{misma} contraseña tendrán \textbf{hashes distintos} porque cada uno tiene un salt diferente. Las rainbow tables se vuelven inútiles porque necesitarían precalcular hashes para cada posible combinación de contraseña + salt.
+	\textbf{Recordá por qué funciona:} dos usuarios con la \textit{misma} contraseña tendrán \textbf{hashes distintos} porque cada uno tiene un salt diferente. Las rainbow tables se vuelven inútiles porque necesitarían precalcular hashes para cada posible combinación de contraseña + salt.
 \end{recallbox}
 
 % =========================================================
@@ -471,10 +472,10 @@ Es una técnica para \textbf{dificultar el ataque por rainbow tables}:
 
 \subsection{Las 4 V's de Big Data}
 \begin{itemize}
-    \item \textbf{Volumen:} cantidad masiva de datos. Estamos hablando de terabytes, petabytes o más.
-    \item \textbf{Variedad:} datos estructurados (tablas), semi-estructurados (JSON, XML) y no estructurados (imágenes, texto libre, logs).
-    \item \textbf{Velocidad:} ritmo de generación de datos y necesidad de procesarlos rápidamente. Algunos casos requieren procesamiento en tiempo real.
-    \item \textbf{Veracidad:} calidad y confiabilidad de los datos. No todos los datos son igualmente confiables.
+	\item \textbf{Volumen:} cantidad masiva de datos. Estamos hablando de terabytes, petabytes o más.
+	\item \textbf{Variedad:} datos estructurados (tablas), semi-estructurados (JSON, XML) y no estructurados (imágenes, texto libre, logs).
+	\item \textbf{Velocidad:} ritmo de generación de datos y necesidad de procesarlos rápidamente. Algunos casos requieren procesamiento en tiempo real.
+	\item \textbf{Veracidad:} calidad y confiabilidad de los datos. No todos los datos son igualmente confiables.
 \end{itemize}
 
 \subsection{Escalabilidad}
@@ -490,21 +491,21 @@ Es una técnica para \textbf{dificultar el ataque por rainbow tables}:
 Este ejemplo muestra cómo un sistema simple se va complejizando ante el crecimiento:
 
 \begin{enumerate}
-    \item \textbf{Estado inicial:} una RDBMS simple con una tabla de pageviews (\texttt{user\_id}, \texttt{url}, \texttt{date}, \texttt{pageviews}). Ante cada evento se actualiza el registro correspondiente.
+	\item \textbf{Estado inicial:} una RDBMS simple con una tabla de pageviews (\texttt{user\_id}, \texttt{url}, \texttt{date}, \texttt{pageviews}). Ante cada evento se actualiza el registro correspondiente.
 
-    \item \textbf{Aumenta el tráfico:} la DB no puede mantener el ritmo de escrituras $\to$ timeouts. \textbf{Solución:} desacoplar componentes con una \textbf{cola (queue)} y un \textbf{worker} independiente que acumula eventos para reducir llamadas a la base. Esto maneja la \textbf{back-pressure} (el productor no se frena por el consumidor).
+	\item \textbf{Aumenta el tráfico:} la DB no puede mantener el ritmo de escrituras $\to$ timeouts. \textbf{Solución:} desacoplar componentes con una \textbf{cola (queue)} y un \textbf{worker} independiente que acumula eventos para reducir llamadas a la base. Esto maneja la \textbf{back-pressure} (el productor no se frena por el consumidor).
 
-    \item \textbf{Aumenta aún más el tráfico:} el worker se atrasa y la cola solo crece. \textbf{Solución:} paralelizar agregando \textbf{más workers} con un \textbf{load balancer} que distribuye la carga equitativamente.
+	\item \textbf{Aumenta aún más el tráfico:} el worker se atrasa y la cola solo crece. \textbf{Solución:} paralelizar agregando \textbf{más workers} con un \textbf{load balancer} que distribuye la carga equitativamente.
 
-    \item \textbf{La base de datos es cuello de botella:} se aplica \textbf{sharding} (partición horizontal): desparramar los datos en \textbf{múltiples servidores de DB}. Cada servidor tiene un subconjunto de filas. La asignación se hace con distribución uniforme. Las queries requieren consultar todos los shards y hacer merge de resultados. Si la app crece más, hay que hacer \textbf{resharding} sin dejar de recibir tráfico.
+	\item \textbf{La base de datos es cuello de botella:} se aplica \textbf{sharding} (partición horizontal): desparramar los datos en \textbf{múltiples servidores de DB}. Cada servidor tiene un subconjunto de filas. La asignación se hace con distribución uniforme. Las queries requieren consultar todos los shards y hacer merge de resultados. Si la app crece más, hay que hacer \textbf{resharding} sin dejar de recibir tráfico.
 
-    \item \textbf{Fallas en nodos:} más nodos = más frecuencia de fallas de disco. Se necesita hacer la DB \textbf{fault tolerant} $\to$ registrar qué nodos están online y mantener \textbf{réplicas pasivas}.
+	\item \textbf{Fallas en nodos:} más nodos = más frecuencia de fallas de disco. Se necesita hacer la DB \textbf{fault tolerant} $\to$ registrar qué nodos están online y mantener \textbf{réplicas pasivas}.
 
-    \item \textbf{Fallas en el código (bugs):} un bug en los workers puede \textbf{corromper la información} (source of truth = DB). Los backups no alcanzan porque implican perder información y no se puede saber qué está corrupto. Se necesita \textbf{human fault tolerance}.
+	\item \textbf{Fallas en el código (bugs):} un bug en los workers puede \textbf{corromper la información} (source of truth = DB). Los backups no alcanzan porque implican perder información y no se puede saber qué está corrupto. Se necesita \textbf{human fault tolerance}.
 \end{enumerate}
 
 \begin{recallbox}
-\textbf{Recordá la conclusión:} el sistema se fue complejizando paso a paso, y cada solución trajo nuevos problemas. Big Data nace de esta necesidad de manejar volumen, velocidad, fallos y complejidad creciente.
+	\textbf{Recordá la conclusión:} el sistema se fue complejizando paso a paso, y cada solución trajo nuevos problemas. Big Data nace de esta necesidad de manejar volumen, velocidad, fallos y complejidad creciente.
 \end{recallbox}
 
 \subsection{First Principles}
@@ -518,7 +519,7 @@ No toda la información es igual: cierta información es derivada de otra. Si se
 La definición más general de un sistema de datos:
 
 \begin{center}
-\large\texttt{query = function(all data)}
+	\large\texttt{query = function(all data)}
 \end{center}
 
 \textbf{Requerimientos no funcionales deseables:} (i) tolerancia a fallos, (ii) escalabilidad, (iii) extensibilidad, (iv) mantenibilidad, (v) baja latencia, y (vi) soporte para consultas específicas.
@@ -552,7 +553,7 @@ Datos crudos de las distintas fuentes con estrategia \textbf{schema-on-read}: no
 \textbf{ELT (Extract, Load, Transform):} mismo objetivo pero con \textbf{orden distinto}. (1) \textbf{Extract:} se consulta y extrae del sistema origen. (2) \textbf{Load:} se almacena \textit{cruda} en el destino. (3) \textbf{Transform:} se limpia, normaliza y procesa \textbf{en el destino}. Asociado a Data Lakes y schema-on-read.
 
 \begin{recallbox}
-\textbf{Recordá la diferencia clave:} en ETL la transformación ocurre \textit{antes} de cargar (los datos llegan limpios). En ELT la transformación ocurre \textit{después} de cargar (los datos llegan crudos y se procesan en destino).
+	\textbf{Recordá la diferencia clave:} en ETL la transformación ocurre \textit{antes} de cargar (los datos llegan limpios). En ELT la transformación ocurre \textit{después} de cargar (los datos llegan crudos y se procesan en destino).
 \end{recallbox}
 
 % =========================================================
@@ -565,16 +566,16 @@ Datos crudos de las distintas fuentes con estrategia \textbf{schema-on-read}: no
 \textbf{OLAP (Online Analytical Processing) / DWH:} optimizada para consultas analíticas complejas sobre grandes volúmenes de datos históricos. Es donde se hacen los reportes y análisis.
 
 \begin{recallbox}
-\textbf{Recordá:} OLTP = muchas escrituras pequeñas y rápidas. OLAP = pocas lecturas grandes y complejas (queries que agregan millones de filas).
+	\textbf{Recordá:} OLTP = muchas escrituras pequeñas y rápidas. OLAP = pocas lecturas grandes y complejas (queries que agregan millones de filas).
 \end{recallbox}
 
 \subsection{Arquitectura Medallion}
 
 Patrón de organización de datos en un Data Lake con 3 capas progresivas de refinamiento:
 \begin{itemize}
-    \item \textbf{Bronze:} datos crudos sin procesar, tal cual llegan de las fuentes. Es el ``landing zone''.
-    \item \textbf{Silver:} datos limpiados, conformados, deduplicados. Se aplican reglas de calidad.
-    \item \textbf{Gold:} datos agregados, modelados y listos para consumo analítico/BI. Es lo que ven los usuarios finales.
+	\item \textbf{Bronze:} datos crudos sin procesar, tal cual llegan de las fuentes. Es el ``landing zone''.
+	\item \textbf{Silver:} datos limpiados, conformados, deduplicados. Se aplican reglas de calidad.
+	\item \textbf{Gold:} datos agregados, modelados y listos para consumo analítico/BI. Es lo que ven los usuarios finales.
 \end{itemize}
 
 \subsection{Star Schema (Esquema Estrella)}
@@ -582,13 +583,13 @@ Patrón de organización de datos en un Data Lake con 3 capas progresivas de ref
 Modelo de datos optimizado para DWH. Tiene una forma de estrella con una tabla central rodeada de tablas satélite:
 
 \begin{itemize}
-    \item \textbf{Fact table (tabla de hechos):} tabla central que contiene las \textbf{métricas/medidas numéricas} del negocio (ej: monto de venta, cantidad vendida, duración) y las \textbf{foreign keys a las dimensiones}. Suele tener \textbf{muchas filas} (cada fila es un evento/transacción).
+	\item \textbf{Fact table (tabla de hechos):} tabla central que contiene las \textbf{métricas/medidas numéricas} del negocio (ej: monto de venta, cantidad vendida, duración) y las \textbf{foreign keys a las dimensiones}. Suele tener \textbf{muchas filas} (cada fila es un evento/transacción).
 
-    \item \textbf{Dimension tables (tablas de dimensiones):} tablas descriptivas que proveen \textbf{contexto} a las medidas de la fact table. Contienen atributos como nombre de producto, categoría, fecha, nombre de cliente. Suelen tener \textbf{pocas filas pero muchas columnas}.
+	\item \textbf{Dimension tables (tablas de dimensiones):} tablas descriptivas que proveen \textbf{contexto} a las medidas de la fact table. Contienen atributos como nombre de producto, categoría, fecha, nombre de cliente. Suelen tener \textbf{pocas filas pero muchas columnas}.
 \end{itemize}
 
 \begin{recallbox}
-\textbf{Ejemplo:} la fact table de ``Ventas'' tiene columnas: fecha\_id, producto\_id, cliente\_id, monto, cantidad. Las dimension tables son: dim\_fecha (año, mes, día, trimestre), dim\_producto (nombre, categoría, precio), dim\_cliente (nombre, ciudad, segmento).
+	\textbf{Ejemplo:} la fact table de ``Ventas'' tiene columnas: fecha\_id, producto\_id, cliente\_id, monto, cantidad. Las dimension tables son: dim\_fecha (año, mes, día, trimestre), dim\_producto (nombre, categoría, precio), dim\_cliente (nombre, ciudad, segmento).
 \end{recallbox}
 
 \subsection{Slowly Changing Dimensions (SCD)}
@@ -596,9 +597,9 @@ Modelo de datos optimizado para DWH. Tiene una forma de estrella con una tabla c
 ¿Qué pasa cuando los datos de una dimensión cambian? (ej: un cliente se muda de ciudad)
 
 \begin{itemize}
-    \item \textbf{Tipo 1:} se \textbf{sobreescribe} el valor anterior. Simple pero se \textbf{pierde el historial}. No se puede saber cuál era el valor antes del cambio.
+	\item \textbf{Tipo 1:} se \textbf{sobreescribe} el valor anterior. Simple pero se \textbf{pierde el historial}. No se puede saber cuál era el valor antes del cambio.
 
-    \item \textbf{Tipo 2:} se \textbf{agrega una nueva fila} con fechas de vigencia (\texttt{valid\_from}, \texttt{valid\_to}), conservando el \textbf{historial completo}. La fila anterior se marca como expirada. Más complejo pero permite análisis histórico.
+	\item \textbf{Tipo 2:} se \textbf{agrega una nueva fila} con fechas de vigencia (\texttt{valid\_from}, \texttt{valid\_to}), conservando el \textbf{historial completo}. La fila anterior se marca como expirada. Más complejo pero permite análisis histórico.
 \end{itemize}
 
 \subsection{Orquestación}
@@ -607,11 +608,11 @@ Modelo de datos optimizado para DWH. Tiene una forma de estrella con una tabla c
 
 \textbf{Conceptos clave de orquestación:}
 \begin{itemize}
-    \item \textbf{Idempotencia:} una operación es idempotente si ejecutarla \textbf{múltiples veces produce el mismo resultado} que ejecutarla una vez. Es fundamental para poder reintentar tareas fallidas sin generar datos duplicados o corruptos.
+	\item \textbf{Idempotencia:} una operación es idempotente si ejecutarla \textbf{múltiples veces produce el mismo resultado} que ejecutarla una vez. Es fundamental para poder reintentar tareas fallidas sin generar datos duplicados o corruptos.
 
-    \item \textbf{Backfill:} proceso de \textbf{ejecutar retroactivamente} un pipeline para fechas/períodos pasados. Se usa cuando se agrega una nueva transformación o se corrige un bug y hay que reprocesar datos históricos.
+	\item \textbf{Backfill:} proceso de \textbf{ejecutar retroactivamente} un pipeline para fechas/períodos pasados. Se usa cuando se agrega una nueva transformación o se corrige un bug y hay que reprocesar datos históricos.
 
-    \item \textbf{Stack moderno visto en la materia:} PostgreSQL (base de datos) + dbt-core (transformación) + Dagster (orquestación) + Metabase (visualización/BI).
+	\item \textbf{Stack moderno visto en la materia:} PostgreSQL (base de datos) + dbt-core (transformación) + Dagster (orquestación) + Metabase (visualización/BI).
 \end{itemize}
 
 % =========================================================
@@ -626,7 +627,7 @@ Son dos enfoques opuestos para manejar el estado de un sistema:
 \textbf{Event Sourcing:} almacena \textbf{todos los eventos/cambios} como una secuencia inmutable (nunca se borran). El estado actual se deriva \textbf{recomputando todos los eventos} desde el inicio. \textbf{Ventaja:} historial completo y capacidad de recomputar desde cero. \textbf{Desventaja:} la latencia del recompute puede ser alta si hay muchos eventos.
 
 \begin{recallbox}
-\textbf{Recordá el ejemplo de la red social de Tom:} en fully incremental, se guarda ``Tom tiene 3 amigos'' (estado actual). En event sourcing, se guarda la secuencia de eventos: ``17/may Add Alice, 18/may Add Jerry, 19/may Add Charlie, 20/may Remove Jerry, ...''. A partir de la secuencia se puede derivar tanto la lista actual de amigos como la cantidad --- y cualquier otra pregunta futura.
+	\textbf{Recordá el ejemplo de la red social de Tom:} en fully incremental, se guarda ``Tom tiene 3 amigos'' (estado actual). En event sourcing, se guarda la secuencia de eventos: ``17/may Add Alice, 18/may Add Jerry, 19/may Add Charlie, 20/may Remove Jerry, ...''. A partir de la secuencia se puede derivar tanto la lista actual de amigos como la cantidad --- y cualquier otra pregunta futura.
 \end{recallbox}
 
 \subsection{Modelos de consistencia}
@@ -634,13 +635,13 @@ Son dos enfoques opuestos para manejar el estado de un sistema:
 En sistemas distribuidos (datos replicados en varios nodos), ¿qué garantías tenemos sobre la frescura de los datos que leemos?
 
 \begin{itemize}
-    \item \textbf{Consistencia fuerte (strong consistency):} después de una escritura, \textbf{toda} lectura subsiguiente (desde cualquier nodo) devuelve el valor actualizado. Todos los nodos ven los mismos datos al mismo tiempo. Es la garantía más fuerte pero la más costosa.
+	\item \textbf{Consistencia fuerte (strong consistency):} después de una escritura, \textbf{toda} lectura subsiguiente (desde cualquier nodo) devuelve el valor actualizado. Todos los nodos ven los mismos datos al mismo tiempo. Es la garantía más fuerte pero la más costosa.
 
-    \item \textbf{Consistencia eventual (eventual consistency):} si no se hacen más escrituras, eventualmente \textbf{todas las réplicas} convergerán al mismo valor. No garantiza que una lectura inmediata después de una escritura devuelva lo más reciente. Es la más débil pero la más performante.
+	\item \textbf{Consistencia eventual (eventual consistency):} si no se hacen más escrituras, eventualmente \textbf{todas las réplicas} convergerán al mismo valor. No garantiza que una lectura inmediata después de una escritura devuelva lo más reciente. Es la más débil pero la más performante.
 
-    \item \textbf{RYOW (Read Your Own Writes):} garantiza que un usuario siempre ve \textbf{sus propias escrituras}. Otro usuario podría ver datos desactualizados, pero cada uno ve al menos lo que él mismo escribió.
+	\item \textbf{RYOW (Read Your Own Writes):} garantiza que un usuario siempre ve \textbf{sus propias escrituras}. Otro usuario podría ver datos desactualizados, pero cada uno ve al menos lo que él mismo escribió.
 
-    \item \textbf{Consistencia de sesión:} garantiza consistencia RYOW dentro de una \textbf{misma sesión} de usuario. Entre sesiones diferentes puede haber inconsistencia.
+	\item \textbf{Consistencia de sesión:} garantiza consistencia RYOW dentro de una \textbf{misma sesión} de usuario. Entre sesiones diferentes puede haber inconsistencia.
 \end{itemize}
 
 \subsection{Teorema CAP}
@@ -648,13 +649,13 @@ En sistemas distribuidos (datos replicados en varios nodos), ¿qué garantías t
 En un sistema distribuido, \textbf{solo se pueden garantizar 2 de 3} propiedades simultáneamente:
 
 \begin{itemize}
-    \item \textbf{C}onsistency: todos los nodos ven los mismos datos al mismo tiempo
-    \item \textbf{A}vailability: toda request recibe una respuesta (no necesariamente con el dato más reciente)
-    \item \textbf{P}artition tolerance: el sistema sigue funcionando pese a fallos de comunicación entre nodos
+	\item \textbf{C}onsistency: todos los nodos ven los mismos datos al mismo tiempo
+	\item \textbf{A}vailability: toda request recibe una respuesta (no necesariamente con el dato más reciente)
+	\item \textbf{P}artition tolerance: el sistema sigue funcionando pese a fallos de comunicación entre nodos
 \end{itemize}
 
 \begin{recallbox}
-\textbf{Recordá la implicancia práctica:} las particiones de red son \textbf{inevitables} en sistemas distribuidos (P es obligatorio). Entonces la elección real es: ante una partición de red, ¿priorizamos \textbf{consistencia} (rechazando requests hasta que los nodos se sincronicen) o \textbf{disponibilidad} (respondiendo con datos que podrían estar desactualizados)?
+	\textbf{Recordá la implicancia práctica:} las particiones de red son \textbf{inevitables} en sistemas distribuidos (P es obligatorio). Entonces la elección real es: ante una partición de red, ¿priorizamos \textbf{consistencia} (rechazando requests hasta que los nodos se sincronicen) o \textbf{disponibilidad} (respondiendo con datos que podrían estar desactualizados)?
 \end{recallbox}
 
 \subsection{Las 8 Falacias de la Computación Distribuida}
@@ -662,14 +663,14 @@ En un sistema distribuido, \textbf{solo se pueden garantizar 2 de 3} propiedades
 Son suposiciones erróneas que los programadores novatos hacen al diseñar sistemas distribuidos:
 
 \begin{enumerate}
-    \item La red es confiable
-    \item La latencia es cero
-    \item El ancho de banda es infinito
-    \item La red es segura
-    \item La topología no cambia
-    \item Hay un solo administrador
-    \item El costo de transporte es cero
-    \item La red es homogénea
+	\item La red es confiable
+	\item La latencia es cero
+	\item El ancho de banda es infinito
+	\item La red es segura
+	\item La topología no cambia
+	\item Hay un solo administrador
+	\item El costo de transporte es cero
+	\item La red es homogénea
 \end{enumerate}
 
 Todas son \textbf{falsas}. Un buen sistema distribuido debe diseñarse asumiendo que \textbf{todas estas cosas van a fallar}.
@@ -684,14 +685,14 @@ La anonimización de datos sensibles busca proteger los derechos y la privacidad
 \subsection{El proceso de anonimizar}
 
 \begin{enumerate}
-    \item \textbf{Evaluación previa:} identificar información sensible en los conjuntos de datos
-    \item \textbf{Aplicar técnicas:} elegir y aplicar las técnicas de anonimización adecuadas
-    \item \textbf{Gestionar riesgos:} gestionar los riesgos de identificación y divulgación
-    \item \textbf{Documentar:} registrar claramente los detalles del proceso, los parámetros utilizados y los controles
+	\item \textbf{Evaluación previa:} identificar información sensible en los conjuntos de datos
+	\item \textbf{Aplicar técnicas:} elegir y aplicar las técnicas de anonimización adecuadas
+	\item \textbf{Gestionar riesgos:} gestionar los riesgos de identificación y divulgación
+	\item \textbf{Documentar:} registrar claramente los detalles del proceso, los parámetros utilizados y los controles
 \end{enumerate}
 
 \begin{recallbox}
-\textbf{Recordá:} la documentación del proceso debe conservarse de forma \textbf{segura}, ya que la revelación de los parámetros puede facilitar la \textbf{reidentificación} de los datos anonimizados. Paradójicamente, el documento que explica cómo se anonimizó es en sí mismo un dato sensible.
+	\textbf{Recordá:} la documentación del proceso debe conservarse de forma \textbf{segura}, ya que la revelación de los parámetros puede facilitar la \textbf{reidentificación} de los datos anonimizados. Paradójicamente, el documento que explica cómo se anonimizó es en sí mismo un dato sensible.
 \end{recallbox}
 
 \subsection{Técnicas de anonimización}
@@ -708,14 +709,14 @@ Ejemplo con $k=3$: si solo hay una persona de 28 años en código postal 1428, s
 Garantizar que en cada grupo k-anónimo haya al menos $l$ valores ``\textbf{bien representados}'' para los atributos sensibles.
 
 \begin{recallbox}
-\textbf{Recordá por qué L-diversidad es necesaria:} si se usa k-anonimato para sueldos y un grupo k-anónimo tiene 5 personas pero \textit{todas con el mismo sueldo}, se puede inferir el sueldo de cualquier persona del grupo. L-diversidad asegura que haya diversidad significativa de valores sensibles dentro de cada grupo.
+	\textbf{Recordá por qué L-diversidad es necesaria:} si se usa k-anonimato para sueldos y un grupo k-anónimo tiene 5 personas pero \textit{todas con el mismo sueldo}, se puede inferir el sueldo de cualquier persona del grupo. L-diversidad asegura que haya diversidad significativa de valores sensibles dentro de cada grupo.
 \end{recallbox}
 
 \subsection{Herramientas}
 \begin{itemize}
-    \item \textbf{Amnesia:} herramienta de código abierto (OpenAIRE) para anonimizar datos tabulares. Utiliza k-anonimato y l-diversidad.
-    \item \textbf{ARX (Data Anonymization Tool):} código abierto, soporta k-anonimato, l-diversidad, t-closeness y privacidad diferencial. Interfaz gráfica intuitiva.
-    \item \textbf{sdcMicro:} paquete R diseñado para anonimización de microdatos, ideal para datos censales y de encuestas. Ofrece supresión, recodificación, perturbación y generación de microdatos sintéticos.
+	\item \textbf{Amnesia:} herramienta de código abierto (OpenAIRE) para anonimizar datos tabulares. Utiliza k-anonimato y l-diversidad.
+	\item \textbf{ARX (Data Anonymization Tool):} código abierto, soporta k-anonimato, l-diversidad, t-closeness y privacidad diferencial. Interfaz gráfica intuitiva.
+	\item \textbf{sdcMicro:} paquete R diseñado para anonimización de microdatos, ideal para datos censales y de encuestas. Ofrece supresión, recodificación, perturbación y generación de microdatos sintéticos.
 \end{itemize}
 
 % =========================================================
@@ -727,9 +728,9 @@ Vimos que \textbf{fully incremental} pierde datos originales (no se puede recomp
 
 \subsection{Las 3 capas}
 \begin{itemize}
-    \item \textbf{Batch Layer:} almacena el master dataset y \textbf{construye batch views} procesando \textit{todos} los datos. Alta latencia pero resultados completos y precisos.
-    \item \textbf{Serving Layer:} \textbf{sirve e indexa las batch views} para que las consultas puedan accederlas rápidamente.
-    \item \textbf{Speed Layer:} \textbf{construye real-time views} con los datos nuevos que llegaron \textit{después} de que empezó el último batch. Compensa la latencia del batch.
+	\item \textbf{Batch Layer:} almacena el master dataset y \textbf{construye batch views} procesando \textit{todos} los datos. Alta latencia pero resultados completos y precisos.
+	\item \textbf{Serving Layer:} \textbf{sirve e indexa las batch views} para que las consultas puedan accederlas rápidamente.
+	\item \textbf{Speed Layer:} \textbf{construye real-time views} con los datos nuevos que llegaron \textit{después} de que empezó el último batch. Compensa la latencia del batch.
 \end{itemize}
 
 \subsection{Las 3 ecuaciones que resumen Lambda}
@@ -737,18 +738,18 @@ Vimos que \textbf{fully incremental} pierde datos originales (no se puede recomp
 Toda la arquitectura se resume en estas tres ecuaciones:
 
 \begin{center}
-\texttt{\sout{query = function(all data)}} \quad (demasiado caro en tiempo real)
+	\texttt{\sout{query = function(all data)}} \quad (demasiado caro en tiempo real)
 
-\vspace{0.5em}
-\texttt{batch view = function(all data)}
+	\vspace{0.5em}
+	\texttt{batch view = function(all data)}
 
-\texttt{realtime view = function(realtime view, new data)}
+	\texttt{realtime view = function(realtime view, new data)}
 
-\texttt{query = function(batch view, realtime view)}
+	\texttt{query = function(batch view, realtime view)}
 \end{center}
 
 \begin{recallbox}
-\textbf{Recordá la intuición:} la función \texttt{query = function(all data)} podría tomar una gran cantidad de recursos y ser muy cara de computar en tiempo real. La alternativa es \textbf{pre-computarla} (batch view). Pero crear una batch view es una operación de alta latencia --- para cuando termine, mucha data nueva no estará representada. Para eso se crea una \textbf{realtime view} que incorpora la data que quedó afuera del batch. La query final combina ambas vistas.
+	\textbf{Recordá la intuición:} la función \texttt{query = function(all data)} podría tomar una gran cantidad de recursos y ser muy cara de computar en tiempo real. La alternativa es \textbf{pre-computarla} (batch view). Pero crear una batch view es una operación de alta latencia --- para cuando termine, mucha data nueva no estará representada. Para eso se crea una \textbf{realtime view} que incorpora la data que quedó afuera del batch. La query final combina ambas vistas.
 \end{recallbox}
 
 \subsection{Ejemplo conceptual: app tipo Spotify}
@@ -761,10 +762,10 @@ Preguntas clave: ¿qué forma tienen los eventos? ¿dónde los almacenamos? ¿c�
 
 La Arquitectura Lambda requiere:
 \begin{itemize}
-    \item Entornos de cómputo paralelizable (batching y streaming)
-    \item Sistemas de almacenamiento distribuido (filesystems distribuidos, bases NoSQL)
-    \item Frameworks de serialización de objetos
-    \item Sistemas de colas distribuidas (asincrónicas)
+	\item Entornos de cómputo paralelizable (batching y streaming)
+	\item Sistemas de almacenamiento distribuido (filesystems distribuidos, bases NoSQL)
+	\item Frameworks de serialización de objetos
+	\item Sistemas de colas distribuidas (asincrónicas)
 \end{itemize}
 
 % =========================================================
@@ -775,9 +776,9 @@ La Arquitectura Lambda requiere:
 Es el \textbf{core de la arquitectura lambda}. Es la \textbf{source of truth} (fuente de verdad) de todo el sistema.
 
 \begin{recallbox}
-\textbf{Recordá esta propiedad fundamental:} si se perdieran \textbf{todos} los datasets de la serving layer y de la speed layer, se podría \textbf{recuperar todo} desde el master dataset. Esto porque las batch views son producidas como función del master dataset, y la speed layer se basa en la data más reciente --- todo se podría reconstruir en pocas horas.
+	\textbf{Recordá esta propiedad fundamental:} si se perdieran \textbf{todos} los datasets de la serving layer y de la speed layer, se podría \textbf{recuperar todo} desde el master dataset. Esto porque las batch views son producidas como función del master dataset, y la speed layer se basa en la data más reciente --- todo se podría reconstruir en pocas horas.
 
-Por lo tanto, es \textbf{la única parte} de la Arquitectura Lambda que debe estar \textbf{absolutamente a resguardo}. Recordar que: máquinas sobrecargadas, discos que fallan, cortes de energía, errores humanos son riesgos intrínsecos que inevitablemente ocurrirán.
+	Por lo tanto, es \textbf{la única parte} de la Arquitectura Lambda que debe estar \textbf{absolutamente a resguardo}. Recordar que: máquinas sobrecargadas, discos que fallan, cortes de energía, errores humanos son riesgos intrínsecos que inevitablemente ocurrirán.
 \end{recallbox}
 
 \subsection{Datos vs Información vs Consultas vs Vistas}
@@ -785,14 +786,14 @@ Por lo tanto, es \textbf{la única parte} de la Arquitectura Lambda que debe est
 La idea de \textbf{dependencia de la información} nos lleva a estas definiciones:
 
 \begin{itemize}
-    \item \textbf{Datos (data):} ``axiomas'' de información que \textbf{no pueden ser derivados} de otros elementos. Son la fuente primaria.
-    \item \textbf{Información:} el conjunto total de conocimiento (incluyendo los datos) \textbf{relevante} al sistema.
-    \item \textbf{Consultas (queries):} preguntas que se le pueden hacer a la información con un dominio en mente.
-    \item \textbf{Vistas (views):} información \textbf{derivada} de los datos base, generalmente orientada a consultas.
+	\item \textbf{Datos (data):} ``axiomas'' de información que \textbf{no pueden ser derivados} de otros elementos. Son la fuente primaria.
+	\item \textbf{Información:} el conjunto total de conocimiento (incluyendo los datos) \textbf{relevante} al sistema.
+	\item \textbf{Consultas (queries):} preguntas que se le pueden hacer a la información con un dominio en mente.
+	\item \textbf{Vistas (views):} información \textbf{derivada} de los datos base, generalmente orientada a consultas.
 \end{itemize}
 
 \begin{recallbox}
-\textbf{Ejemplo de la red social:} los \textbf{datos} son los eventos de usuarios (``17/may Add Alice'', ``20/may Remove Jerry''...). La \textbf{lista actual de amigos} es una \textbf{vista} (derivada de los datos). ``¿Tom es amigo de Jerry?'' es una \textbf{consulta}. La cantidad de amigos actual (3) es otra vista.
+	\textbf{Ejemplo de la red social:} los \textbf{datos} son los eventos de usuarios (``17/may Add Alice'', ``20/may Remove Jerry''...). La \textbf{lista actual de amigos} es una \textbf{vista} (derivada de los datos). ``¿Tom es amigo de Jerry?'' es una \textbf{consulta}. La cantidad de amigos actual (3) es otra vista.
 \end{recallbox}
 
 \subsection{Las 3 propiedades clave de los datos}
@@ -805,7 +806,7 @@ Ejemplo con datos de Spotify: ``Ana hizo fav a 3 canciones'' es menos crudo que 
 Los datos crudos suelen ser no estructurados antes que normalizados. Hay una distinción fina entre simplemente \textit{parsear} los datos y hacer una \textbf{normalización semántica}. La normalización semántica (reorganizar información con formato libre en una forma estructurada) implica \textbf{eliminar cualidades del dato que pueden importar en el futuro}.
 
 \begin{recallbox}
-\textbf{Recordá:} una arquitectura más cercana a la del \textbf{Data Lake} es más consistente con la idea de crudeza. Los algoritmos y formas de procesar los datos pueden cambiar a lo largo del tiempo sin que esto sea un problema --- los datos originales siguen ahí.
+	\textbf{Recordá:} una arquitectura más cercana a la del \textbf{Data Lake} es más consistente con la idea de crudeza. Los algoritmos y formas de procesar los datos pueden cambiar a lo largo del tiempo sin que esto sea un problema --- los datos originales siguen ahí.
 \end{recallbox}
 
 \subsubsection{2. Inmutabilidad}
@@ -813,15 +814,15 @@ Es un concepto extraño pensado desde una base relacional donde el \texttt{UPDAT
 
 \textbf{Beneficios de la inmutabilidad:}
 \begin{itemize}
-    \item Hace al sistema \textbf{tolerante a las fallas humanas}: si ocurre un error, se puede recomputar el master dataset.
-    \item \textbf{Simplifica la carga de datos}: estructuras append-only con archivos planos.
+	\item Hace al sistema \textbf{tolerante a las fallas humanas}: si ocurre un error, se puede recomputar el master dataset.
+	\item \textbf{Simplifica la carga de datos}: estructuras append-only con archivos planos.
 \end{itemize}
 
 \subsubsection{3. Perpetuidad}
 Los datos se \textbf{conservan indefinidamente}. No se descartan datos viejos. Comprender los fundamentos de Big Data es asimilar estos conceptos de crudeza, inmutabilidad y perpetuidad.
 
 \begin{recallbox}
-\textbf{Recordá el contraste:} en un ambiente relacional tradicional constantemente se actualiza y resume información para reflejar el estado actual. Los términos ``inmutabilidad'' y ``perpetuidad'' no tienen sentido en ese contexto. En Big Data, son fundamentales.
+	\textbf{Recordá el contraste:} en un ambiente relacional tradicional constantemente se actualiza y resume información para reflejar el estado actual. Los términos ``inmutabilidad'' y ``perpetuidad'' no tienen sentido en ese contexto. En Big Data, son fundamentales.
 \end{recallbox}
 
 % =========================================================
@@ -840,37 +841,37 @@ Los tres serialization frameworks notables: \textbf{Thrift} (Facebook), \textbf{
 \subsection{Formato Avro (row-oriented)}
 
 \begin{itemize}
-    \item Permite almacenar el \textbf{esquema junto con el mensaje} (el esquema se define en JSON)
-    \item Aporta \textbf{compresión} de los datos
-    \item Organiza la información en \textbf{filas (row-oriented)}: optimizado para leer \textbf{filas completas} y leer muchas \textbf{filas consecutivas}
-    \item Tiene soporte para \textbf{estructuras complejas} (registros anidados, arrays, maps, etc.)
-    \item Provee \textbf{bibliotecas} en los principales lenguajes para serializar y deserializar objetos
-    \item Organiza los registros en \textbf{bloques de tamaño fijo} (muy importante para usar en un filesystem distribuido)
+	\item Permite almacenar el \textbf{esquema junto con el mensaje} (el esquema se define en JSON)
+	\item Aporta \textbf{compresión} de los datos
+	\item Organiza la información en \textbf{filas (row-oriented)}: optimizado para leer \textbf{filas completas} y leer muchas \textbf{filas consecutivas}
+	\item Tiene soporte para \textbf{estructuras complejas} (registros anidados, arrays, maps, etc.)
+	\item Provee \textbf{bibliotecas} en los principales lenguajes para serializar y deserializar objetos
+	\item Organiza los registros en \textbf{bloques de tamaño fijo} (muy importante para usar en un filesystem distribuido)
 \end{itemize}
 
 \textbf{Estructura interna de un archivo Avro:}
 \begin{itemize}
-    \item \textbf{Header:} un magic number de 4 bytes para identificación, el esquema de serialización (en JSON), metadata extra, y un marcador de sincronización de 16 bytes para indicar separaciones entre bloques.
-    \item \textbf{Bloques de datos:} cada uno con un indicador de cuántos registros contiene, indicador del tamaño en bytes total, los objetos serializados, y el marcador de sincronización al final.
+	\item \textbf{Header:} un magic number de 4 bytes para identificación, el esquema de serialización (en JSON), metadata extra, y un marcador de sincronización de 16 bytes para indicar separaciones entre bloques.
+	\item \textbf{Bloques de datos:} cada uno con un indicador de cuántos registros contiene, indicador del tamaño en bytes total, los objetos serializados, y el marcador de sincronización al final.
 \end{itemize}
 
 \subsection{Formato Parquet (column-oriented)}
 
 \begin{itemize}
-    \item Organización \textbf{columnar}: la organización columnar permite mucha mayor eficiencia de compresión. Establece \textbf{encoding específico} para cada columna.
-    \item También permite \textbf{particionar} los archivos (para consumo distribuido)
-    \item Brinda optimización para \textbf{procesamiento}: solo se leen las columnas que se necesitan (en general, no todas)
-    \item Soporta \textbf{predicate pushdown}: acercar la lógica de la recuperación de datos al origen de los datos, ejecutar determinadas operaciones directamente en el origen, para ahorrar tiempo y potenciar el procesamiento al no llevar todos los datos de la red al motor.
-    \item Permite almacenar el \textbf{esquema} junto con el mensaje (no tiene lenguaje propio de definición de esquema, se pueden usar los de Thrift o Avro)
-    \item Soporta tipos complejos y cuenta con bibliotecas para los principales lenguajes
+	\item Organización \textbf{columnar}: la organización columnar permite mucha mayor eficiencia de compresión. Establece \textbf{encoding específico} para cada columna.
+	\item También permite \textbf{particionar} los archivos (para consumo distribuido)
+	\item Brinda optimización para \textbf{procesamiento}: solo se leen las columnas que se necesitan (en general, no todas)
+	\item Soporta \textbf{predicate pushdown}: acercar la lógica de la recuperación de datos al origen de los datos, ejecutar determinadas operaciones directamente en el origen, para ahorrar tiempo y potenciar el procesamiento al no llevar todos los datos de la red al motor.
+	\item Permite almacenar el \textbf{esquema} junto con el mensaje (no tiene lenguaje propio de definición de esquema, se pueden usar los de Thrift o Avro)
+	\item Soporta tipos complejos y cuenta con bibliotecas para los principales lenguajes
 \end{itemize}
 
 \textbf{Estructura interna de un archivo Parquet (4 partes):}
 \begin{enumerate}
-    \item Un \textbf{magic number} de 4 bytes para identificación
-    \item Metadata sobre los \textbf{row groups} (los registros están agrupados) incluyendo su offset dentro del archivo
-    \item Los \textbf{column chunks} (primero todos los del row group 1, después los del 2, etc.)
-    \item El \textbf{footer} del archivo, incluyendo el esquema, información de row groups, e información de encoding y ubicación de los distintos chunks
+	\item Un \textbf{magic number} de 4 bytes para identificación
+	\item Metadata sobre los \textbf{row groups} (los registros están agrupados) incluyendo su offset dentro del archivo
+	\item Los \textbf{column chunks} (primero todos los del row group 1, después los del 2, etc.)
+	\item El \textbf{footer} del archivo, incluyendo el esquema, información de row groups, e información de encoding y ubicación de los distintos chunks
 \end{enumerate}
 
 \subsection{¿Cuándo usar Avro vs Parquet?}
@@ -883,10 +884,10 @@ Los tres serialization frameworks notables: \textbf{Thrift} (Facebook), \textbf{
 
 Un filesystem distribuido consiste en \textbf{múltiples soportes físicos} detrás de un \textbf{único file system lógico}. Proveen muchas garantías no funcionales:
 \begin{itemize}
-    \item \textbf{Escalabilidad:} manejo de grandes volúmenes
-    \item \textbf{High availability:} disponibilidad continua
-    \item \textbf{Paralelización de lecturas:} múltiples nodos leen en paralelo
-    \item \textbf{Redundancia:} datos replicados para tolerar fallos
+	\item \textbf{Escalabilidad:} manejo de grandes volúmenes
+	\item \textbf{High availability:} disponibilidad continua
+	\item \textbf{Paralelización de lecturas:} múltiples nodos leen en paralelo
+	\item \textbf{Redundancia:} datos replicados para tolerar fallos
 \end{itemize}
 
 \subsection{Hadoop}
@@ -899,9 +900,313 @@ Un filesystem distribuido consiste en \textbf{múltiples soportes físicos} detr
 
 \textbf{Tres componentes principales de Hadoop:}
 \begin{itemize}
-    \item \textbf{HDFS (Hadoop Distributed File System):} filesystem diseñado especialmente para Hadoop. Open source, desarrollado en Java, optimizado para archivos muy grandes, manejo de grandes volúmenes en forma distribuida.
-    \item \textbf{MapReduce:} modelo de programación para procesamiento distribuido. Divide el trabajo en tareas Map (transformación paralela) y Reduce (agregación de resultados).
-    \item \textbf{YARN (Yet Another Resource Negotiator):} sistema de gestión de recursos del cluster. Decide qué tarea se ejecuta en qué nodo y cuántos recursos recibe.
+	\item \textbf{HDFS (Hadoop Distributed File System):} filesystem diseñado especialmente para Hadoop. Open source, desarrollado en Java, optimizado para archivos muy grandes, manejo de grandes volúmenes en forma distribuida.
+	\item \textbf{MapReduce:} modelo de programación para procesamiento distribuido. Divide el trabajo en tareas Map (transformación paralela) y Reduce (agregación de resultados).
+	\item \textbf{YARN (Yet Another Resource Negotiator):} sistema de gestión de recursos del cluster. Decide qué tarea se ejecuta en qué nodo y cuántos recursos recibe.
 \end{itemize}
+
+% =========================================================
+\section{12.1 — S3 (Simple Storage Service)}
+% =========================================================
+
+\subsection{¿Qué es S3?}
+
+Amazon S3 es un servicio de \textbf{almacenamiento de objetos} en la nube de AWS. No es un filesystem jerárquico tradicional: es un \textbf{key-value store} donde cada objeto tiene una clave (key) y un valor (el archivo).
+
+\begin{recallbox}
+	\textbf{Recordá:} en la sección de File Systems Distribuidos vimos que un filesystem distribuido presenta \textbf{múltiples soportes físicos} detrás de un \textbf{único file system lógico}. S3 cumple este rol: abstrae la infraestructura física y brinda escalabilidad, alta disponibilidad y redundancia automáticamente.
+\end{recallbox}
+
+\textbf{Conceptos clave:}
+\begin{itemize}
+	\item \textbf{Bucket:} contenedor de objetos. Nombre \textbf{globalmente único} en todo AWS. Se asocia a una \textbf{región}.
+	\item \textbf{Object:} un archivo almacenado dentro de un bucket. Identificado por su \textbf{key} (la ruta completa, ej: \texttt{datos/ventas/2024.csv}).
+	\item \textbf{Region:} ubicación geográfica del data center. Elegir la región más cercana reduce latencia.
+\end{itemize}
+
+S3 no tiene carpetas reales: la apariencia de carpetas es simulada mediante \textbf{prefijos} en la key. El archivo \texttt{datos/ventas/2024.csv} tiene key \texttt{datos/ventas/2024.csv}, y la consola muestra ``datos'' y ``ventas'' como carpetas por conveniencia.
+
+\subsection{Operaciones con AWS CLI}
+
+\begin{itemize}
+	\item \texttt{aws s3 ls s3://bucket/prefix} --- listar objetos
+	\item \texttt{aws s3 cp archivo s3://bucket/key} --- copiar archivo local a S3 (o viceversa)
+	\item \texttt{aws s3 cp s3://bucket/prefix . --recursive} --- descargar recursivamente
+	\item \texttt{aws s3 sync carpeta/ s3://bucket/prefix/} --- sincronizar (solo sube lo que cambió)
+	\item \texttt{aws s3 rm s3://bucket/key} --- eliminar objeto
+	\item \texttt{aws s3 rm s3://bucket/prefix --recursive} --- eliminar recursivamente
+\end{itemize}
+
+\subsection{AWS Athena}
+
+Athena es un servicio de \textbf{consultas SQL interactivas} directamente sobre archivos almacenados en S3. No requiere levantar un servidor ni cargar datos en una base de datos.
+
+\textbf{Características:}
+\begin{itemize}
+	\item \textbf{Serverless:} no hay infraestructura que administrar
+	\item \textbf{Pay-per-query:} se paga por la \textbf{cantidad de datos escaneados} por cada consulta
+	\item \textbf{Schema-on-read:} se define un schema al consultar, no al almacenar
+	\item Soporta formatos: CSV, JSON, Parquet, ORC, Avro
+\end{itemize}
+
+\begin{recallbox}
+	\textbf{Recordá:} en la sección de formatos de archivo vimos que \textbf{Parquet} (column-oriented) es ideal para consultas analíticas que leen pocas columnas de muchas filas. En Athena, usar Parquet en vez de CSV reduce drásticamente la cantidad de datos escaneados y por lo tanto el costo.
+\end{recallbox}
+
+\subsection{AWS RDS}
+
+RDS (Relational Database Service) es un servicio \textbf{administrado} de bases de datos relacionales en la nube. Soporta PostgreSQL, MySQL, SQL Server, Oracle, entre otros.
+
+\textbf{Diferencia con Athena:}
+\begin{itemize}
+	\item RDS mantiene un \textbf{servidor de base de datos corriendo} permanentemente (pay-per-hour)
+	\item Los datos se almacenan \textbf{dentro de la base de datos}, no en S3
+	\item Soporta \textbf{escrituras y transacciones} (OLTP)
+	\item Athena es mejor para \textbf{análisis ad-hoc} sobre datos ya almacenados en S3
+\end{itemize}
+
+\begin{recallbox}
+	\textbf{Recordá:} la distinción OLTP vs OLAP. RDS es un servicio pensado para \textbf{OLTP} (muchas escrituras pequeñas y rápidas). Athena se alinea más con \textbf{OLAP} (consultas analíticas sobre grandes volúmenes).
+\end{recallbox}
+
+% =========================================================
+\section{12.2 — Organización del Master Dataset}
+% =========================================================
+
+\begin{recallbox}
+	\textbf{Recordá:} el master dataset es el \textbf{core de la arquitectura lambda}, la source of truth del sistema. Contiene datos \textbf{crudos, inmutables y perpetuos}. Ahora vemos cómo organizar su almacenamiento físico de manera eficiente.
+\end{recallbox}
+
+\subsection{Particionamiento Vertical}
+
+El master dataset se organiza mediante \textbf{particionamiento vertical}: se separan los datos en \textbf{directorios} según algún criterio lógico, típicamente por \textbf{entidad} o \textbf{tipo de dato}.
+
+\textbf{Ejemplo:} en una red social, se podrían tener carpetas separadas para:
+\begin{itemize}
+	\item \texttt{/master/usuarios/} --- datos de perfil de usuarios
+	\item \texttt{/master/relaciones/} --- relaciones de amistad
+	\item \texttt{/master/interacciones/} --- likes, shares, comentarios
+\end{itemize}
+
+\textbf{Ventajas:}
+\begin{itemize}
+	\item Las batch views que solo necesitan un tipo de dato \textbf{no escanean todo el dataset}
+	\item Facilita la \textbf{evolución del esquema} por separado
+	\item Mejor \textbf{paralelización}: distintas computaciones pueden procesar distintas particiones simultáneamente
+\end{itemize}
+
+En S3, esto se implementa con \textbf{prefijos de bucket}: \texttt{s3://master-dataset/usuarios/}, \texttt{s3://master-dataset/relaciones/}, etc.
+
+% =========================================================
+\section{12.3 — Servers}
+% =========================================================
+
+\subsection{Evolución de la arquitectura de servidores}
+
+La arquitectura de cómputo evolucionó en varias etapas:
+
+\begin{enumerate}
+	\item \textbf{Mainframes (1950s--70s):} una computadora central grande y cara. Múltiples usuarios acceden vía terminales ``tontas''. Todo el procesamiento centralizado.
+	\item \textbf{Desktop apps (1980s--90s):} la PC personal tiene su propio procesamiento. Los datos pueden estar en un servidor, pero la lógica corre en la máquina del usuario.
+	\item \textbf{HTML estático (1990s):} páginas web servidas como archivos estáticos. El servidor solo envía archivos, no procesa lógica.
+	\item \textbf{Applets (Java, Flash):} código ejecutado en el \textbf{navegador del cliente}. Problema: dependencia de plugins, seguridad, performance.
+	\item \textbf{HTML dinámico (2000s):} el servidor genera HTML dinámicamente (PHP, JSP, ASP). La lógica vuelve al servidor.
+	\item \textbf{Arquitecturas modernas:} APIs REST/GraphQL, microservicios, SPAs con frontend desacoplado del backend.
+\end{enumerate}
+
+\subsection{Computación secuencial vs paralela}
+
+\textbf{Secuencial:} un solo procesador ejecuta las instrucciones una tras otra. Simple pero limitado por la velocidad del procesador.
+
+\textbf{Paralelo:} múltiples procesadores trabajan simultáneamente en partes distintas del problema. Requiere que el problema sea \textbf{divisible} en sub-tareas independientes.
+
+\textbf{Ley de Amdahl:} el speedup máximo de un programa con paralelización está limitado por la \textbf{porción secuencial} del programa. Si el 10\% del programa es inherentemente secuencial, el speedup máximo teórico es 10x, sin importar cuántos procesadores se agreguen.
+
+% =========================================================
+\section{12.4 — MapReduce}
+% =========================================================
+
+\begin{recallbox}
+	\textbf{Recordá:} en la arquitectura lambda, la batch layer pre-computa \textbf{batch views} como función de todo el master dataset. MapReduce es el \textbf{paradigma de procesamiento} que permite hacer esto de forma distribuida y escalable.
+\end{recallbox}
+
+\subsection{El paradigma MapReduce}
+
+MapReduce es un modelo de programación para procesar grandes volúmenes de datos en paralelo sobre un cluster de máquinas. Consta de \textbf{5 fases}:
+
+\begin{enumerate}
+	\item \textbf{Split:} el input se divide en fragmentos (splits) que se distribuyen entre los nodos del cluster.
+	\item \textbf{Map:} cada nodo aplica una función \texttt{map()} a su fragmento. Emite pares \texttt{(clave, valor)}.
+	\item \textbf{Shuffle \& Sort:} el framework \textbf{agrupa} todos los pares por clave y los \textbf{ordena}. Pares con la misma clave llegan al mismo reducer.
+	\item \textbf{Reduce:} una función \texttt{reduce()} recibe todos los valores asociados a una clave y los agrega/combina en un resultado.
+	\item \textbf{Merge:} los resultados de todos los reducers se combinan en el output final.
+\end{enumerate}
+
+\subsection{Ejemplo canónico: Word Count}
+
+Contar la frecuencia de cada palabra en un conjunto de documentos.
+
+\begin{itemize}
+	\item \textbf{Map:} para cada palabra en el documento, emitir \texttt{(palabra, 1)}
+	\item \textbf{Shuffle \& Sort:} agrupar por palabra: \texttt{(``hola'', [1, 1, 1])}
+	\item \textbf{Reduce:} sumar los valores: \texttt{(``hola'', 3)}
+\end{itemize}
+
+\subsection{Hadoop MapReduce en detalle}
+
+\begin{recallbox}
+	\textbf{Recordá:} Hadoop tiene tres componentes: HDFS (almacenamiento distribuido), MapReduce (procesamiento) y YARN (gestión de recursos). Ahora profundizamos en cómo MapReduce ejecuta un job sobre HDFS.
+\end{recallbox}
+
+\textbf{Arquitectura HDFS:}
+\begin{itemize}
+	\item \textbf{NameNode:} nodo maestro que mantiene los \textbf{metadatos} del filesystem (qué archivo está en qué bloque, en qué nodo). No almacena datos.
+	\item \textbf{DataNodes:} nodos que almacenan los \textbf{bloques de datos}. Cada bloque se replica (por defecto 3 veces) para tolerancia a fallos.
+\end{itemize}
+
+\textbf{Pasos de ejecución de un job MapReduce en Hadoop:}
+\begin{enumerate}
+	\item \textbf{Splitting + Mapping:} los datos de HDFS se dividen en splits. Cada mapper procesa un split y escribe los resultados intermedios al \textbf{disco local} (no a HDFS).
+	\item \textbf{Partitioning:} los resultados del map se particionan por clave para determinar a qué reducer irá cada par.
+	\item \textbf{Shuffling + Sorting:} los datos se transfieren por red desde los mappers a los reducers, ordenados por clave.
+	\item \textbf{Reducing:} cada reducer procesa todas las claves que le corresponden y escribe el resultado final a \textbf{HDFS}.
+\end{enumerate}
+
+\textbf{Data locality (localidad de datos):} Hadoop intenta ejecutar el mapper en el \textbf{mismo nodo} donde están almacenados los datos. Mover el procesamiento hacia los datos es mucho más eficiente que mover los datos hacia el procesamiento.
+
+\textbf{YARN:} se encarga de la \textbf{gestión de recursos} del cluster. Tiene un \textbf{ResourceManager} (global) que asigna recursos, y \textbf{NodeManagers} (por nodo) que monitorean el uso de CPU, memoria y disco. El \textbf{ApplicationMaster} coordina la ejecución de cada job.
+
+% =========================================================
+\section{12.5 — Spark}
+% =========================================================
+
+\subsection{¿Qué es Spark?}
+
+Apache Spark es un motor de procesamiento distribuido que, a diferencia de Hadoop MapReduce, opera \textbf{en memoria} (in-memory). Esto lo hace significativamente más rápido para workloads iterativos y consultas interactivas.
+
+\begin{recallbox}
+	\textbf{Recordá:} Hadoop MapReduce escribe resultados intermedios al \textbf{disco local} entre cada fase Map y Reduce. Spark mantiene los datos en \textbf{memoria RAM} entre operaciones, evitando la latencia de I/O a disco. Esto es especialmente ventajoso en algoritmos iterativos (como ML) donde el mismo dataset se recorre múltiples veces.
+\end{recallbox}
+
+\subsection{RDD (Resilient Distributed Dataset)}
+
+El RDD es la abstracción fundamental de Spark. Es una \textbf{colección distribuida e inmutable} de elementos que puede ser procesada en paralelo.
+
+\textbf{Propiedades:}
+\begin{itemize}
+	\item \textbf{Resilient:} tolerante a fallos. Si se pierde una partición, se puede recalcular a partir de su \textbf{lineage} (la secuencia de transformaciones que la creó).
+	\item \textbf{Distributed:} los datos se distribuyen entre los nodos del cluster.
+	\item \textbf{Inmutable:} una vez creado, no se modifica. Las transformaciones generan \textbf{nuevos} RDDs.
+\end{itemize}
+
+\textbf{Dos tipos de operaciones sobre RDDs:}
+\begin{itemize}
+	\item \textbf{Transformations:} operaciones \textbf{lazy} que definen un nuevo RDD sin ejecutarlo inmediatamente. Ejemplos: \texttt{map}, \texttt{filter}, \texttt{flatMap}, \texttt{reduceByKey}, \texttt{groupByKey}.
+	\item \textbf{Actions:} operaciones que \textbf{disparan la ejecución} del plan y devuelven un resultado. Ejemplos: \texttt{collect}, \texttt{count}, \texttt{saveAsTextFile}, \texttt{reduce}.
+\end{itemize}
+
+Spark construye un \textbf{DAG (Directed Acyclic Graph)} de transformaciones y solo ejecuta cuando se invoca una action (\textbf{lazy evaluation}).
+
+\subsection{DataFrames}
+
+Los DataFrames son una abstracción de más alto nivel sobre los RDDs. Representan datos como una \textbf{tabla con columnas nombradas y tipadas}, similar a una tabla SQL o un DataFrame de Pandas.
+
+\textbf{Ventajas sobre RDDs:}
+\begin{itemize}
+	\item \textbf{Optimización automática:} Spark SQL usa un \textbf{query optimizer} (Catalyst) que optimiza el plan de ejecución.
+	\item \textbf{API más simple:} operaciones tipo SQL (\texttt{select}, \texttt{filter}, \texttt{groupBy}, \texttt{join}).
+	\item \textbf{Interoperabilidad:} se pueden consultar con SQL directamente.
+\end{itemize}
+
+\subsection{Data Skew (sesgo de datos)}
+
+El \textbf{data skew} es un problema crítico en procesamiento distribuido. Ocurre cuando la distribución de claves es \textbf{desigual}: algunas claves tienen muchísimos más valores que otras.
+
+\textbf{Consecuencia:} el reducer que maneja la clave ``popular'' recibe mucho más trabajo que los demás. Todo el job queda esperando a ese único reducer lento --- se pierde el beneficio de la paralelización.
+
+\textbf{Mitigaciones:}
+\begin{itemize}
+	\item \textbf{Salting:} agregar un prefijo aleatorio a las claves para distribuir mejor la carga, y luego hacer una segunda agregación.
+	\item \textbf{Repartitioning:} redistribuir los datos explícitamente.
+	\item \textbf{Broadcast join:} si una tabla es pequeña, enviarla completa a todos los nodos en vez de hacer shuffle.
+\end{itemize}
+
+\subsection{MapReduce vs Spark}
+
+\begin{center}
+	\begin{tabular}{p{3.5cm} p{4.5cm} p{4.5cm}}
+		\toprule
+		\textbf{Aspecto}          & \textbf{Hadoop MapReduce}          & \textbf{Spark}                                \\
+		\midrule
+		Almacenamiento intermedio & Disco local                        & Memoria RAM                                   \\
+		Latencia                  & Alta (I/O a disco)                 & Baja (in-memory)                              \\
+		Iteraciones               & Lento (lee/escribe disco cada vez) & Rápido (datos en memoria)                     \\
+		Tolerancia a fallos       & Re-lee desde disco                 & Recalcula desde lineage                       \\
+		Robustez                  & Muy estable para jobs enormes      & Puede fallar si los datos no caben en memoria \\
+		Costo                     & Más barato (disco es barato)       & Más caro (RAM es cara)                        \\
+		\bottomrule
+	\end{tabular}
+\end{center}
+
+% =========================================================
+\section{12.6 — Adecuación a Big Data}
+% =========================================================
+
+\begin{recallbox}
+	\textbf{Recordá:} la batch layer genera \textbf{batch views} como función del master dataset: \texttt{batch view = f(all data)}. Esta sección muestra ejemplos concretos de batch views que se pueden generar con MapReduce o Spark.
+\end{recallbox}
+
+\subsection{Ejemplo 1: Clasificador Bayesiano de Spam}
+
+Un clasificador Naive Bayes para spam se puede entrenar con MapReduce. El modelo necesita calcular probabilidades condicionales: $P(\text{palabra} | \text{clase})$ para clase $\in \{\text{spam}, \text{ham}\}$.
+
+\textbf{Mapper:} para cada email del dataset de entrenamiento, emite:
+\begin{itemize}
+	\item \texttt{(TOTAL\_SPAM, 1)} o \texttt{(TOTAL\_HAM, 1)} --- conteo total por clase
+	\item \texttt{(COUNT\_SPAM\_palabra, 1)} o \texttt{(COUNT\_HAM\_palabra, 1)} --- conteo de cada palabra por clase
+	\item \texttt{(TOTAL\_WORD\_SPAM, 1)} o \texttt{(TOTAL\_WORD\_HAM, 1)} --- total de palabras por clase
+\end{itemize}
+
+\textbf{Reducer:} suma todos los valores para cada clave. El resultado es una tabla de frecuencias que permite calcular las probabilidades del modelo.
+
+\begin{recallbox}
+	\textbf{Recordá:} este clasificador es un ejemplo de \textbf{batch view} generada por la batch layer. El modelo entrenado se almacena en la serving layer y se usa para clasificar nuevos emails en tiempo real.
+\end{recallbox}
+
+\subsection{Ejemplo 2: Índice Invertido}
+
+Un \textbf{índice invertido} mapea cada palabra a la lista de documentos donde aparece (y opcionalmente la posición). Es la base de los motores de búsqueda.
+
+\textbf{Con MapReduce:}
+\begin{itemize}
+	\item \textbf{Map:} para cada palabra en un documento, emitir \texttt{(palabra, (doc\_id, posición))}
+	\item \textbf{Reduce:} para cada palabra, recolectar todas las tuplas \texttt{(doc\_id, posición)} en una lista
+\end{itemize}
+
+\textbf{Con Spark:}
+\begin{verbatim}
+rdd.flatMap(lambda doc: [(word, (doc.id, pos))
+                         for pos, word in enumerate(doc.words)])
+   .groupByKey()
+   .mapValues(list)
+\end{verbatim}
+
+\subsection{Ejemplo 3: Filtrado Colaborativo (Sistemas de Recomendación)}
+
+El filtrado colaborativo busca recomendar ítems basándose en los \textbf{patrones de preferencia de usuarios similares}.
+
+\textbf{Modelo:} se tiene una matriz $R$ de $n$ usuarios $\times$ $m$ ítems, donde $R_{ij}$ es el rating que el usuario $i$ dio al ítem $j$. La mayoría de las entradas están vacías (la matriz es \textbf{sparse}).
+
+\textbf{Factorización matricial:} se buscan dos matrices $U$ ($n \times k$) y $V$ ($k \times m$) tales que $R \approx U \cdot V$. Cada usuario queda representado por un vector de $k$ \textbf{factores latentes}, y cada ítem igual. El producto punto entre el vector de un usuario y el de un ítem predice el rating.
+
+\textbf{Con MapReduce/Spark:} el entrenamiento es iterativo (ej: ALS --- Alternating Least Squares). En cada iteración:
+\begin{itemize}
+	\item Se fija $V$ y se optimiza $U$ (paralelizable por usuario)
+	\item Se fija $U$ y se optimiza $V$ (paralelizable por ítem)
+\end{itemize}
+
+\begin{recallbox}
+	\textbf{Recordá:} los algoritmos iterativos como ALS son donde Spark brilla frente a Hadoop MapReduce. Hadoop escribiría a disco después de cada iteración; Spark mantiene las matrices en memoria entre iteraciones, reduciendo drásticamente la latencia.
+\end{recallbox}
 
 \end{document}
