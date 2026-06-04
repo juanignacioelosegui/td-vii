@@ -1,0 +1,34 @@
+{
+  "version": "1.0",
+  "timestamp": "2026-06-03T20:33:12.837Z",
+  "source": "auto-postool",
+  "partial": false,
+  "phase": null,
+  "phase_name": null,
+  "phase_dir": null,
+  "plan": null,
+  "task": null,
+  "total_tasks": null,
+  "status": "auto-checkpoint",
+  "completed_tasks": [],
+  "remaining_tasks": [],
+  "blockers": [],
+  "human_actions_pending": [],
+  "decisions": [],
+  "uncommitted_files": [
+    {
+      "status": "M",
+      "path": "clases/teoricas/segundo-parcial/resumen_segundo_parcial.tex"
+    },
+    {
+      "status": "??",
+      "path": ".planning/"
+    },
+    {
+      "status": "??",
+      "path": "flashcards_segundo_parcial.txt"
+    }
+  ],
+  "next_action": null,
+  "context_notes": "Recent commits:\nca06358 Avance\nb486d9d Agregadas notas T11.1\n8caac7e Agregado enunciado TP2\n181629b Agregadas notas T10.5\ndcbbfeb Agregadas clases T11"
+}
