@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "timestamp": "2026-06-04T20:21:15.388Z",
+  "timestamp": "2026-06-04T20:15:58.926Z",
   "source": "auto-postool",
   "partial": false,
   "phase": null,
@@ -19,14 +19,6 @@
     {
       "status": "M",
       "path": ".planning/HANDOFF.json"
-    },
-    {
-      "status": "M",
-      "path": "clases/teoricas/segundo-parcial/.planning/HANDOFF.json"
-    },
-    {
-      "status": "M",
-      "path": "clases/teoricas/segundo-parcial/resumen_segundo_parcial.pdf"
     },
     {
       "status": "M",
